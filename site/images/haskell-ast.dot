@@ -1,0 +1,18 @@
+digraph {
+    bgcolor="invis"
+
+    node [style="filled", fillcolor="lightblue", color="white"]
+
+    Dec -> Type
+    Dec -> Exp
+    Dec -> Pat
+    Exp -> Dec
+    Exp -> Type
+    Exp -> Pat
+    Exp -> Stmt
+    Pat -> Type
+    Stmt -> Exp
+    Stmt -> Pat
+
+    Type -> Pat [color=invis]
+}
