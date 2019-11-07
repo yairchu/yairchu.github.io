@@ -9,6 +9,7 @@ import           Control.Lens
 import           Control.Monad
 import           Data.Aeson                 as A
 import           Data.Aeson.Lens
+import           Data.List (sortOn)
 import           Development.Shake
 import           Development.Shake.Classes
 import           Development.Shake.Forward
@@ -71,7 +72,7 @@ data Post =
 buildIndex :: [Post] -> Action ()
 buildIndex posts' = do
   indexT <- compileTemplate' "site/templates/index.html"
-  let indexInfo = IndexInfo {posts = posts'}
+  let indexInfo = IndexInfo {posts = reverse (sortOn date posts')}
       indexHTML = T.unpack $ substitute indexT (withSiteMeta $ toJSON indexInfo)
   writeFile' (outputFolder </> "index.html") indexHTML
 

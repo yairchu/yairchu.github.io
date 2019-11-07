@@ -1,7 +1,7 @@
 ---
 title: "The four simple ways to encode sum-types"
 author: Yair Chuchem
-date: Nov 6, 2019
+date: 2019.11.06
 tags: [haskell, adt, sum-type]
 description: How and why to encode sum types?
 image: Loc_Bloc_example_1_of_Disney.jpg
