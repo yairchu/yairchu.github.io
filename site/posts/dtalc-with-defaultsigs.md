@@ -96,3 +96,7 @@ While Data Types a la Carte allows us to re-use individual components such as `V
 
 In practice, programming language ASTs tend to consist of multiple mutually-recursive types,
 and Data Types a la Carte's approach can't help us express those. I'll expand [on how to extend its approach for more complicated ASTs](https://github.com/lamdu/hypertypes) in a future post.
+
+Discussion:
+
+* <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell](https://www.reddit.com/r/haskell/comments/dcpi4n/nicer_data_types_a_la_carte_with_defaultsignatures/)

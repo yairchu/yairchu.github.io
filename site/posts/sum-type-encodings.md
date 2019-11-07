@@ -200,4 +200,8 @@ We use `Generic` and `DefaultSignatures` based derivations to derive our class i
 
 This approach allows us to implement our basic types, operations, and instances in a modular way, while only closing the type at the top-level. It does allow us to implement operations on more than one value (such as diffs), and we can encode a list in either of the styles supported by Final or OO styles.
 
+Discussion:
+
+* <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell](https://www.reddit.com/r/haskell/comments/dsgr0r/the_four_simple_ways_to_encode_sumtypes/)
+
 (image credit: [MissMarvel50sWorld](https://commons.wikimedia.org/wiki/File:Loc_Bloc_example_1_of_Disney.JPG))
