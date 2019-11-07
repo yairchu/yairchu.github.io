@@ -2,7 +2,7 @@
 title: "Nicer Data Types a la Carte with DefaultSignatures"
 author: Yair Chuchem
 date: 2019.10.02
-tags: [haskell, ast, dtalc, defaultsignatures]
+tags: [programming, expression-problem, haskell, default-signatures]
 description: On using DefaultSignatures to improve DTALC
 image: ingredients.png
 ---
