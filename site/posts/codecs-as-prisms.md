@@ -44,7 +44,7 @@ ipv4 = Struct(
 
 In this simple declaration we created a parser, builder, and the data type for IPv4 packets!
 
-Also, I'd like to highlight the richness of the format. It isn't a simple "struct" with fields of known types, but rather a "dependently-typed" one, where the size of the `options` field depends on the value of `header.length`! Haskell parser combinators libraries which support such dependencies that do tend to identify as ["monadic parser combinators" libraries](http://hackage.haskell.org/package/parsec), in constrast to ["applicative parser combinators"](http://hackage.haskell.org/package/regex-applicative) which don't support them.
+Also, I'd like to highlight the richness of the format. It isn't a simple "struct" with fields of known types, but rather a "dependently-typed" one, where the size of the `options` field depends on the value of `header.length`! Haskell parser combinators libraries which support such dependencies tend to identify as ["monadic parser combinators" libraries](http://hackage.haskell.org/package/parsec), in constrast to ["applicative parser combinators"](http://hackage.haskell.org/package/regex-applicative) which don't support them.
 
 ## Parsers and builders as prisms
 
