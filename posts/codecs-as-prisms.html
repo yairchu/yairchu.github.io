@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Yair&#39;s website">
+    <meta name="author" content="Yair Chuchem">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="Parsers and Builders as Prisms">
+    <meta name="twitter:description" content="Declarative parsing and pretty printing">
+    <meta name="twitter:image" content="https://yairchu.github.io/blog/images/Dispersive_prism.png">
+    <title>Parsers and Builders as Prisms</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text"> HOME </div>
+            </a>
+        </nav>
+    
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+        </div>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Parsers and Builders as Prisms
+            </span>
+            <br>
+
+            <img class="post-image" src="/images/Dispersive_prism.png">
+            <br>
+            <span class="byline">by Yair Chuchem</span>
+            <br>
+            <span class="date">2019.12.19</span>
+            <br>
+            <div class="metadata">
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <p>Serialization and deserialization are tedious tasks, often riddled with boiler-plate and bug-prone code. There's a plethora of tools, such as parser combinator libraries, which aim to assist us in some of these tasks, and it seems that new tools never stop popping up. This hints that there are probably no well known satisfactory solutions to these problems, which probably means that most of these tools are ad-hoc rather than principled high-quality solutions.</p>
+<p>Are there no good solutions out there? Actually, there are!</p>
+<p>Back when I was programming in Python, I have used <a href="https://construct.readthedocs.io/en/latest/intro.html">Construct</a> to great satisfaction. But for a long time now I have been using Haskell, and have found no equivalent to it, <a href="https://stackoverflow.com/questions/1225053/haskell-equivalent-of-pythons-construct">which I've actually wanted for more than 10 years</a>! So perhaps I should start looking into making one? Hence this post.</p>
+<p>In this post we'll introduce Construct's declarative approach and then discuss how to implement an equivalent principled solution in Haskell, based on optics.</p>
+<h2 id="construct-declarative-parsers-and-builders">Construct: declarative parsers and builders</h2>
+<p>Construct is declarative.</p>
+<p>What do I mean by that? A declarative implementation of a parser should describe the format, not how to parse it!</p>
+<p>From this description, the computer will automatically figure out how to parse. Not only that, it will also know how to build, and ideally even generate extra artifacts like documentation for the format!</p>
+<p>Here's how Construct defines the format of IPv4 packets:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>ipv4 <span class="op">=</span> Struct(</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="st">&quot;header&quot;</span> <span class="op">/</span> BitStruct(</span>
+<span id="cb1-3"><a href="#cb1-3"></a>        <span class="st">&quot;version&quot;</span> <span class="op">/</span> Const(<span class="dv">4</span>, Nibble),</span>
+<span id="cb1-4"><a href="#cb1-4"></a>        <span class="st">&quot;length&quot;</span> <span class="op">/</span> ExprAdapter(Nibble,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>            decoder <span class="op">=</span> <span class="kw">lambda</span> obj, ctx: obj <span class="op">*</span> <span class="dv">4</span>,</span>
+<span id="cb1-6"><a href="#cb1-6"></a>            encoder <span class="op">=</span> <span class="kw">lambda</span> obj, ctx: obj <span class="op">//</span> <span class="dv">4</span>,</span>
+<span id="cb1-7"><a href="#cb1-7"></a>        ),</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    ),</span>
+<span id="cb1-9"><a href="#cb1-9"></a>    ...</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    <span class="st">&quot;total_length&quot;</span> <span class="op">/</span> Int16ub,</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    ...</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    <span class="st">&quot;options&quot;</span> <span class="op">/</span> Bytes(this.header.length <span class="op">-</span> <span class="dv">20</span>),</span>
+<span id="cb1-13"><a href="#cb1-13"></a>    <span class="st">&quot;body&quot;</span> <span class="op">/</span> Bytes(this.total_length <span class="op">-</span> this.header.length),</span>
+<span id="cb1-14"><a href="#cb1-14"></a>)</span></code></pre></div>
+<p>In this simple declaration we created a parser, builder, and the data type for IPv4 packets!</p>
+<p>Also, I'd like to highlight the richness of the format. It isn't a simple "struct" with fields of known types, but rather a "dependently-typed" one, where the size of the <code>options</code> field depends on the value of <code>header.length</code>! Haskell parser combinators libraries which support such dependencies that do tend to identify as <a href="http://hackage.haskell.org/package/parsec">"monadic parser combinators" libraries</a>, in constrast to <a href="http://hackage.haskell.org/package/regex-applicative">"applicative parser combinators"</a> which don't support them.</p>
+<h2 id="parsers-and-builders-as-prisms">Parsers and builders as prisms</h2>
+<p>What is the essence of parsing and building?</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">data</span> <span class="dt">Codec</span> myType encoded <span class="ot">=</span> <span class="dt">Codec</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>    {<span class="ot"> build ::</span> myType <span class="ot">-&gt;</span> encoded</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    ,<span class="ot"> parse ::</span> encoded <span class="ot">-&gt;</span> <span class="dt">Maybe</span> myType</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    }</span></code></pre></div>
+<p>(Caveat: one may desire meaningful parse errors using <code>Either ParseError</code> rather of <code>Maybe</code>. We'll ignore this issue for now)</p>
+<p>Looking for a principled solution, one may notice that this type is equivalent to <a href="https://hackage.haskell.org/package/lens/docs/Control-Lens-Prism.html"><code>Prism</code></a> from the popular <a href="https://hackage.haskell.org/package/lens"><code>lens</code></a> package!</p>
+<blockquote>
+<p>‘There are only two hard things in Computer Science: cache invalidation and naming things.’ - Phil Karlton</p>
+</blockquote>
+<p>Naming things is hard, and we want principled approaches and code re-use, so we'll choose to use the existing <code>Prism</code> rather than make an equivalent new ad-hoc type. Hopefully this will also enable enjoying the fruits of the existing <code>lens</code> eco-system.</p>
+<p>Let's demonstrate with a simplified IP-like protocol:</p>
+<ul>
+<li>Word8: The constant 7</li>
+<li>Word16: Body length</li>
+<li>Word16: Origin address</li>
+<li>Word16: Destination address</li>
+<li>Body-length bytes: Packet body</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;</span> simplifiedIp <span class="op">#</span> ((<span class="dv">2</span>, <span class="dv">3</span>), <span class="st">&quot;Hello World!&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="st">&quot;\a\NUL\f\NUL\STX\NUL\ETXHello World!&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="op">&gt;</span> <span class="st">&quot;\a\NUL\f\NUL\STX\NUL\ETXHello World!&quot;</span> <span class="op">^?</span> simplifiedIp</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="dt">Just</span> ((<span class="dv">2</span>,<span class="dv">3</span>),<span class="st">&quot;Hello World!&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="ot">simplifiedIp ::</span> <span class="dt">Prism&#39;</span> <span class="dt">ByteString</span> ((<span class="dt">Word16</span>, <span class="dt">Word16</span>), <span class="dt">ByteString</span>)</span>
+<span id="cb3-8"><a href="#cb3-8"></a>simplifiedIp <span class="ot">=</span> takeSimplifiedIp <span class="op">.</span> secondOnly <span class="st">&quot;&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="ot">takeSimplifiedIp ::</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>    <span class="dt">Prism&#39;</span> <span class="dt">ByteString</span> (((<span class="dt">Word16</span>, <span class="dt">Word16</span>), <span class="dt">ByteString</span>), <span class="dt">ByteString</span>)</span>
+<span id="cb3-12"><a href="#cb3-12"></a>takeSimplifiedIp <span class="ot">=</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a>    _Cons <span class="op">.</span> firstOnly <span class="dv">7</span> <span class="op">.</span> <span class="co">-- Remove the constant byte 7</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a>    takeWord16 <span class="op">.</span>          <span class="co">-- (bodyLen, rest)</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a>    aside (takeWord16 <span class="op">.</span> aside takeWord16) <span class="op">.</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a>                          <span class="co">-- (bodyLen, (origin, (dest, rest)))</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a></span>
+<span id="cb3-18"><a href="#cb3-18"></a>    <span class="co">-- Reordering (this is somewhat painful):</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a>    aside retuple <span class="op">.</span>       <span class="co">-- (bodyLen, ((origin, dest), rest))</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a>    retuple <span class="op">.</span>             <span class="co">-- ((bodyLen, (origin, dest)), rest)</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a>    asideFirst swapped <span class="op">.</span>  <span class="co">-- (((origin, dest), bodyLen), rest)</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a>    from retuple <span class="op">.</span>        <span class="co">-- ((origin, dest), (bodyLen, rest))</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a></span>
+<span id="cb3-24"><a href="#cb3-24"></a>    aside takeBytes <span class="op">.</span>     <span class="co">-- ((origin, dest), (body, remainder))</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a>    retuple               <span class="co">-- (((origin, dest), body), remainder)</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a></span>
+<span id="cb3-27"><a href="#cb3-27"></a><span class="co">-- Helper functions (not available in Control.Lens)</span></span>
+<span id="cb3-28"><a href="#cb3-28"></a></span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="ot">firstOnly ::</span> <span class="dt">Eq</span> e <span class="ot">=&gt;</span> e <span class="ot">-&gt;</span> <span class="dt">Prism&#39;</span> (e, a) a</span>
+<span id="cb3-30"><a href="#cb3-30"></a>firstOnly x <span class="ot">=</span> asideFirst (only x) <span class="op">.</span> iso <span class="fu">snd</span> ((,) ())</span>
+<span id="cb3-31"><a href="#cb3-31"></a></span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="ot">secondOnly ::</span> <span class="dt">Eq</span> e <span class="ot">=&gt;</span> e <span class="ot">-&gt;</span> <span class="dt">Prism&#39;</span> (a, e) a</span>
+<span id="cb3-33"><a href="#cb3-33"></a>secondOnly x <span class="ot">=</span> swapped <span class="op">.</span> firstOnly x</span>
+<span id="cb3-34"><a href="#cb3-34"></a></span>
+<span id="cb3-35"><a href="#cb3-35"></a><span class="ot">asideFirst ::</span> <span class="dt">APrism</span> s t a b <span class="ot">-&gt;</span> <span class="dt">Prism</span> (s, e) (t, e) (a, e) (b, e)</span>
+<span id="cb3-36"><a href="#cb3-36"></a>asideFirst l <span class="ot">=</span> swapped <span class="op">.</span> aside l <span class="op">.</span> swapped</span>
+<span id="cb3-37"><a href="#cb3-37"></a></span>
+<span id="cb3-38"><a href="#cb3-38"></a><span class="ot">takeWord16 ::</span> <span class="dt">Prism&#39;</span> <span class="dt">ByteString</span> (<span class="dt">Word16</span>, <span class="dt">ByteString</span>)</span>
+<span id="cb3-39"><a href="#cb3-39"></a>takeWord16 <span class="ot">=</span> _Cons <span class="op">.</span> aside _Cons <span class="op">.</span> retuple <span class="op">.</span> asideFirst (from word16Bytes)</span>
+<span id="cb3-40"><a href="#cb3-40"></a></span>
+<span id="cb3-41"><a href="#cb3-41"></a><span class="ot">word16Bytes ::</span> <span class="dt">Iso&#39;</span> <span class="dt">Word16</span> (<span class="dt">Word8</span>, <span class="dt">Word8</span>)</span>
+<span id="cb3-42"><a href="#cb3-42"></a>word16Bytes <span class="ot">=</span></span>
+<span id="cb3-43"><a href="#cb3-43"></a>    iso</span>
+<span id="cb3-44"><a href="#cb3-44"></a>    ((both <span class="op">%~</span> <span class="fu">fromIntegral</span>) <span class="op">.</span> (<span class="ot">`divMod`</span> <span class="dv">256</span>))</span>
+<span id="cb3-45"><a href="#cb3-45"></a>    (\(w1, w0) <span class="ot">-&gt;</span> <span class="fu">fromIntegral</span> w1 <span class="op">*</span> <span class="dv">256</span> <span class="op">+</span> <span class="fu">fromIntegral</span> w0)</span>
+<span id="cb3-46"><a href="#cb3-46"></a></span>
+<span id="cb3-47"><a href="#cb3-47"></a><span class="ot">retuple ::</span></span>
+<span id="cb3-48"><a href="#cb3-48"></a>    <span class="dt">Iso</span></span>
+<span id="cb3-49"><a href="#cb3-49"></a>    (a0, (a1, a2)) (b0, (b1, b2))</span>
+<span id="cb3-50"><a href="#cb3-50"></a>    ((a0, a1), a2) ((b0, b1), b2)</span>
+<span id="cb3-51"><a href="#cb3-51"></a>retuple <span class="ot">=</span></span>
+<span id="cb3-52"><a href="#cb3-52"></a>    iso</span>
+<span id="cb3-53"><a href="#cb3-53"></a>    (\(w0, (w1, r)) <span class="ot">-&gt;</span> ((w0, w1), r))</span>
+<span id="cb3-54"><a href="#cb3-54"></a>    (\((w0, w1), r) <span class="ot">-&gt;</span> (w0, (w1, r)))</span>
+<span id="cb3-55"><a href="#cb3-55"></a></span>
+<span id="cb3-56"><a href="#cb3-56"></a><span class="ot">takeBytes ::</span></span>
+<span id="cb3-57"><a href="#cb3-57"></a>    <span class="dt">Integral</span> a <span class="ot">=&gt;</span></span>
+<span id="cb3-58"><a href="#cb3-58"></a>    <span class="dt">Prism&#39;</span> (a, <span class="dt">ByteString</span>) (<span class="dt">ByteString</span>, <span class="dt">ByteString</span>)</span>
+<span id="cb3-59"><a href="#cb3-59"></a>takeBytes <span class="ot">=</span></span>
+<span id="cb3-60"><a href="#cb3-60"></a>    prism&#39;</span>
+<span id="cb3-61"><a href="#cb3-61"></a>    ( \(x, y) <span class="ot">-&gt;</span></span>
+<span id="cb3-62"><a href="#cb3-62"></a>        (<span class="fu">fromIntegral</span> (<span class="dt">ByteString</span><span class="op">.</span><span class="fu">length</span> x), x <span class="op">&lt;&gt;</span> y))</span>
+<span id="cb3-63"><a href="#cb3-63"></a>    (\(count, x) <span class="ot">-&gt;</span></span>
+<span id="cb3-64"><a href="#cb3-64"></a>        <span class="dt">ByteString</span><span class="op">.</span><span class="fu">splitAt</span> (<span class="fu">fromIntegral</span> count) x <span class="op">&lt;$</span></span>
+<span id="cb3-65"><a href="#cb3-65"></a>        guard (<span class="fu">fromIntegral</span> count <span class="op">&lt;=</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">length</span> x))</span></code></pre></div>
+<p>We've succesfully crafted prisms to parse and build our structure!</p>
+<p>Now let's review some drawbacks of the presented approach:</p>
+<ul>
+<li>We used anonymous tuples where Construct uses named fields
+<ul>
+<li>Using tuples isn't so type-safe nor is it descriptive</li>
+<li>Reordering our tuples to fit the combinators was painful</li>
+<li>To do what Construct does, we would need structural records, where we can add fields to the structure one at a time (note that this may be possible using a package such as <a href="https://hackage.haskell.org/package/vinyl-0.12.0/docs/Data-Vinyl-Tutorial-Overview.html">vinyl</a>?)</li>
+</ul></li>
+<li>Our parsers don't perform error reporting
+<ul>
+<li>When writing parsers for programming languages this is quite crucial! (Imagine getting a syntax error with the compiler not even pointing out what line it's at)</li>
+</ul></li>
+</ul>
+<p>I believe that both of these problems can be solved, resulting in a powerful and ergonomic principled solution. In my next post I'll describe an approach to add error reporting to our prisms.</p>
+<p>Notes:</p>
+<ul>
+<li>This is somewhat equivalent to <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2004/01/picklercombinators.pdf">AJ. Kennedy's "Pickler Combinators" paper (JFP 2004)</a>, which described parsing+building combinators in Haskell using a custom data type (not using prisms)</li>
+<li>Apparently T. Filiba, the author of Construct, <a href="http://tomerfiliba.com/blog/ConstructPlusPlus/">has attempted re-implementing it in Haskell in 2014</a>, but gave up</li>
+<li>Image credit: <a href="https://commons.wikimedia.org/wiki/File:Dispersive_prism.png">Kelvinsong [CC0]</a></li>
+</ul>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+        <div class="social-buttons">
+            <a href="https://twitter.com/share" class="twitter-share-button"
+                                                data-url="https://yairchu.github.io/blog" data-text="Check out: Parsers and Builders as Prisms - " data-via="yairchu">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+        </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
