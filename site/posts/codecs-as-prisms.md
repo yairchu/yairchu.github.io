@@ -156,6 +156,6 @@ I believe that both of these problems can be solved, resulting in a powerful and
 
 Notes:
 
-* This is somewhat equivalent to [AJ. Kennedy's "Pickler Combinators" paper (JFP 2004)](https://www.microsoft.com/en-us/research/wp-content/uploads/2004/01/picklercombinators.pdf), which described parsing+building combinators in Haskell using a custom data type (not using prisms)
+* [AJ. Kennedy's "Pickler Combinators" paper (JFP 2004)](https://www.microsoft.com/en-us/research/wp-content/uploads/2004/01/picklercombinators.pdf) described parsing+building combinators in Haskell using a custom data type (not using prisms) and demonstrated some more useful combinators for parsing
 * Apparently T. Filiba, the author of Construct, [has attempted re-implementing it in Haskell in 2014](http://tomerfiliba.com/blog/ConstructPlusPlus/), but gave up
 * Image credit: [Kelvinsong [CC0]](https://commons.wikimedia.org/wiki/File:Dispersive_prism.png)
