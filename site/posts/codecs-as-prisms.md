@@ -2,7 +2,7 @@
 title: "Parsers and Builders as Prisms"
 author: Yair Chuchem
 date: 2019.12.19
-tags: [programming, declarative-programming, haskell, python, optics, parsing, codecs]
+tags: [programming, declarative-programming, haskell, python, optics, parsing, codecs, construct]
 description: Declarative parsing and pretty printing
 image: Dispersive_prism.png
 ---
@@ -99,9 +99,13 @@ takeSimplifiedIp =
 
     aside takeBytes .     -- ((origin, dest), (body, remainder))
     retuple               -- (((origin, dest), body), remainder)
+```
 
--- Helper functions (not available in Control.Lens)
+This uses some combinators from `Control.Lens` and some extra combinators defined below:
 
+### Parse-build prism combinators
+
+```
 firstOnly :: Eq e => e -> Prism' (e, a) a
 firstOnly x = asideFirst (only x) . iso snd ((,) ())
 
@@ -111,15 +115,7 @@ secondOnly x = swapped . firstOnly x
 asideFirst :: APrism s t a b -> Prism (s, e) (t, e) (a, e) (b, e)
 asideFirst l = swapped . aside l . swapped
 
-takeWord16 :: Prism' ByteString (Word16, ByteString)
-takeWord16 = _Cons . aside _Cons . retuple . asideFirst (from word16Bytes)
-
-word16Bytes :: Iso' Word16 (Word8, Word8)
-word16Bytes =
-    iso
-    ((both %~ fromIntegral) . (`divMod` 256))
-    (\(w1, w0) -> fromIntegral w1 * 256 + fromIntegral w0)
-
+-- Tuple shuffling Iso
 retuple ::
     Iso
     (a0, (a1, a2)) (b0, (b1, b2))
@@ -128,6 +124,15 @@ retuple =
     iso
     (\(w0, (w1, r)) -> ((w0, w1), r))
     (\((w0, w1), r) -> (w0, (w1, r)))
+
+takeWord16 :: Prism' ByteString (Word16, ByteString)
+takeWord16 = _Cons . aside _Cons . retuple . asideFirst (from word16Bytes)
+
+word16Bytes :: Iso' Word16 (Word8, Word8)
+word16Bytes =
+    iso
+    ((both %~ fromIntegral) . (`divMod` 256))
+    (\(w1, w0) -> fromIntegral w1 * 256 + fromIntegral w0)
 
 takeBytes ::
     Integral a =>
@@ -140,6 +145,8 @@ takeBytes =
         ByteString.splitAt (fromIntegral count) x <$
         guard (fromIntegral count <= ByteString.length x))
 ```
+
+## Conclusion
 
 We've succesfully crafted prisms to parse and build our structure!
 
