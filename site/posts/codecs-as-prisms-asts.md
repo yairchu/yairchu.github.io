@@ -1,7 +1,7 @@
 ---
 title: "Prisms for AST Parsing and Building"
 author: Yair Chuchem
-date: 2019.12.24
+date: 2019.12.25
 tags: [programming, declarative-programming, haskell, python, optics, parsing, codecs, construct]
 description: Declarative parsing and pretty printing for language ASTs
 image: prism-tree.png
@@ -52,7 +52,54 @@ This used the following combinators:
   [`aside`](http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:aside)
   from [`Control.Lens`](http://hackage.haskell.org/package/lens)
 * `firstOnly`, `secondOnly`, and `asideFirst` from [the previous post](codecs-as-prisms#parse-build-prism-combinators)
-* `tokens`, `infixOpLeftRecursion`, and `tryMatch` defined below
+* `tokens`, `infixOpLeftRecursion`, and `tryMatch` are defined in the [appendix](#appendix) at the bottom
+
+## Observations
+
+In the previous post, `Prism`s didn't match up to Python's [Construct](https://construct.readthedocs.io/en/latest/intro.html) in encoding binary protocols, where Construct made good use of structural duck types (note that this seems solvable with some effort). However, for programming language syntax `Prism` seem very elegant imho.
+
+Note how we harness optics' parametricity and composition. In the previous post we parsed `ByteString`s but here we parse `String` and we start by converting them to tokens (ie `[String]`) and parse that.
+
+### Renegade prisms
+
+Unlike the previous post's lawful `Prism`s, this post's parsing is lossy,
+so it breaks the [`Traversal` laws](https://artyom.me/lens-over-tea-2#traversal-laws):
+
+```Haskell
+> "1 + (2*3)" & expr %~ id
+"1 + 2 * 3"
+```
+
+If one desires lawful parsing Prisms, their AST representation has to represent white-space and redundant parentheses.
+
+A `Prism` law that is kept is that if you parse what you built you do get it back:
+
+```Haskell
+import Test.QuickCheck.Arbitrary.ADT
+
+propParseBack e = (expr # e) ^? expr == Just e
+
+instance Arbitrary Expr where
+    arbitrary = genericArbitrary
+    shrink = genericShrink
+
+> quickCheck propParseBack
++++ OK, passed 100 tests.
+```
+
+### Caveat: meaninful parse errors
+
+When parsing with this `Prism` fails, it offers no useful error-reporting.
+But do I believe that this is solvable and I'll address it in future posts.
+
+## Request for feedback
+
+* Do you think that some extra combinators used here (`asideFirst`, `retuple`, etc) should belong in [`lens`](http://hackage.haskell.org/package/lens)?
+* Or prehaps these combinators should belong in a separate package? How would you call it?
+* Any suggestions as for naming these combinators? Other code improvements?
+* Image credit: Does anyone know who is the artist for the opening image? (I found it on [the internets](https://www.pinterest.com/pin/800303796254211989/))
+
+## Appendix
 
 ### AST parse-build prism combinators
 
@@ -123,42 +170,3 @@ tokens =
 ```
 
 (the `retuple` `Iso` was [defined in the previous post](codecs-as-prisms#parse-build-prism-combinators))
-
-## Renegade prisms
-
-Unlike the previous post's lawful `Prism`s, our syntax parsing is lossy,
-so it breaks the [`Traversal` laws](https://artyom.me/lens-over-tea-2#traversal-laws):
-
-```Haskell
-> "1 + (2*3)" & expr %~ id
-"1 + 2 * 3"
-```
-
-(if one desires lawful parsing Prisms, their AST representation should also represent white-space etc)
-
-But a law that is kept is that if you parse what you built you do get it back:
-
-```Haskell
-import Test.QuickCheck.Arbitrary.ADT
-
-propParseBack e = (expr # e) ^? expr == Just e
-
-instance Arbitrary Expr where
-    arbitrary = genericArbitrary
-    shrink = genericShrink
-
-> quickCheck propParseBack
-+++ OK, passed 100 tests.
-```
-
-## Caveat: meaninful parse errors
-
-When parsing with this `Prism` fails, it offers no useful error-reporting.
-But do I believe that this is solvable and I'll address it in future posts.
-
-## Request for feedback
-
-* Do you think that some extra combinators used here (`asideFirst`, `retuple`, etc) should belong in [`lens`](http://hackage.haskell.org/package/lens)?
-* Or prehaps these combinators should belong in a separate package? How would you call it?
-* Any suggestions as for naming these combinators? Other code improvements?
-* Image credit: Does anyone know who is the artist for the opening image? (I found it on [the internets](https://www.pinterest.com/pin/800303796254211989/))
