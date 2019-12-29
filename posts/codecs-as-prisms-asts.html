@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Yair&#39;s website">
+    <meta name="author" content="Yair Chuchem">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="Elegant AST Parsing and Building with Prisms">
+    <meta name="twitter:description" content="Declarative parsing and pretty printing for language ASTs">
+    <meta name="twitter:image" content="https://yairchu.github.io/blog/images/prism-tree.png">
+    <title>Elegant AST Parsing and Building with Prisms</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text"> HOME </div>
+            </a>
+        </nav>
+    
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+        </div>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Elegant AST Parsing and Building with Prisms
+            </span>
+            <br>
+
+            <img class="post-image" src="/images/prism-tree.png">
+            <br>
+            <span class="byline">by Yair Chuchem</span>
+            <br>
+            <span class="date">2019.12.25</span>
+            <br>
+            <div class="metadata">
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <p>Following my <a href="codecs-as-prisms">previous post</a> which suggested the use of <code>Prism</code>s for parsing and building, using a binary format example - I also want to show how the same idea can work nicely for parsing and builiding programming language syntax.</p>
+<h2 id="simple-ast-example">Simple AST example</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">data</span> <span class="dt">Expr</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="ot">=</span> <span class="dt">Lit</span> <span class="dt">Int</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="op">|</span> <span class="dt">Add</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="op">|</span> <span class="dt">Mul</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Generic</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>makePrisms &#39;<span class="dt">&#39;Expr</span></span></code></pre></div>
+<p>Here's our <code>Prism</code> for parsing and building the above AST:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;</span> expr <span class="op">#</span> <span class="dt">Mul</span> (<span class="dt">Add</span> (<span class="dt">Lit</span> <span class="dv">1</span>) (<span class="dt">Lit</span> <span class="dv">2</span>)) (<span class="dt">Lit</span> <span class="dv">3</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="st">&quot;(1 + 2) * 3&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="ot">expr ::</span> <span class="dt">Prism&#39;</span> <span class="dt">String</span> <span class="dt">Expr</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>expr <span class="ot">=</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>    tokens <span class="op">.</span>      <span class="co">-- convert string to tokens</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    takeExpr <span class="op">.</span>    <span class="co">-- take the expression</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>    secondOnly [] <span class="co">-- and there should be no remaining tokens</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="ot">takeExpr ::</span> <span class="dt">Prism&#39;</span> [<span class="dt">String</span>] (<span class="dt">Expr</span>, [<span class="dt">String</span>])</span>
+<span id="cb2-11"><a href="#cb2-11"></a>takeExpr <span class="ot">=</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>    infixOpLeftRecursion <span class="st">&quot;+&quot;</span> _Add <span class="op">$</span> <span class="co">-- Additions of</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>    infixOpLeftRecursion <span class="st">&quot;*&quot;</span> _Mul <span class="op">$</span> <span class="co">-- multiplications of</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a>    tryMatch (asideFirst _Lit)      <span class="co">-- literals or</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a>        (_Cons <span class="op">.</span> asideFirst _Show) <span class="op">$</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a>    _Cons <span class="op">.</span> firstOnly <span class="st">&quot;(&quot;</span> <span class="op">.</span>         <span class="co">-- expressions in parentheses</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a>        takeExpr <span class="op">.</span> aside (_Cons <span class="op">.</span> firstOnly <span class="st">&quot;)&quot;</span>)</span></code></pre></div>
+<p>This used the following combinators:</p>
+<ul>
+<li><a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Cons.html"><code>_Cons</code></a>, <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:_Show"><code>_Show</code></a>, and <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:aside"><code>aside</code></a> from <a href="http://hackage.haskell.org/package/lens"><code>Control.Lens</code></a></li>
+<li><code>firstOnly</code>, <code>secondOnly</code>, and <code>asideFirst</code> from <a href="codecs-as-prisms#parse-build-prism-combinators">the previous post</a></li>
+<li><code>tokens</code>, <code>infixOpLeftRecursion</code>, and <code>tryMatch</code> are defined in the <a href="#appendix">appendix</a> at the bottom</li>
+</ul>
+<h2 id="observations">Observations</h2>
+<p>In the previous post, <code>Prism</code>s didn't match up to Python's <a href="https://construct.readthedocs.io/en/latest/intro.html">Construct</a> in encoding binary protocols, where Construct made good use of structural duck types (though this appears solvable with some effort). However, for programming language syntax <code>Prism</code>s seem very elegant imho.</p>
+<p>Note how we harness optics' parametricity and composition. In the previous post we parsed <code>ByteString</code>s but here we parse <code>String</code> and we start by converting them to tokens (ie <code>[String]</code>) and parse that.</p>
+<h3 id="renegade-prisms">Renegade prisms</h3>
+<p>Unlike the previous post's lawful <code>Prism</code>s, this post's parsing is lossy, so it breaks the <a href="https://artyom.me/lens-over-tea-2#traversal-laws"><code>Traversal</code> laws</a>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;</span> <span class="st">&quot;1 + (2*3)&quot;</span> <span class="op">&amp;</span> expr <span class="op">%~</span> <span class="fu">id</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="st">&quot;1 + 2 * 3&quot;</span></span></code></pre></div>
+<p>If one desires lawful parsing Prisms, their AST representation has to represent white-space and redundant parentheses.</p>
+<p>A <code>Prism</code> law that is kept is that if you parse what you built you do get it back:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">import</span> <span class="dt">Test.QuickCheck.Arbitrary.ADT</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>propParseBack e <span class="ot">=</span> (expr <span class="op">#</span> e) <span class="op">^?</span> expr <span class="op">==</span> <span class="dt">Just</span> e</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">instance</span> <span class="dt">Arbitrary</span> <span class="dt">Expr</span> <span class="kw">where</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>    arbitrary <span class="ot">=</span> genericArbitrary</span>
+<span id="cb4-7"><a href="#cb4-7"></a>    shrink <span class="ot">=</span> genericShrink</span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="op">&gt;</span> quickCheck propParseBack</span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="op">+++</span> <span class="dt">OK</span>, passed <span class="dv">100</span> tests<span class="op">.</span></span></code></pre></div>
+<h3 id="caveat-meaninful-parse-errors">Caveat: meaninful parse errors</h3>
+<p>When parsing with this <code>Prism</code> fails, it offers no useful error-reporting. But do I believe that this is solvable and I'll address it in future posts.</p>
+<h2 id="request-for-feedback">Request for feedback</h2>
+<ul>
+<li>Do you think that some extra combinators used here (<code>asideFirst</code>, <code>firstOnly</code>, etc) should belong in <a href="http://hackage.haskell.org/package/lens"><code>lens</code></a>?</li>
+<li>Or prehaps these combinators should belong in a separate package? How would you call it?</li>
+<li>Any suggestions as for naming these combinators? Other code improvements?</li>
+<li>Image credit: Does anyone know who is the artist for the opening image? (I found it on <a href="https://www.pinterest.com/pin/800303796254211989/">the internets</a>)</li>
+</ul>
+<p>Btw: Thanks to Eyal Lotem for reading drafts of this.</p>
+<h2 id="appendix">Appendix</h2>
+<h3 id="ast-parse-build-prism-combinators">AST parse-build prism combinators</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">-- Extend a base parsing prism with applications of an operator</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="ot">infixOpLeftRecursion ::</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="dt">Eq</span> a <span class="ot">=&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>    a <span class="ot">-&gt;</span>                        <span class="co">-- The operator&#39;s text</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>    <span class="dt">Prism&#39;</span> expr (expr, expr) <span class="ot">-&gt;</span> <span class="co">-- The operator constructor&#39;s prism</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>    <span class="dt">Prism&#39;</span> [a] (expr, [a]) <span class="ot">-&gt;</span>   <span class="co">-- The base parsing prism</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="dt">Prism&#39;</span> [a] (expr, [a])</span>
+<span id="cb5-8"><a href="#cb5-8"></a>infixOpLeftRecursion operatorText cons sub <span class="ot">=</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a>    leftRecursion cons</span>
+<span id="cb5-10"><a href="#cb5-10"></a>    (aside (_Cons <span class="op">.</span> firstOnly operatorText <span class="op">.</span> sub) <span class="op">.</span> retuple)</span>
+<span id="cb5-11"><a href="#cb5-11"></a>    sub</span>
+<span id="cb5-12"><a href="#cb5-12"></a></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">-- Extend a base parsing prism with extensions to its right side</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="ot">leftRecursion ::</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>    <span class="dt">Prism&#39;</span> whole cons <span class="ot">-&gt;</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a>    <span class="dt">Prism&#39;</span> (whole, state) (cons, state) <span class="ot">-&gt;</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a>    <span class="dt">Prism&#39;</span> state (whole, state) <span class="ot">-&gt;</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a>    <span class="dt">Prism&#39;</span> state (whole, state)</span>
+<span id="cb5-19"><a href="#cb5-19"></a>leftRecursion cons extend base <span class="ot">=</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a>    prism&#39; build (<span class="fu">fmap</span> parseExtends <span class="op">.</span> (<span class="op">^?</span> base))</span>
+<span id="cb5-21"><a href="#cb5-21"></a>    <span class="kw">where</span></span>
+<span id="cb5-22"><a href="#cb5-22"></a>        build (x, state) <span class="ot">=</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a>            <span class="fu">maybe</span></span>
+<span id="cb5-24"><a href="#cb5-24"></a>            (base <span class="op">#</span> (x, state))</span>
+<span id="cb5-25"><a href="#cb5-25"></a>            (build <span class="op">.</span> (extend <span class="op">#</span>) <span class="op">.</span> (, state)) (x <span class="op">^?</span> cons)</span>
+<span id="cb5-26"><a href="#cb5-26"></a>        parseExtends x <span class="ot">=</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a>            x <span class="op">^?</span> extend <span class="op">&lt;&amp;&gt;</span> _1 <span class="op">%~</span> (cons <span class="op">#</span>) <span class="op">&amp;</span> <span class="fu">maybe</span> x parseExtends</span>
+<span id="cb5-28"><a href="#cb5-28"></a></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="co">-- Add an encoding for a sum-type constructor to an existing prism</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a><span class="ot">tryMatch ::</span></span>
+<span id="cb5-31"><a href="#cb5-31"></a>    <span class="dt">Prism&#39;</span> whole cons <span class="ot">-&gt;</span> <span class="co">-- The sum-type constructor prism</span></span>
+<span id="cb5-32"><a href="#cb5-32"></a>    <span class="dt">Prism&#39;</span> src cons <span class="ot">-&gt;</span>   <span class="co">-- Parse the constructor contents</span></span>
+<span id="cb5-33"><a href="#cb5-33"></a>    <span class="dt">Prism&#39;</span> src whole <span class="ot">-&gt;</span>  <span class="co">-- Prism to encode the other options</span></span>
+<span id="cb5-34"><a href="#cb5-34"></a>    <span class="dt">Prism&#39;</span> src whole</span>
+<span id="cb5-35"><a href="#cb5-35"></a>tryMatch cons parse fallback <span class="ot">=</span></span>
+<span id="cb5-36"><a href="#cb5-36"></a>    prism&#39; build (\x <span class="ot">-&gt;</span> (x <span class="op">^?</span> parse <span class="op">&lt;&amp;&gt;</span> (cons <span class="op">#</span>)) <span class="op">&lt;|&gt;</span> x <span class="op">^?</span> fallback)</span>
+<span id="cb5-37"><a href="#cb5-37"></a>    <span class="kw">where</span></span>
+<span id="cb5-38"><a href="#cb5-38"></a>        build x <span class="ot">=</span> <span class="fu">maybe</span> (fallback <span class="op">#</span> x) (parse <span class="op">#</span>) (x <span class="op">^?</span> cons)</span>
+<span id="cb5-39"><a href="#cb5-39"></a></span>
+<span id="cb5-40"><a href="#cb5-40"></a><span class="co">-- Transform a string into tokens</span></span>
+<span id="cb5-41"><a href="#cb5-41"></a><span class="ot">tokens ::</span> <span class="dt">Iso&#39;</span> <span class="dt">String</span> [<span class="dt">String</span>]</span>
+<span id="cb5-42"><a href="#cb5-42"></a>tokens <span class="ot">=</span></span>
+<span id="cb5-43"><a href="#cb5-43"></a>    iso splitTokens (<span class="fu">foldr</span> addToken <span class="st">&quot;&quot;</span>)</span>
+<span id="cb5-44"><a href="#cb5-44"></a>    <span class="kw">where</span></span>
+<span id="cb5-45"><a href="#cb5-45"></a>        addToken x <span class="st">&quot;&quot;</span> <span class="ot">=</span> x</span>
+<span id="cb5-46"><a href="#cb5-46"></a>        addToken [x] y</span>
+<span id="cb5-47"><a href="#cb5-47"></a>            <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span>generalCategory x <span class="op">==</span> <span class="dt">Char</span><span class="op">.</span><span class="dt">OpenPunctuation</span> <span class="ot">=</span> x <span class="op">:</span> y</span>
+<span id="cb5-48"><a href="#cb5-48"></a>        addToken x (y<span class="op">:</span>ys)</span>
+<span id="cb5-49"><a href="#cb5-49"></a>            <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span>generalCategory y <span class="op">==</span> <span class="dt">Char</span><span class="op">.</span><span class="dt">ClosePunctuation</span> <span class="ot">=</span> x <span class="op">&lt;&gt;</span> (y<span class="op">:</span>ys)</span>
+<span id="cb5-50"><a href="#cb5-50"></a>        addToken x y <span class="ot">=</span> x <span class="op">&lt;&gt;</span> <span class="st">&quot; &quot;</span> <span class="op">&lt;&gt;</span> y</span>
+<span id="cb5-51"><a href="#cb5-51"></a>        isOp <span class="ot">=</span></span>
+<span id="cb5-52"><a href="#cb5-52"></a>            (<span class="ot">`elem`</span> [<span class="dt">Char</span><span class="op">.</span><span class="dt">MathSymbol</span>, <span class="dt">Char</span><span class="op">.</span><span class="dt">OtherPunctuation</span>]) <span class="op">.</span></span>
+<span id="cb5-53"><a href="#cb5-53"></a>            <span class="dt">Char</span><span class="op">.</span>generalCategory</span>
+<span id="cb5-54"><a href="#cb5-54"></a>        isParen <span class="ot">=</span> (<span class="ot">`elem`</span> <span class="st">&quot;()[]{}&quot;</span>)</span>
+<span id="cb5-55"><a href="#cb5-55"></a>        splitTokens <span class="st">&quot;&quot;</span> <span class="ot">=</span> []</span>
+<span id="cb5-56"><a href="#cb5-56"></a>        splitTokens (x<span class="op">:</span>s<span class="op">:</span>xs) <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span><span class="fu">isSpace</span> s <span class="ot">=</span> [x] <span class="op">:</span> splitTokens xs</span>
+<span id="cb5-57"><a href="#cb5-57"></a>        splitTokens (s<span class="op">:</span>xs) <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span><span class="fu">isSpace</span> s <span class="ot">=</span> splitTokens xs</span>
+<span id="cb5-58"><a href="#cb5-58"></a>        splitTokens (x<span class="op">:</span>xs) <span class="op">|</span> isParen x <span class="ot">=</span> [x] <span class="op">:</span> splitTokens xs</span>
+<span id="cb5-59"><a href="#cb5-59"></a>        splitTokens (x<span class="op">:</span>xs) <span class="ot">=</span></span>
+<span id="cb5-60"><a href="#cb5-60"></a>            <span class="kw">case</span> splitTokens xs <span class="kw">of</span></span>
+<span id="cb5-61"><a href="#cb5-61"></a>            [] <span class="ot">-&gt;</span> [[x]]</span>
+<span id="cb5-62"><a href="#cb5-62"></a>            ((y<span class="op">:</span>ys) <span class="op">:</span> zs) <span class="op">|</span> <span class="fu">not</span> (isParen y) <span class="op">&amp;&amp;</span> isOp x <span class="op">==</span> isOp y <span class="ot">-&gt;</span> (x<span class="op">:</span>y<span class="op">:</span>ys) <span class="op">:</span> zs</span>
+<span id="cb5-63"><a href="#cb5-63"></a>            ys <span class="ot">-&gt;</span> [x] <span class="op">:</span> ys</span></code></pre></div>
+<ul>
+<li>The <code>retuple</code> <code>Iso</code> was <a href="codecs-as-prisms#parse-build-prism-combinators">defined in the previous post</a></li>
+<li><code>tryMatch</code> takes two prisms from the unparsed source and from the resulting structure to the matched pattern. If there were optics for inversed prisms and <a href="https://stackoverflow.com/questions/59426379/optic-for-partial-conversion-on-both-sides/59441415#59441415">partial isomorphisms</a> then these could be combined into one argument and the existing <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Combinators.html#v:failing"><code>failing</code></a> combinator could replace <code>tryMatch</code>.</li>
+</ul>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+        <div class="social-buttons">
+            <a href="https://twitter.com/share" class="twitter-share-button"
+                                                data-url="https://yairchu.github.io/blog" data-text="Check out: Elegant AST Parsing and Building with Prisms - " data-via="yairchu">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+        </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
