@@ -45,7 +45,7 @@ takeExpr =
 
 ```
 
-This used the following combinators:
+This uses the following combinators:
 
 * [`_Cons`](http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Cons.html),
   [`_Show`](http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:_Show), and
