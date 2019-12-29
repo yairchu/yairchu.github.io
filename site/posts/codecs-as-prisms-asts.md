@@ -101,6 +101,10 @@ But do I believe that this is solvable and I'll address it in future posts.
 
 Btw: Thanks to Eyal Lotem for reading drafts of this.
 
+Discussion:
+
+* <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell](https://www.reddit.com/r/haskell/comments/eh4gpg/elegant_ast_parsing_and_building_with_prisms/)
+
 ## Appendix
 
 ### AST parse-build prism combinators
