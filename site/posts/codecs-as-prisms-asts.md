@@ -1,7 +1,7 @@
 ---
-title: "Prisms for AST Parsing and Building"
+title: "Elegant AST Parsing and Building with Prisms"
 author: Yair Chuchem
-date: 2019.12.25
+date: 2019.12.29
 tags: [programming, declarative-programming, haskell, python, optics, parsing, codecs, construct]
 description: Declarative parsing and pretty printing for language ASTs
 image: prism-tree.png
@@ -56,7 +56,7 @@ This used the following combinators:
 
 ## Observations
 
-In the previous post, `Prism`s didn't match up to Python's [Construct](https://construct.readthedocs.io/en/latest/intro.html) in encoding binary protocols, where Construct made good use of structural duck types (note that this seems solvable with some effort). However, for programming language syntax `Prism` seem very elegant imho.
+In the previous post, `Prism`s didn't match up to Python's [Construct](https://construct.readthedocs.io/en/latest/intro.html) in encoding binary protocols, where Construct made good use of structural duck types (though this appears solvable with some effort). However, for programming language syntax `Prism`s seem very elegant imho.
 
 Note how we harness optics' parametricity and composition. In the previous post we parsed `ByteString`s but here we parse `String` and we start by converting them to tokens (ie `[String]`) and parse that.
 
@@ -94,10 +94,12 @@ But do I believe that this is solvable and I'll address it in future posts.
 
 ## Request for feedback
 
-* Do you think that some extra combinators used here (`asideFirst`, `retuple`, etc) should belong in [`lens`](http://hackage.haskell.org/package/lens)?
+* Do you think that some extra combinators used here (`asideFirst`, `firstOnly`, etc) should belong in [`lens`](http://hackage.haskell.org/package/lens)?
 * Or prehaps these combinators should belong in a separate package? How would you call it?
 * Any suggestions as for naming these combinators? Other code improvements?
 * Image credit: Does anyone know who is the artist for the opening image? (I found it on [the internets](https://www.pinterest.com/pin/800303796254211989/))
+
+Btw: Thanks to Eyal Lotem for reading drafts of this.
 
 ## Appendix
 
@@ -169,4 +171,5 @@ tokens =
             ys -> [x] : ys
 ```
 
-(the `retuple` `Iso` was [defined in the previous post](codecs-as-prisms#parse-build-prism-combinators))
+* The `retuple` `Iso` was [defined in the previous post](codecs-as-prisms#parse-build-prism-combinators)
+* `tryMatch` takes two prisms from the unparsed source and from the resulting structure to the matched pattern. If there were optics for inversed prisms and [partial isomorphisms](https://stackoverflow.com/questions/59426379/optic-for-partial-conversion-on-both-sides/59441415#59441415) then these could be combined into one argument and the existing [`failing`](http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Combinators.html#v:failing) combinator could replace `tryMatch`.
