@@ -9,7 +9,7 @@ image: prism-tree.png
 
 Following my [previous post](codecs-as-prisms) which suggested the use of `Prism`s for parsing and building,
 using a binary format example -
-I also want to show how the same idea can work nicely for parsing and builiding programming language syntax.
+I also want to show how the same idea can work nicely for parsing and building programming language syntax.
 
 ## Simple AST example
 
