@@ -47,7 +47,7 @@
             <br>
             <span class="byline">by Yair Chuchem</span>
             <br>
-            <span class="date">2019.12.25</span>
+            <span class="date">2019.12.29</span>
             <br>
             <div class="metadata">
             </div>
@@ -80,7 +80,7 @@
 <span id="cb2-15"><a href="#cb2-15"></a>        (_Cons <span class="op">.</span> asideFirst _Show) <span class="op">$</span></span>
 <span id="cb2-16"><a href="#cb2-16"></a>    _Cons <span class="op">.</span> firstOnly <span class="st">&quot;(&quot;</span> <span class="op">.</span>         <span class="co">-- expressions in parentheses</span></span>
 <span id="cb2-17"><a href="#cb2-17"></a>        takeExpr <span class="op">.</span> aside (_Cons <span class="op">.</span> firstOnly <span class="st">&quot;)&quot;</span>)</span></code></pre></div>
-<p>This used the following combinators:</p>
+<p>This uses the following combinators:</p>
 <ul>
 <li><a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Cons.html"><code>_Cons</code></a>, <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:_Show"><code>_Show</code></a>, and <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:aside"><code>aside</code></a> from <a href="http://hackage.haskell.org/package/lens"><code>Control.Lens</code></a></li>
 <li><code>firstOnly</code>, <code>secondOnly</code>, and <code>asideFirst</code> from <a href="codecs-as-prisms#parse-build-prism-combinators">the previous post</a></li>
