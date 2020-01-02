@@ -59,9 +59,11 @@ instance e ~ e' => VerboseApplicative e (ConstEither e' r) where
 Now we may want an operator to transform optics into verbose optics:
 
 ```Haskell
+-- Given an error message constructor, turns:
+-- * Traversal to VerboseTraversal
+-- * Prism to VerbosePrism
 verbose ::
-    Profunctor p =>
-    VerboseApplicative e f =>
+    (Profunctor p, VerboseApplicative e f) =>
     (t -> e) ->
     Optic p (WithPure f) s t a b ->
     Optic p f s t a b
@@ -83,8 +85,7 @@ instance Apply f => Applicative (WithPure f) where
     Free f <*> Free x = Free (liftF2 ($) f x)
 ```
 
-`verbose` turns `Traversal`s to `VerboseTraversal`s and `Prism`s to `VerbosePrism`s.
-Note that I haven't found how to make such a combinator which will also turn a [`Fold`](http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#t:Fold) to a verbose variant.
+Note that I haven't found how to make `verbose` also turn a [`Fold`](http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#t:Fold) to a verbose variant.
 
 To see our verbose optics in action we'll make some verbose variants of optics from [`lens-aeson`](https://hackage.haskell.org/package/lens-aeson/docs/Data-Aeson-Lens.html):
 
