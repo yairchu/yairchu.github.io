@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Yair&#39;s website">
+    <meta name="author" content="Yair Chuchem">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="Basic error reporting for optics">
+    <meta name="twitter:description" content="Adding error reportinh to folds, traversals and prisms">
+    <meta name="twitter:image" content="https://yairchu.github.io/blog/images/railway-crossing.jpg">
+    <title>Basic error reporting for optics</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text"> HOME </div>
+            </a>
+        </nav>
+    
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+        </div>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Basic error reporting for optics
+            </span>
+            <br>
+
+            <img class="post-image" src="/images/railway-crossing.jpg">
+            <br>
+            <span class="byline">by Yair Chuchem</span>
+            <br>
+            <span class="date">2020.01.02</span>
+            <br>
+            <div class="metadata">
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <p>When <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#v:-94--63-"><code>^?</code></a> returns <code>Nothing</code>, it is often desired to know why.</p>
+<p>Let's define a <code>^??</code> operator which returns an <code>Either</code> instead of a <code>Maybe</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">newtype</span> <span class="dt">ConstEither</span> e r a <span class="ot">=</span> <span class="dt">ConstEither</span> {<span class="ot"> getConstEither ::</span> <span class="dt">Either</span> e r }</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="kw">deriving</span> <span class="dt">Functor</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">infixl</span> <span class="dv">8</span> <span class="op">^??</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="ot">(^??) ::</span> s <span class="ot">-&gt;</span> <span class="dt">LensLike&#39;</span> (<span class="dt">ConstEither</span> e a) s a <span class="ot">-&gt;</span> <span class="dt">Either</span> e a</span>
+<span id="cb1-6"><a href="#cb1-6"></a>whole <span class="op">^??</span> f <span class="ot">=</span> f (<span class="dt">ConstEither</span> <span class="op">.</span> <span class="dt">Right</span>) whole <span class="op">&amp;</span> getConstEither</span></code></pre></div>
+<p>The standard optics (<code>Traversal</code>, <code>Prism</code>, etc) do not work with our new combinator, so let's see how we can define ones which would.</p>
+<p><a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Traversal.html#v:Traversal"><code>Traversal s t a b</code></a> is <code>forall f. Applicative f =&gt; (a -&gt; f b) -&gt; s -&gt; f t</code> and it uses <code>f</code>'s <code>pure</code> in the empty case, so we'll replace the <code>Applicative</code> with a verbose variant which supplies error information in the empty case:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">class</span> <span class="dt">Apply</span> f <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e f <span class="kw">where</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ot">    vpure ::</span> e <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> f a</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">type</span> <span class="dt">VerboseTraversal</span> e s t a b <span class="ot">=</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="kw">forall</span> f<span class="op">.</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>    <span class="dt">VerboseApplicative</span> e f <span class="ot">=&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="dt">LensLike</span> f s t a b</span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="kw">type</span> <span class="dt">VerbosePrism</span> e s t a b <span class="ot">=</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>    <span class="kw">forall</span> p f<span class="op">.</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>    (<span class="dt">Choice</span> p, <span class="dt">VerboseApplicative</span> e f) <span class="ot">=&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>    <span class="dt">Optic</span> p f s t a b</span>
+<span id="cb2-13"><a href="#cb2-13"></a></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="kw">type</span> <span class="dt">VerboseTraversal&#39;</span> e s a <span class="ot">=</span> <span class="dt">VerboseTraversal</span> e s s a a</span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="kw">type</span> <span class="dt">VerbosePrism&#39;</span> e s a <span class="ot">=</span> <span class="dt">VerbosePrism</span> e s s a a</span>
+<span id="cb2-16"><a href="#cb2-16"></a></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">-- Verbose optics support for (^.) and (^..)</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="kw">instance</span> <span class="dt">Monoid</span> r <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e (<span class="dt">Const</span> r) <span class="kw">where</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a>    vpure _ <span class="ot">=</span> <span class="fu">pure</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="co">-- Verbose optics support for `preview`, aka (#)</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="kw">instance</span> <span class="dt">VerboseApplicative</span> e <span class="dt">Identity</span> <span class="kw">where</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a>    vpure _ <span class="ot">=</span> <span class="fu">pure</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="co">-- Verbose optics support for our (^??)</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="kw">instance</span> <span class="dt">Apply</span> (<span class="dt">ConstEither</span> e r) <span class="kw">where</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a>    <span class="dt">ConstEither</span> x <span class="op">&lt;.&gt;</span> _ <span class="ot">=</span> <span class="dt">ConstEither</span> x</span>
+<span id="cb2-28"><a href="#cb2-28"></a><span class="kw">instance</span> e <span class="op">~</span> e&#39; <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e (<span class="dt">ConstEither</span> e&#39; r) <span class="kw">where</span></span>
+<span id="cb2-29"><a href="#cb2-29"></a>    vpure e _ <span class="ot">=</span> <span class="dt">ConstEither</span> (<span class="dt">Left</span> e)</span></code></pre></div>
+<p>Now we may want an operator to transform optics into verbose optics:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">-- Given an error message constructor, turns:</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">-- * Traversal to VerboseTraversal</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">-- * Prism to VerbosePrism</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="ot">verbose ::</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>    (<span class="dt">Profunctor</span> p, <span class="dt">VerboseApplicative</span> e f) <span class="ot">=&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>    (t <span class="ot">-&gt;</span> e) <span class="ot">-&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="dt">Optic</span> p (<span class="dt">WithPure</span> f) s t a b <span class="ot">-&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a>    <span class="dt">Optic</span> p f s t a b</span>
+<span id="cb3-9"><a href="#cb3-9"></a>verbose e t <span class="ot">=</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>    rmap f <span class="op">.</span> t <span class="op">.</span> rmap <span class="dt">Free</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>    <span class="kw">where</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a>        f (<span class="dt">Free</span> r) <span class="ot">=</span> r</span>
+<span id="cb3-13"><a href="#cb3-13"></a>        f (<span class="dt">Pure</span> r) <span class="ot">=</span> vpure (e r) r</span>
+<span id="cb3-14"><a href="#cb3-14"></a></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">-- WithPure turns an Apply to an Applicative via an added Pure</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="kw">data</span> <span class="dt">WithPure</span> f a <span class="ot">=</span> <span class="dt">Pure</span> a <span class="op">|</span> <span class="dt">Free</span> (f a)</span>
+<span id="cb3-17"><a href="#cb3-17"></a>    <span class="kw">deriving</span> <span class="dt">Functor</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="kw">instance</span> <span class="dt">Apply</span> f <span class="ot">=&gt;</span> <span class="dt">Applicative</span> (<span class="dt">WithPure</span> f) <span class="kw">where</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a>    <span class="fu">pure</span> <span class="ot">=</span> <span class="dt">Pure</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Pure</span> (f x)</span>
+<span id="cb3-22"><a href="#cb3-22"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Free</span> x <span class="ot">=</span> <span class="dt">Free</span> (f <span class="op">&lt;$&gt;</span> x)</span>
+<span id="cb3-23"><a href="#cb3-23"></a>    <span class="dt">Free</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Free</span> (f <span class="op">&lt;&amp;&gt;</span> (<span class="op">$</span> x))</span>
+<span id="cb3-24"><a href="#cb3-24"></a>    <span class="dt">Free</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Free</span> x <span class="ot">=</span> <span class="dt">Free</span> (liftF2 (<span class="op">$</span>) f x)</span></code></pre></div>
+<p>Note that I haven't found how to make <code>verbose</code> also turn a <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#t:Fold"><code>Fold</code></a> to a verbose variant.</p>
+<p>To see our verbose optics in action we'll make some verbose variants of optics from <a href="https://hackage.haskell.org/package/lens-aeson/docs/Data-Aeson-Lens.html"><code>lens-aeson</code></a>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">type</span> <span class="dt">Err</span> <span class="ot">=</span> <span class="dt">String</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="ot">v_Value ::</span> (<span class="dt">AsValue</span> t, <span class="dt">Show</span> t) <span class="ot">=&gt;</span> <span class="dt">VerbosePrism&#39;</span> <span class="dt">Err</span> t <span class="dt">Value</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>v_Value <span class="ot">=</span> verbose (\x <span class="ot">-&gt;</span> <span class="st">&quot;Doesn&#39;t parse as JSON: &quot;</span> <span class="op">&lt;&gt;</span> <span class="fu">show</span> x) _Value</span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="ot">v_Double ::</span> (<span class="dt">ToJSON</span> t, <span class="dt">AsNumber</span> t) <span class="ot">=&gt;</span> <span class="dt">VerbosePrism&#39;</span> <span class="dt">Err</span> t <span class="dt">Double</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>v_Double <span class="ot">=</span> verbose (expectJson <span class="st">&quot;number&quot;</span>) _Double</span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="ot">vnth ::</span> (<span class="dt">ToJSON</span> t, <span class="dt">AsValue</span> t) <span class="ot">=&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">VerboseTraversal&#39;</span> <span class="dt">Err</span> t <span class="dt">Value</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>vnth i <span class="ot">=</span> verbose (expectJson (<span class="st">&quot;item at index &quot;</span> <span class="op">&lt;&gt;</span> <span class="fu">show</span> i)) (nth i)</span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="ot">expectJson ::</span> <span class="dt">ToJSON</span> a <span class="ot">=&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Err</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>expectJson e x <span class="ot">=</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>    <span class="st">&quot;Expected &quot;</span> <span class="op">&lt;&gt;</span> e <span class="op">&lt;&gt;</span> <span class="st">&quot; but found &quot;</span> <span class="op">&lt;&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a>    Data.ByteString.Lazy.Char8.unpack (encode x)</span></code></pre></div>
+<p>Now let's see they work:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="pp"># Verbose traversals can work like regular traversals</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^?</span> _Value <span class="op">.</span> nth <span class="dv">0</span> <span class="op">.</span> _Double</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="dt">Just</span> <span class="fl">1.0</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^?</span> v_Value <span class="op">.</span> vnth <span class="dv">0</span> <span class="op">.</span> v_Double</span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="dt">Just</span> <span class="fl">1.0</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^?</span> v_Value <span class="op">.</span> vnth <span class="dv">1</span> <span class="op">.</span> v_Double</span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="dt">Nothing</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="pp"># But using ^?? rather than ^? we can also get error info</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> vnth <span class="dv">0</span> <span class="op">.</span> v_Double</span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="dt">Right</span> <span class="fl">1.0</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> vnth <span class="dv">1</span> <span class="op">.</span> v_Double</span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="dt">Left</span> <span class="st">&quot;Expected number but found \&quot;x\&quot;&quot;</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> vnth <span class="dv">2</span> <span class="op">.</span> v_Double</span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="dt">Left</span> <span class="st">&quot;Expected item at index 2 but found [1,\&quot;x\&quot;]&quot;</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="op">&gt;</span> <span class="st">&quot;hello&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> v_Double</span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="dt">Left</span> <span class="st">&quot;Doesn&#39;t parse as JSON: \&quot;hello\&quot;&quot;</span></span></code></pre></div>
+<h2 id="notes">Notes</h2>
+<p><a href="https://www.reddit.com/r/haskell/comments/eh4gpg/elegant_ast_parsing_and_building_with_prisms/fcl7dvv/">In the previous post's discussion</a>, <a href="https://github.com/ekmett/lens"><code>lens</code></a>'s creator Edward Kmett noted that in <code>lens</code>'s early days they experimented with a different formulation of error-reporting optics that placed the extra information in <code>Optic p f s t a b</code>'s <code>p</code> rather than <code>f</code>, but that with that formulation they ran into problems with inference and that this new formulation may work better.</p>
+<h2 id="request-for-feedback">Request for feedback</h2>
+<ul>
+<li>Do you have use cases for this? If so, do you think that this should belong in <code>lens</code>?</li>
+<li>Should it belong in a separate package? Perhaps along with the previous posts' <code>Prism</code> combinators and with additional optics like <a href="https://github.com/ekmett/lens/issues/904">inverted <code>Prism</code>s and partial <code>Iso</code>s</a>?</li>
+<li>Any code suggestions or improvements?</li>
+</ul>
+<p><a href="https://www.peakpx.com/637476/railway-line-train-railway-crossing-sky-no-people">Image source</a></p>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+        <div class="social-buttons">
+            <a href="https://twitter.com/share" class="twitter-share-button"
+                                                data-url="https://yairchu.github.io/blog" data-text="Check out: Basic error reporting for optics - " data-via="yairchu">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+        </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
