@@ -105,7 +105,7 @@ This uses some combinators from `Control.Lens` and some extra combinators define
 
 ### Parse-build prism combinators
 
-```
+```Haskell
 firstOnly :: Eq e => e -> Prism' (e, a) a
 firstOnly x = asideFirst (only x) . iso snd ((,) ())
 
