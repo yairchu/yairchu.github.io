@@ -141,4 +141,8 @@ Left "Doesn't parse as JSON: \"hello\""
 * Should it belong in a separate package? Perhaps along with the previous posts' `Prism` combinators and with additional optics like [inverted `Prism`s and partial `Iso`s](https://github.com/ekmett/lens/issues/904)?
 * Any code suggestions or improvements?
 
+Discussion
+
+* <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell](https://www.reddit.com/r/haskell/comments/ej15ar/basic_error_reporting_for_optics/)
+
 [Image source](https://www.peakpx.com/637476/railway-line-train-railway-crossing-sky-no-people)
