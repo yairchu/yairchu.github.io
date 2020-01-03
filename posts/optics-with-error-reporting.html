@@ -100,24 +100,26 @@
 <span id="cb3-4"><a href="#cb3-4"></a><span class="ot">verbose ::</span></span>
 <span id="cb3-5"><a href="#cb3-5"></a>    (<span class="dt">Profunctor</span> p, <span class="dt">VerboseApplicative</span> e f) <span class="ot">=&gt;</span></span>
 <span id="cb3-6"><a href="#cb3-6"></a>    (t <span class="ot">-&gt;</span> e) <span class="ot">-&gt;</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>    <span class="dt">Optic</span> p (<span class="dt">WithPure</span> f) s t a b <span class="ot">-&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="dt">Optic</span> p (<span class="dt">Lift</span> f) s t a b <span class="ot">-&gt;</span></span>
 <span id="cb3-8"><a href="#cb3-8"></a>    <span class="dt">Optic</span> p f s t a b</span>
 <span id="cb3-9"><a href="#cb3-9"></a>verbose e t <span class="ot">=</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a>    rmap f <span class="op">.</span> t <span class="op">.</span> rmap <span class="dt">Free</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>    rmap f <span class="op">.</span> t <span class="op">.</span> rmap <span class="dt">Other</span></span>
 <span id="cb3-11"><a href="#cb3-11"></a>    <span class="kw">where</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>        f (<span class="dt">Free</span> r) <span class="ot">=</span> r</span>
+<span id="cb3-12"><a href="#cb3-12"></a>        f (<span class="dt">Other</span> r) <span class="ot">=</span> r</span>
 <span id="cb3-13"><a href="#cb3-13"></a>        f (<span class="dt">Pure</span> r) <span class="ot">=</span> vpure (e r) r</span>
 <span id="cb3-14"><a href="#cb3-14"></a></span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="co">-- WithPure turns an Apply to an Applicative via an added Pure</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="kw">data</span> <span class="dt">WithPure</span> f a <span class="ot">=</span> <span class="dt">Pure</span> a <span class="op">|</span> <span class="dt">Free</span> (f a)</span>
-<span id="cb3-17"><a href="#cb3-17"></a>    <span class="kw">deriving</span> <span class="dt">Functor</span></span>
-<span id="cb3-18"><a href="#cb3-18"></a></span>
-<span id="cb3-19"><a href="#cb3-19"></a><span class="kw">instance</span> <span class="dt">Apply</span> f <span class="ot">=&gt;</span> <span class="dt">Applicative</span> (<span class="dt">WithPure</span> f) <span class="kw">where</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a>    <span class="fu">pure</span> <span class="ot">=</span> <span class="dt">Pure</span></span>
-<span id="cb3-21"><a href="#cb3-21"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Pure</span> (f x)</span>
-<span id="cb3-22"><a href="#cb3-22"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Free</span> x <span class="ot">=</span> <span class="dt">Free</span> (f <span class="op">&lt;$&gt;</span> x)</span>
-<span id="cb3-23"><a href="#cb3-23"></a>    <span class="dt">Free</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Free</span> (f <span class="op">&lt;&amp;&gt;</span> (<span class="op">$</span> x))</span>
-<span id="cb3-24"><a href="#cb3-24"></a>    <span class="dt">Free</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Free</span> x <span class="ot">=</span> <span class="dt">Free</span> (liftF2 (<span class="op">$</span>) f x)</span></code></pre></div>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">-- A fixed variant of transformers:Control.Applicative.Lift -</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">-- Turns an Apply to an Applicative</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">-- (transformer&#39;s versions Applicative instance requires Applicative f)</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="kw">data</span> <span class="dt">Lift</span> f a <span class="ot">=</span> <span class="dt">Pure</span> a <span class="op">|</span> <span class="dt">Other</span> (f a)</span>
+<span id="cb3-19"><a href="#cb3-19"></a>    <span class="kw">deriving</span> <span class="dt">Functor</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="kw">instance</span> <span class="dt">Apply</span> f <span class="ot">=&gt;</span> <span class="dt">Applicative</span> (<span class="dt">Lift</span> f) <span class="kw">where</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a>    <span class="fu">pure</span> <span class="ot">=</span> <span class="dt">Pure</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Pure</span> (f x)</span>
+<span id="cb3-24"><a href="#cb3-24"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Other</span> x <span class="ot">=</span> <span class="dt">Other</span> (f <span class="op">&lt;$&gt;</span> x)</span>
+<span id="cb3-25"><a href="#cb3-25"></a>    <span class="dt">Other</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Other</span> (f <span class="op">&lt;&amp;&gt;</span> (<span class="op">$</span> x))</span>
+<span id="cb3-26"><a href="#cb3-26"></a>    <span class="dt">Other</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Other</span> x <span class="ot">=</span> <span class="dt">Other</span> (liftF2 (<span class="op">$</span>) f x)</span></code></pre></div>
 <p>Note that I haven't found how to make <code>verbose</code> also turn a <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#t:Fold"><code>Fold</code></a> to a verbose variant.</p>
 <p>To see our verbose optics in action we'll make some verbose variants of optics from <a href="https://hackage.haskell.org/package/lens-aeson/docs/Data-Aeson-Lens.html"><code>lens-aeson</code></a>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">type</span> <span class="dt">Err</span> <span class="ot">=</span> <span class="dt">String</span></span>
