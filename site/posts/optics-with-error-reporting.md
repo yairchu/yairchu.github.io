@@ -65,24 +65,26 @@ Now we may want an operator to transform optics into verbose optics:
 verbose ::
     (Profunctor p, VerboseApplicative e f) =>
     (t -> e) ->
-    Optic p (WithPure f) s t a b ->
+    Optic p (Lift f) s t a b ->
     Optic p f s t a b
 verbose e t =
-    rmap f . t . rmap Free
+    rmap f . t . rmap Other
     where
-        f (Free r) = r
+        f (Other r) = r
         f (Pure r) = vpure (e r) r
 
--- WithPure turns an Apply to an Applicative via an added Pure
-data WithPure f a = Pure a | Free (f a)
+-- A fixed variant of transformers:Control.Applicative.Lift -
+-- Turns an Apply to an Applicative
+-- (transformer's versions Applicative instance requires Applicative f)
+data Lift f a = Pure a | Other (f a)
     deriving Functor
 
-instance Apply f => Applicative (WithPure f) where
+instance Apply f => Applicative (Lift f) where
     pure = Pure
     Pure f <*> Pure x = Pure (f x)
-    Pure f <*> Free x = Free (f <$> x)
-    Free f <*> Pure x = Free (f <&> ($ x))
-    Free f <*> Free x = Free (liftF2 ($) f x)
+    Pure f <*> Other x = Other (f <$> x)
+    Other f <*> Pure x = Other (f <&> ($ x))
+    Other f <*> Other x = Other (liftF2 ($) f x)
 ```
 
 Note that I haven't found how to make `verbose` also turn a [`Fold`](http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#t:Fold) to a verbose variant.
