@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head profile="http://www.w3.org/2005/10/profile">
+    <meta charset="UTF-8">
+    <meta name="description" content="Yair&#39;s website">
+    <meta name="author" content="Yair Chuchem">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="Chess Chase">
+    <meta name="twitter:description" content="Chess without turns nor sight!">
+    <meta name="twitter:image" content="https://yairchu.github.io/blog/images/Chess Chase.png">
+    <title>Chess Chase</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a id="beacon" href="/">
+                <div id="home-text"> HOME </div>
+            </a>
+        </nav>
+    
+        <div class="right-sidebar">
+            <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+            <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+        </div>
+    </header>
+
+<div id="page">
+    <div class="wrapper">
+        <div class="masthead">
+            <span class="title">
+                Chess Chase
+            </span>
+            <br>
+
+            <img class="post-image" src="/images/Chess Chase.png">
+            <br>
+            <span class="byline">by Yair Chuchem</span>
+            <br>
+            <span class="date">2020.03.29</span>
+            <br>
+            <div class="metadata">
+            </div>
+        </div>
+    </div>
+    <article class="post">
+        <p>Chess Chase is a fusion of Chess and modern real-time strategy games like Starcraft.</p>
+<p>It is free and <a href="https://github.com/yairchu/chess2">open source</a>.</p>
+<h2 id="tutorial-video">Tutorial video</h2>
+<p>TODO!</p>
+<h2 id="installing">Installing</h2>
+<h3 id="macos-or-windows">macOS or Windows</h3>
+<p>Download the appropriate installer for your OS <a href="https://github.com/yairchu/chess2/releases">from here</a>.</p>
+<h3 id="linuxandroidios">Linux/Android/iOS</h3>
+<p>Build <a href="https://github.com/yairchu/chess2">from the source code</a>.</p>
+<p>(The game will soon be available in the iOS app store)</p>
+<h2 id="rules">Rules</h2>
+<h3 id="differences-from-standard-chess">Differences from standard chess</h3>
+<p>Instead of alternating turns, the game is real-time with cool-downs (aka rate limits):</p>
+<ul>
+<li>After a move, a player cannot move any piece for 0.8 second</li>
+<li>After a piece moves, it cannot move for 2.8 seconds</li>
+<li>A King is quicker and is only frozen for 2.2 seconds</li>
+<li>A Pawn promoted to a Queen becomes frozen for 2.2 seconds as well</li>
+</ul>
+<p>Instead of seeing the whole board, you only see these parts:</p>
+<ul>
+<li>The squares that your pieces inhabit</li>
+<li>The squares that your pieces can move to</li>
+<li>The enemy pieces that immediately threaten your King ("Check")</li>
+<li>Enemy pawns that you can capture by <a href="https://en.wikipedia.org/wiki/En_passant">En Passant</a></li>
+</ul>
+<p>Unlike standard Chess:</p>
+<ul>
+<li>The game is won by actually capturing the King (not before in a <a href="https://en.wikipedia.org/wiki/Chess#Win">Checkmate</a>)</li>
+<li>The King can move to threatened position - so be careful!</li>
+<li>A <a href="https://en.wikipedia.org/wiki/Castling">Castling</a> can be done regardless of the enemy's attacks - so be careful!</li>
+<li>How <a href="https://en.wikipedia.org/wiki/En_passant">En Passant</a> relates to turns - if your previous turn happened before the enemy pawn moved you may En Passant capture it.</li>
+<li>There is currently no notion of a tie (but this might change in future update)</li>
+</ul>
+<h3 id="for-players-not-familiar-with-chess">For players not familiar with Chess</h3>
+<p>Like different units in Starcraft, pieces moves in differently.</p>
+<p>You don't need to learn the moves before starting to play, you'll figure it out as you go!</p>
+<p>To help you see where pieces can move the board is color-coded to show you where they can move. For example the "Knight" is assigned the green color and its possibly destinations are colored green. On a computer, hovering over a piece shows you where it can move.</p>
+<p>After a few rounds of the game you will learn how each piece moves, which is the same as their moves in the classic game of Chess!</p>
+<h2 id="misc">Misc</h2>
+<ul>
+<li><a href="/projects/chess-chase/privacy-policy">Privacy Policy</a></li>
+</ul>
+<p>Similar games:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Kung-Fu_Chess">Kung Fu Chess</a> - Has the real-time aspect but the whole board is visible</li>
+</ul>
+
+        <br>
+        <br>
+
+        <!--Share buttons-->
+        <div class="social-buttons">
+            <a href="https://twitter.com/share" class="twitter-share-button"
+                                                data-url="https://yairchu.github.io/blog" data-text="Check out: Chess Chase - " data-via="yairchu">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+        </div>
+</article>
+
+</div>
+
+<footer>
+    Built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
