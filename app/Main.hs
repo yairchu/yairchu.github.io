@@ -55,6 +55,7 @@ data SiteMeta =
 data IndexInfo =
   IndexInfo
     { posts :: [Post]
+    , projects :: [Post]
     }
   deriving (Generic, Show, FromJSON, ToJSON)
 
@@ -63,6 +64,7 @@ data Post =
   Post
     { title :: String
     , author :: String
+    , description :: String
     , content :: String
     , url :: String
     , date :: String
@@ -72,18 +74,22 @@ data Post =
   deriving (Generic, Eq, Ord, Show, FromJSON, ToJSON, Binary)
 
 -- | given a list of posts this will build a table of contents
-buildIndex :: [Post] -> Action ()
-buildIndex posts' = do
+buildIndex :: [Post] -> [Post] -> Action ()
+buildIndex posts' projects' = do
   indexT <- compileTemplate' "site/templates/index.html"
-  let indexInfo = IndexInfo {posts = reverse (sortOn date posts')}
+  let indexInfo =
+        IndexInfo
+        { posts = reverse (sortOn date posts')
+        , projects = reverse (sortOn title projects')
+        }
       indexHTML = T.unpack $ substitute indexT (withSiteMeta $ toJSON indexInfo)
   writeFile' (outputFolder </> "index.html") indexHTML
 
 -- | Find and build all posts
-buildPosts :: Action [Post]
-buildPosts = do
-  pPaths <- getDirectoryFiles "." ["site/posts//*.md"]
-  forP pPaths buildPost
+buildPosts :: FilePath -> Action [Post]
+buildPosts folder = do
+  _ <- getDirectoryFiles "." ["site/" <> folder <> "/*//*.md"] >>= (`forP` buildPost)
+  getDirectoryFiles "." ["site/" <> folder <> "/*.md"] >>= (`forP` buildPost)
 
 -- | Load a post, process metadata, write it to output, then return the post object
 -- Detects changes to either post content or template
@@ -114,8 +120,9 @@ copyStaticFiles = do
 --   defines workflow to build the website
 buildRules :: Action ()
 buildRules = do
-  allPosts <- buildPosts
-  buildIndex allPosts
+  allPosts <- buildPosts "posts"
+  allProjects <- buildPosts "projects"
+  buildIndex allPosts allProjects
   copyStaticFiles
 
 main :: IO ()

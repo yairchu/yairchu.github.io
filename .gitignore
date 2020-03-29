@@ -2,3 +2,4 @@
 *~
 .shake
 docs/
+.DS_Store
