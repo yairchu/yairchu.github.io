@@ -67,8 +67,6 @@ After a few rounds of the game you will learn how each piece moves, which is the
 
 ## Misc
 
+* [The Chess piece graphics](https://commons.wikimedia.org/wiki/File:Chess_Pieces_Sprite.svg) were created by Cburnett and jurgenwesterhof
 * [Privacy Policy](/projects/chess-chase/privacy-policy)
-
-Similar games:
-
-* [Kung Fu Chess](https://en.wikipedia.org/wiki/Kung-Fu_Chess) - Has the real-time aspect but the whole board is visible
+* Similar game: [Kung Fu Chess](https://en.wikipedia.org/wiki/Kung-Fu_Chess). It has the real-time aspect but the whole board is visible.
