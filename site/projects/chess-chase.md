@@ -21,7 +21,11 @@ TODO!
 
 Download the appropriate installer for your OS [from here](https://github.com/yairchu/chess2/releases).
 
-### Linux/Android/iOS
+### iOS
+
+The game is currently [available for beta-testing](https://testflight.apple.com/join/dpRLg7th) via Apple's test-flight. It is not yet available in the normal App Store.
+
+### Linux/Android
 
 Build [from the source code](https://github.com/yairchu/chess2).
 
@@ -70,3 +74,4 @@ After a few rounds of the game you will learn how each piece moves, which is the
 * [The Chess piece graphics](https://commons.wikimedia.org/wiki/File:Chess_Pieces_Sprite.svg) were created by Cburnett and jurgenwesterhof
 * [Privacy Policy](/projects/chess-chase/privacy-policy)
 * Similar game: [Kung Fu Chess](https://en.wikipedia.org/wiki/Kung-Fu_Chess). It has the real-time aspect but the whole board is visible.
+* Feedback is most welcome! It can be given via Twitter, GitHub issues, or the medium of your choice.
