@@ -23,7 +23,7 @@ Download the appropriate installer for your OS [from here](https://github.com/ya
 
 ### iOS
 
-The game is currently [available for beta-testing](https://testflight.apple.com/join/dpRLg7th) via Apple's test-flight. It is not yet available in the normal App Store.
+The game is currently [available for beta-testing](https://testflight.apple.com/join/dpRLg7th) via Apple's TestFlight. It is not yet available in the normal App Store.
 
 ### Linux/Android
 
@@ -52,22 +52,22 @@ Instead of seeing the whole board, you only see these parts:
 Unlike standard Chess:
 
 * The game is won by actually capturing the King (not before in a [Checkmate](https://en.wikipedia.org/wiki/Chess#Win))
-* The King can move to threatened position - so be careful!
-* A [Castling](https://en.wikipedia.org/wiki/Castling) can be done regardless of the enemy's attacks - so be careful!
+* The King can move to threatened positions - so be careful!
+* [Castling](https://en.wikipedia.org/wiki/Castling) can be done regardless of the enemy's attacks - so be careful!
 * How [En Passant](https://en.wikipedia.org/wiki/En_passant) relates to turns - if your previous turn happened before the enemy pawn moved you may En Passant capture it.
-* There is currently no notion of a tie (but this might change in future update)
+* There is currently no notion of a tie (but this might change in future updates)
 
 ### For players not familiar with Chess
 
-Like different units in Starcraft, pieces moves in differently.
+Like in Starcraft, there are different kind of units and each kind moves in different ways.
 
 You don't need to learn the moves before starting to play, you'll figure it out as you go!
 
-To help you see where pieces can move the board is color-coded to show you where they can move.
-For example the "Knight" is assigned the green color and its possibly destinations are colored green.
+To help you see where pieces can move, the board is color-coded.
+For example, the "Knight" is assigned the green color and its possibly destinations are colored green.
 On a computer, hovering over a piece shows you where it can move.
 
-After a few rounds of the game you will learn how each piece moves, which is the same as their moves in the classic game of Chess!
+After playing a few rounds, you will learn how each piece moves, which is the same way it moves in the classic game of Chess!
 
 ## Misc
 
