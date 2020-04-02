@@ -1,60 +1,62 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="Yair&#39;s website">
-    <meta name="author" content="Yair Chuchem">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@yairchu">
+  <meta charset="UTF-8">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
 <meta name="twitter:creator" content="@yairchu">
 <meta name="twitter:title" content="Parsers and Builders as Prisms">
-    <meta name="twitter:description" content="Declarative parsing and pretty printing">
-    <meta name="twitter:image" content="https://yairchu.github.io/blog/images/Dispersive_prism.png">
-    <title>Parsers and Builders as Prisms</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/syntax.css">
+  <meta name="twitter:description" content="Declarative parsing and pretty printing">
+  <meta name="twitter:image" content="https://yairchu.github.io/blog/images/Dispersive_prism.png">
+  <title>Parsers and Builders as Prisms</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="Parsers and Builders as Prisms" />
+  <meta property="og:image" content="https://yairchu.github.io/images/Dispersive_prism.png" />
 </head>
 <body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text"> HOME </div>
-            </a>
-        </nav>
-    
-        <div class="right-sidebar">
-            <a class="ext-link" href="https://github.com/yairchu">
+  <header>
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
             <img src="/images/github-logo.png" alt="Github Profile"/>
         </a>
 
-            <a class="ext-link" href="https://twitter.com/yairchu">
+          <a class="ext-link" href="https://twitter.com/yairchu">
             <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
         </a>
     <div id="theme-button">DAY</div>
-        </div>
-    </header>
+      </div>
+  </header>
 
 <div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                Parsers and Builders as Prisms
-            </span>
-            <br>
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        Parsers and Builders as Prisms
+      </span>
+      <br>
 
-            <img class="post-image" src="/images/Dispersive_prism.png">
-            <br>
-            <span class="byline">by Yair Chuchem</span>
-            <br>
-            <span class="date">2019.12.19</span>
-            <br>
-            <div class="metadata">
-            </div>
-        </div>
+      <img class="post-image" src="/images/Dispersive_prism.png">
+      <br>
+      <span class="byline">by Yair Chuchem</span>
+      <br>
+      <span class="date">2019.12.19</span>
+      <br>
+      <div class="metadata">
+      </div>
     </div>
-    <article class="post">
-        <p>Serialization and deserialization are tedious tasks, often riddled with boiler-plate and bug-prone code. There's a plethora of tools, such as parser combinator libraries, which aim to assist us in some of these tasks, and it seems that new tools never stop popping up. This hints that there are probably no well known satisfactory solutions to these problems, which probably means that most of these tools are ad-hoc rather than principled high-quality solutions.</p>
+  </div>
+  <article class="post">
+    <p>Serialization and deserialization are tedious tasks, often riddled with boiler-plate and bug-prone code. There's a plethora of tools, such as parser combinator libraries, which aim to assist us in some of these tasks, and it seems that new tools never stop popping up. This hints that there are probably no well known satisfactory solutions to these problems, which probably means that most of these tools are ad-hoc rather than principled high-quality solutions.</p>
 <p>Are there no good solutions out there? Actually, there are!</p>
 <p>Back when I was programming in Python, I have used <a href="https://construct.readthedocs.io/en/latest/intro.html">Construct</a> to great satisfaction. But for a long time now I have been using Haskell, and have found no equivalent to it, <a href="https://stackoverflow.com/questions/1225053/haskell-equivalent-of-pythons-construct">which I've actually wanted for more than 10 years</a>! So perhaps I should start looking into making one? Hence this post.</p>
 <p>In this post we'll introduce Construct's declarative approach and then discuss how to implement an equivalent principled solution in Haskell, based on optics.</p>
@@ -192,18 +194,18 @@
 <li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://www.reddit.com/r/haskell/comments/ed7k24/parsers_and_builders_as_prisms/">r/haskell</a></li>
 </ul>
 
-        <br>
-        <br>
+    <br>
+    <br>
 
-        <!--Share buttons-->
-        <div class="social-buttons">
-            <a href="https://twitter.com/share" class="twitter-share-button"
-                                                data-url="https://yairchu.github.io/blog" data-text="Check out: Parsers and Builders as Prisms - " data-via="yairchu">Tweet</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
-        </div>
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button"
+                                          data-url="https://yairchu.github.io/blog" data-text="Check out: Parsers and Builders as Prisms - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
 </article>
 
 </div>

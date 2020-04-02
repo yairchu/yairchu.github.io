@@ -1,60 +1,62 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="UTF-8">
-    <meta name="description" content="Yair&#39;s website">
-    <meta name="author" content="Yair Chuchem">
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@yairchu">
+  <meta charset="UTF-8">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
 <meta name="twitter:creator" content="@yairchu">
 <meta name="twitter:title" content="Basic error reporting for optics">
-    <meta name="twitter:description" content="Adding error reportinh to folds, traversals and prisms">
-    <meta name="twitter:image" content="https://yairchu.github.io/blog/images/railway-crossing.jpg">
-    <title>Basic error reporting for optics</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/syntax.css">
+  <meta name="twitter:description" content="Adding error reportinh to folds, traversals and prisms">
+  <meta name="twitter:image" content="https://yairchu.github.io/blog/images/railway-crossing.jpg">
+  <title>Basic error reporting for optics</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="Basic error reporting for optics" />
+  <meta property="og:image" content="https://yairchu.github.io/images/railway-crossing.jpg" />
 </head>
 <body>
-    <header>
-        <nav>
-            <a id="beacon" href="/">
-                <div id="home-text"> HOME </div>
-            </a>
-        </nav>
-    
-        <div class="right-sidebar">
-            <a class="ext-link" href="https://github.com/yairchu">
+  <header>
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
             <img src="/images/github-logo.png" alt="Github Profile"/>
         </a>
 
-            <a class="ext-link" href="https://twitter.com/yairchu">
+          <a class="ext-link" href="https://twitter.com/yairchu">
             <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
         </a>
     <div id="theme-button">DAY</div>
-        </div>
-    </header>
+      </div>
+  </header>
 
 <div id="page">
-    <div class="wrapper">
-        <div class="masthead">
-            <span class="title">
-                Basic error reporting for optics
-            </span>
-            <br>
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        Basic error reporting for optics
+      </span>
+      <br>
 
-            <img class="post-image" src="/images/railway-crossing.jpg">
-            <br>
-            <span class="byline">by Yair Chuchem</span>
-            <br>
-            <span class="date">2020.01.02</span>
-            <br>
-            <div class="metadata">
-            </div>
-        </div>
+      <img class="post-image" src="/images/railway-crossing.jpg">
+      <br>
+      <span class="byline">by Yair Chuchem</span>
+      <br>
+      <span class="date">2020.01.02</span>
+      <br>
+      <div class="metadata">
+      </div>
     </div>
-    <article class="post">
-        <p>When <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#v:-94--63-"><code>^?</code></a> returns <code>Nothing</code>, it is often desired to know why.</p>
+  </div>
+  <article class="post">
+    <p>When <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#v:-94--63-"><code>^?</code></a> returns <code>Nothing</code>, it is often desired to know why.</p>
 <p>Let's define a <code>^??</code> operator which returns an <code>Either</code> instead of a <code>Maybe</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">newtype</span> <span class="dt">ConstEither</span> e r a <span class="ot">=</span> <span class="dt">ConstEither</span> {<span class="ot"> getConstEither ::</span> <span class="dt">Either</span> e r }</span>
 <span id="cb1-2"><a href="#cb1-2"></a>    <span class="kw">deriving</span> <span class="dt">Functor</span></span>
@@ -171,18 +173,18 @@
 </ul>
 <p><a href="https://www.peakpx.com/637476/railway-line-train-railway-crossing-sky-no-people">Image source</a></p>
 
-        <br>
-        <br>
+    <br>
+    <br>
 
-        <!--Share buttons-->
-        <div class="social-buttons">
-            <a href="https://twitter.com/share" class="twitter-share-button"
-                                                data-url="https://yairchu.github.io/blog" data-text="Check out: Basic error reporting for optics - " data-via="yairchu">Tweet</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
-        </div>
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button"
+                                          data-url="https://yairchu.github.io/blog" data-text="Check out: Basic error reporting for optics - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
 </article>
 
 </div>
