@@ -13,7 +13,8 @@ It is free and [open source](https://github.com/yairchu/chess2).
 
 ## Tutorial video
 
-TODO!
+<iframe style="display: block; margin: auto; margin-top: 15px;" width="640" height="360" src="https://www.youtube.com/embed/9XRKH32EaWQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
+></iframe>
 
 ## Installing
 
