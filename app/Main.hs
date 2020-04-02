@@ -100,12 +100,13 @@ buildPost srcPath =
     postContent <- readFile' srcPath
   -- load post content and metadata as JSON blob
     postData <- markdownToHTML . T.pack $ postContent
-    let postUrl = T.pack . dropDirectory1 $ srcPath -<.> "html"
+    let postUrl = T.pack . dropDirectory1 $ dropExtension srcPath
         withPostUrl = _Object . at "url" ?~ String postUrl
   -- Add additional metadata we've been able to compute
     let fullPostData = withSiteMeta . withPostUrl $ postData
     template <- compileTemplate' "site/templates/post.html"
-    writeFile' (outputFolder </> T.unpack postUrl) . T.unpack $
+    let postFilename = T.unpack postUrl -<.> "html"
+    writeFile' (outputFolder </> postFilename) . T.unpack $
       substitute template fullPostData
     convert fullPostData
 
