@@ -20,7 +20,7 @@ It is free and [open source](https://github.com/yairchu/chess2).
 
 ### macOS or Windows
 
-Download the appropriate installer for your OS [from here](https://github.com/yairchu/chess2/releases).
+Download the appropriate installer for your operating system [from here](https://github.com/yairchu/chess2/releases).
 
 ### iOS
 
@@ -29,8 +29,6 @@ The game is currently [available for beta-testing](https://testflight.apple.com/
 ### Linux/Android
 
 Build [from the source code](https://github.com/yairchu/chess2).
-
-(The game will soon be available in the iOS app store)
 
 ## Rules
 
