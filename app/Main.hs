@@ -10,6 +10,7 @@ import Control.Monad
 import Data.Aeson as A
 import Data.Aeson.Lens
 import Data.List (sortOn)
+import Data.Time
 import Development.Shake
 import Development.Shake.Classes
 import Development.Shake.FilePath
@@ -25,7 +26,7 @@ siteMeta :: SiteMeta
 siteMeta =
   SiteMeta
     { siteAuthor = "Yair Chuchem"
-    , baseUrl = "https://yairchu.github.io/blog"
+    , baseUrl = "https://yairchu.github.io/"
     , siteTitle = "Yair's website"
     , twitterHandle = Just "yairchu"
     , githubUser = Just "yairchu"
@@ -73,13 +74,24 @@ data Post =
     }
   deriving (Generic, Eq, Ord, Show, FromJSON, ToJSON, Binary)
 
+data AtomData =
+  AtomData
+    { atomTitle :: String
+    , domain :: String
+    , atomAuthor :: String
+    , atomPosts :: [Post]
+    , currentTime :: String
+    , atomUrl :: String
+    }
+  deriving (Generic, ToJSON, Eq, Ord, Show)
+
 -- | given a list of posts this will build a table of contents
 buildIndex :: [Post] -> [Post] -> Action ()
 buildIndex posts' projects' = do
   indexT <- compileTemplate' "site/templates/index.html"
   let indexInfo =
         IndexInfo
-        { posts = reverse (sortOn date posts')
+        { posts = posts'
         , projects = reverse (sortOn title projects')
         }
       indexHTML = T.unpack $ substitute indexT (withSiteMeta $ toJSON indexInfo)
@@ -117,13 +129,44 @@ copyStaticFiles = do
   void $ forP filepaths $ \filepath ->
     copyFileChanged ("site" </> filepath) (outputFolder </> filepath)
 
+formatDate :: String -> String
+formatDate humanDate = toIsoDate parsedTime
+  where
+    parsedTime =
+      parseTimeOrError True defaultTimeLocale "%Y.%m.%d" humanDate :: UTCTime
+
+rfc3339 :: Maybe String
+rfc3339 = Just "%H:%M:SZ"
+
+toIsoDate :: UTCTime -> String
+toIsoDate = formatTime defaultTimeLocale (iso8601DateFormat rfc3339)
+
+buildFeed :: [Post] -> Action ()
+buildFeed posts = do
+  now <- liftIO getCurrentTime
+  let atomData =
+        AtomData
+          { atomTitle = siteTitle siteMeta
+          , domain = baseUrl siteMeta
+          , atomAuthor = siteAuthor siteMeta
+          , atomPosts = mkAtomPost <$> posts
+          , currentTime = toIsoDate now
+          , atomUrl = "/atom.xml"
+          }
+  atomTempl <- compileTemplate' "site/templates/atom.xml"
+  writeFile' (outputFolder </> "atom.xml") . T.unpack $ substitute atomTempl (toJSON atomData)
+    where
+      mkAtomPost :: Post -> Post
+      mkAtomPost p = p { date = formatDate $ date p }
+
 -- | Specific build rules for the Shake system
 --   defines workflow to build the website
 buildRules :: Action ()
 buildRules = do
-  allPosts <- buildPosts "posts"
+  allPosts <- buildPosts "posts" <&> sortOn date <&> reverse
   allProjects <- buildPosts "projects"
   buildIndex allPosts allProjects
+  buildFeed allPosts
   copyStaticFiles
 
 main :: IO ()
