@@ -30,19 +30,13 @@ If we rebase rather than merge, the following script makes the process easy by a
 ## sub-rebase.sh
 
 ```Bash
-BASE=$1
-if [ "$BASE" == "" ]
-then
-    BASE=master
-fi
+#!/bin/bash
+
+BASE=${1:-master}
 while true
 do
-    NEXT_COMMIT=`git rev-list ..$BASE | tail -n 1`
-    if [ "$NEXT_COMMIT" == "" ]
-    then
-        echo "Done"
-        exit 1
-    fi
+    NEXT_COMMIT=$(git rev-list ..$BASE | tail -n 1)
+    ["$NEXT_COMMIT" == ""] && echo "Done" && exit
     git rebase $NEXT_COMMIT || exit 1
 done
 ```
