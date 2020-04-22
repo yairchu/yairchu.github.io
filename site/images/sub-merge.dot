@@ -1,0 +1,28 @@
+digraph {
+    bgcolor="invis"
+
+    node [style="filled" fontcolor="white", color="white"]
+
+    Base [fillcolor="#777777"]
+    A1 [fillcolor="#BB7777" label="A^"]
+    A [fillcolor="#FF7777"]
+    B1 [fillcolor="#7777BB" label="B^"]
+    B [fillcolor="#7777FF"]
+    AB [fillcolor="#FF77FF" label="A + B"]
+
+    A1B1 [fillcolor="#BB77BB" label="A^ + B^" shape="octagon"]
+    AB1 [fillcolor="#FF77BB" label="A + B^" shape="octagon"]
+
+    Base -> A1
+    A1 -> A
+    Base -> B1
+    B1 -> B
+
+    A1 -> A1B1
+    B1 -> A1B1
+    A -> AB1
+    A1B1 -> AB1
+
+    AB1 -> AB
+    B -> AB
+}
