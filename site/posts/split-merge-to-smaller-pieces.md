@@ -7,11 +7,11 @@ description: Tactics for merging in smaller chunks
 image: shape-sorter.jpg
 ---
 
-When I have a merges with many conflicts I become stressed.
+Merges with many conflicts are horrifying.
 
-While the chance of making a mistake in resolution increases, I can't run the test suite to verify my work until all of them are resolved.
+As the chance for a conflict resolution mistake increases, we can't run the tests to verify correctness until all of the conflicts are resolved.
 
-Often however we can break the merge process down to smaller pieces, where we can check and save our work after each step.
+Often, however, we can break the merge process down to smaller pieces, where we can check and save our work after each step!
 
 ![Git merge](/images/merge.svg)
 
@@ -25,7 +25,7 @@ A down-side of this simple approach is that it may be tedious to do manually and
 
 One way to resolve the history issue is to rewrite it, which one can do with `git rebase`.
 
-If rebasing rather than merging, the following script makes the process easy by automating it:
+If we rebase rather than merge, the following script makes the process easy by automating it:
 
 ## sub-rebase.sh
 
@@ -47,11 +47,12 @@ do
 done
 ```
 
-`sub-rebase.sh` applies a rebase up to the first parent of the base branch which has merge conflicts to address.
+It rebases up to the first parent of the base branch which has any merge conflicts to address (so it doesn't accumulate conflicts from multiple commits).
 
 Apply it to advance towards your complete merge in smaller, testable pieces.
 
 Notes:
 
+* This process works well when we commit often in small commits.
 * For resolving the conflicts, [I recommend using git-mediate](/posts/git-mediate-stops-fear)
 * Image from [this meme](https://www.reddit.com/r/funny/comments/ub7x3/fail_shape_sorter_college_campus_level/)
