@@ -2,7 +2,7 @@
 title: "Elegant AST Parsing and Building with Prisms"
 author: Yair Chuchem
 date: 2019.12.29
-tags: [programming, declarative-programming, haskell, python, optics, parsing, codecs, construct]
+tags: [code, declarative, haskell, optics, parsing, construct]
 description: Declarative parsing and pretty printing for language ASTs
 image: prism-tree.png
 ---

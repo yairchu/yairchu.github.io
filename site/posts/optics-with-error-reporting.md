@@ -2,7 +2,7 @@
 title: "Basic error reporting for optics"
 author: Yair Chuchem
 date: 2020.01.02
-tags: [programming, haskell, optics]
+tags: [code, haskell, optics]
 description: Adding error reportinh to folds, traversals and prisms
 image: railway-crossing.jpg
 ---

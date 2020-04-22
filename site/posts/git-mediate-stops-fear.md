@@ -2,7 +2,7 @@
 title: "How git-mediate made me stop fearing merge conflicts!"
 author: Yair Chuchem
 date: 2016.12.28
-tags: [programming, source-control, git, merge-conflicts]
+tags: [code, git, merge]
 description: Quick intro to git-mediate
 image: mine-sweeper-flow.png
 ---

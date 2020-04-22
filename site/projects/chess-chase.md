@@ -2,7 +2,7 @@
 title: "Chess Chase"
 author: Yair Chuchem
 date: 2020.03.29
-tags: [programming, games, chess, chess-chase, python, kivy, ios]
+tags: [code, games, chess, chess-chase, python, kivy, ios]
 description: Chess without turns nor sight!
 image: Chess Chase.png
 ---

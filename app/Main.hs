@@ -9,8 +9,10 @@ import Control.Lens
 import Control.Monad
 import Data.Aeson as A
 import Data.Aeson.Lens
+import Data.Foldable (traverse_)
+import Data.Function (on)
 import qualified Data.HashMap.Lazy as HML
-import Data.List (sortOn)
+import Data.List (groupBy, sortOn)
 import qualified Data.Text as T
 import Data.Time
 import Development.Shake
@@ -55,7 +57,9 @@ data SiteMeta
 data IndexInfo
   = IndexInfo
       { posts :: [Post],
-        projects :: [Post]
+        projects :: [Post],
+        tagsList :: [String],
+        tagName :: String
       }
   deriving (Generic, Show, FromJSON, ToJSON)
 
@@ -85,22 +89,25 @@ data AtomData
   deriving (Generic, ToJSON, Eq, Ord, Show)
 
 -- | given a list of posts this will build a table of contents
-buildIndex :: [Post] -> [Post] -> Action ()
-buildIndex posts' projects' = do
+buildIndex :: [Post] -> [Post] -> [String] -> Action ()
+buildIndex posts' projects' allTags = do
   indexT <- compileTemplate' "site/templates/index.html"
   let indexInfo =
         IndexInfo
           { posts = posts',
-            projects = reverse (sortOn title projects')
+            projects = reverse (sortOn title projects'),
+            tagsList = allTags,
+            tagName = ""
           }
       indexHTML = T.unpack $ substitute indexT (withSiteMeta $ toJSON indexInfo)
   writeFile' (outputFolder </> "index.html") indexHTML
 
 -- | Find and build all posts
-buildPosts :: FilePath -> Action [Post]
-buildPosts folder = do
-  _ <- getDirectoryFiles "." ["site/" <> folder <> "/*//*.md"] >>= (`forP` buildPost)
-  getDirectoryFiles "." ["site/" <> folder <> "/*.md"] >>= (`forP` buildPost)
+buildPosts :: FilePath -> Action ([Post], [Post])
+buildPosts folder =
+  (,)
+    <$> (getDirectoryFiles "." ["site/" <> folder <> "/*.md"] >>= (`forP` buildPost))
+    <*> (getDirectoryFiles "." ["site/" <> folder <> "/*//*.md"] >>= (`forP` buildPost))
 
 -- | Load a post, process metadata, write it to output, then return the post object
 -- Detects changes to either post content or template
@@ -158,13 +165,44 @@ buildFeed posts = do
     mkAtomPost :: Post -> Post
     mkAtomPost p = p {date = formatDate $ date p}
 
+buildTag :: String -> [Post] -> Action ()
+buildTag tag pages =
+  do
+    indexT <- compileTemplate' "site/templates/tag.html"
+    let indexInfo =
+          IndexInfo
+            { posts = pages,
+              projects = [],
+              tagsList = [],
+              tagName = tag
+            }
+        indexHTML = T.unpack $ substitute indexT (withSiteMeta $ toJSON indexInfo)
+    writeFile' (outputFolder </> "tag" </> tag -<.> "html") indexHTML
+
+makeTags :: [Post] -> [(String, [Post])]
+makeTags pages =
+  do
+    page <- pages
+    t <- tags page
+    [(t, page)]
+    & sortOn fst
+    & groupBy ((==) `on` fst)
+    <&> ((,) <$> fst . head <*> reverse . sortOn date . map snd)
+
 -- | Specific build rules for the Shake system
 --   defines workflow to build the website
 buildRules :: Action ()
 buildRules = do
-  allPosts <- buildPosts "posts" <&> sortOn date <&> reverse
-  allProjects <- buildPosts "projects"
-  buildIndex allPosts allProjects
+  (allPosts, postsInner) <- buildPosts "posts" <&> _1 %~ reverse . sortOn date
+  (allProjects, projInner) <- buildPosts "projects"
+  allPosts <> postsInner <> allProjects <> projInner
+    & makeTags
+    & traverse_ (uncurry buildTag)
+  makeTags allPosts
+    & filter (not . null . drop 1 . snd)
+    & sortOn (negate . length . snd)
+    <&> fst
+    & buildIndex allPosts allProjects
   buildFeed allPosts
   copyStaticFiles
 

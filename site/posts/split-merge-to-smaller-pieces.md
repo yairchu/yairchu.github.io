@@ -2,7 +2,7 @@
 title: "Break big merges to smaller pieces"
 author: Yair Chuchem
 date: 2020.04.22
-tags: [programming, source-control, git, merge-conflicts]
+tags: [code, git, merge, rebase]
 description: Tactics for merging in smaller chunks
 image: shape-sorter.jpg
 ---

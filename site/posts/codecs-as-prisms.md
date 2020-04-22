@@ -2,7 +2,7 @@
 title: "Parsers and Builders as Prisms"
 author: Yair Chuchem
 date: 2019.12.19
-tags: [programming, declarative-programming, haskell, python, optics, parsing, codecs, construct]
+tags: [code, declarative, haskell, python, optics, parsing, construct]
 description: Declarative parsing and pretty printing
 image: Dispersive_prism.png
 ---

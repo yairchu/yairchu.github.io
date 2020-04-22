@@ -2,7 +2,7 @@
 title: "The four simple ways to encode sum-types"
 author: Yair Chuchem
 date: 2019.11.06
-tags: [programming, expression-problem, sum-types, haskell, default-signatures]
+tags: [code, expr-problem, sum-types, haskell, default-sigs]
 description: How and why to encode sum types?
 image: Loc_Bloc_example_1_of_Disney.jpg
 ---

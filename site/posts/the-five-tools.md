@@ -2,7 +2,7 @@
 title: "Why does your programming language have five command line tools?"
 author: Yair Chuchem
 date: 2019.11.07
-tags: [programming, haskell, python, c++, rust, stack]
+tags: [code, haskell, python, c++, rust, stack]
 description: Why do programming languages have so many build tools
 image: car-duct-tape.jpg
 ---

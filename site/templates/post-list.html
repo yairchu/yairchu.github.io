@@ -1,7 +1,16 @@
 <ul>
-    {{#posts}}
-        <li>
-            <a href="{{url}}">{{title}} <span class="date">{{date}}</span> </a>
-        </li>
-    {{/posts}}
+  {{#posts}}
+    <li>
+      <a href="{{url}}" class="post">
+        <span class="date">{{date}}</span>
+        {{title}}
+      </a>
+      <span class="post-tags">
+        {{#tags}}
+          <a href="/tag/{{.}}" class="tag">{{.}}</a>
+        {{/tags}}
+      </span>
+      <div style="clear:both"/>
+    </li>
+  {{/posts}}
 </ul>
