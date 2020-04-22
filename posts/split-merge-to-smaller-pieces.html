@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="UTF-8">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="Break big merges to smaller pieces">
+  <meta name="twitter:description" content="Tactics for merging in smaller chunks">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/shape-sorter.jpg">
+  <title>Break big merges to smaller pieces</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="Break big merges to smaller pieces" />
+  <meta property="og:image" content="https://yairchu.github.io/images/shape-sorter.jpg" />
+</head>
+<body>
+  <header>
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        Break big merges to smaller pieces
+      </span>
+      <br>
+
+      <img class="post-image" src="/images/shape-sorter.jpg">
+      <br>
+      <span class="byline">by Yair Chuchem</span>
+      <br>
+      <span class="date">2020.04.22</span>
+      <br>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/git" class="tag">git</a>
+        <a href="/tag/merge" class="tag">merge</a>
+        <a href="/tag/rebase" class="tag">rebase</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p>Merges with many conflicts are horrifying.</p>
+<p>As the chance for a conflict resolution mistake increases, we can't run the tests to verify correctness until all of the conflicts are resolved.</p>
+<p>Often, however, we can break the merge process down to smaller pieces, where we can check and save our work after each step!</p>
+<p><img src="/images/merge.svg" alt="Git merge" /></p>
+<p>The simplest way to break a merge down is to apply "sub-merges" which merge a single commit at a time.</p>
+<p><img src="/images/sub-merge.svg" alt="Git merge with sub-merges" /></p>
+<p>Each sub-merge involves less conflicts and we can run our test-suite to verify ourselves.</p>
+<p>A down-side of this simple approach is that it may be tedious to do manually and it will result in a very complicated git history tree.</p>
+<p>One way to resolve the history issue is to rewrite it, which one can do with <code>git rebase</code>.</p>
+<p>If we rebase rather than merge, the following script makes the process easy by automating it:</p>
+<h2 id="sub-rebasesh">sub-rebase.sh</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="va">BASE=$1</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">if</span><span class="bu"> [</span> <span class="st">&quot;</span><span class="va">$BASE</span><span class="st">&quot;</span> <span class="ot">==</span> <span class="st">&quot;&quot;</span><span class="bu"> ]</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">then</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="va">BASE=</span>master</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">fi</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">while</span> <span class="fu">true</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">do</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>    <span class="va">NEXT_COMMIT=</span><span class="kw">`</span><span class="fu">git</span> rev-list ..<span class="va">$BASE</span> <span class="kw">|</span> <span class="fu">tail</span> -n 1<span class="kw">`</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="kw">if</span><span class="bu"> [</span> <span class="st">&quot;</span><span class="va">$NEXT_COMMIT</span><span class="st">&quot;</span> <span class="ot">==</span> <span class="st">&quot;&quot;</span><span class="bu"> ]</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>    <span class="kw">then</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>        <span class="bu">echo</span> <span class="st">&quot;Done&quot;</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>        <span class="bu">exit</span> 1</span>
+<span id="cb1-13"><a href="#cb1-13"></a>    <span class="kw">fi</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>    <span class="fu">git</span> rebase <span class="va">$NEXT_COMMIT</span> <span class="kw">||</span> <span class="bu">exit</span> 1</span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="kw">done</span></span></code></pre></div>
+<p>It rebases up to the first parent of the base branch which has any merge conflicts to address (so it doesn't accumulate conflicts from multiple commits).</p>
+<p>Apply it to advance towards your complete merge in smaller, testable pieces.</p>
+<p>Notes:</p>
+<ul>
+<li>This process works well when we commit often in small commits.</li>
+<li>For resolving the conflicts, <a href="/posts/git-mediate-stops-fear">I recommend using git-mediate</a></li>
+<li>Image from <a href="https://www.reddit.com/r/funny/comments/ub7x3/fail_shape_sorter_college_campus_level/">this meme</a></li>
+</ul>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button"
+                                          data-url="https://yairchu.github.io/" data-text="Check out: Break big merges to smaller pieces - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
