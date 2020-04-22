@@ -200,11 +200,13 @@ buildRules = do
     & traverse_ (uncurry buildTag)
   makeTags allPosts
     & filter (not . null . drop 1 . snd)
-    & sortOn (negate . length . snd)
+    & sortOn tagOrder
     <&> fst
     & buildIndex allPosts allProjects
   buildFeed allPosts
   copyStaticFiles
+  where
+    tagOrder (t, posts) = (negate (length posts), length t)
 
 main :: IO ()
 main = do
