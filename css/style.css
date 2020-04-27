@@ -231,9 +231,10 @@ a.tag, a.category {
   .dark a.tag, .dark a.category {
     border: 1px solid #777;
     background: #555;
-    color: #555; }
+    color: #DDD; }
     .dark a.tag:hover, .dark a.category:hover {
-      color: #333;
+      color: #555;
+      background: #DDD;
       text-decoration: none; }
 
 .post {
