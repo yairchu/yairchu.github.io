@@ -35,8 +35,22 @@ If we rebase rather than merge, the following script makes the process easy by a
 BASE=${1:-master}
 while true
 do
-    NEXT_COMMIT=$(git rev-list ..$BASE | tail -n 1)
-    ["$NEXT_COMMIT" == ""] && echo "Done" && exit
+    # Find next commit to rebase to
+    COMMON_ANCESTOR=$(git merge-base HEAD $BASE)
+    for COMMIT in $(git rev-list ..$BASE --reverse)
+    do
+        if [ $(git merge-base HEAD $COMMIT) == $COMMON_ANCESTOR ]
+        then
+            # Rebasing on this commit will strictly progress towards our goal
+            NEXT_COMMIT=$COMMIT
+            break
+        fi
+        # The commit is not strictly ahead of BASE
+        echo Skipping $COMMIT as it is not strictly ahead of $BASE
+    done
+
+    [ "$NEXT_COMMIT" == "" ] && echo "Done" && exit
+    echo Rebasing over $NEXT_COMMIT
     git rebase $NEXT_COMMIT || exit 1
 done
 ```
@@ -50,3 +64,7 @@ Notes:
 * This process works well when we commit often in small commits.
 * For resolving the conflicts, [I recommend using git-mediate](/posts/git-mediate-stops-fear)
 * Image from [this meme](https://www.reddit.com/r/funny/comments/ub7x3/fail_shape_sorter_college_campus_level/)
+
+Updates:
+
+* 2020.05.19: Updated script to skip over commits that are not strictly ahead of the common ancestor with the base branch
