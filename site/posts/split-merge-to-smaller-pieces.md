@@ -36,6 +36,7 @@ BASE=${1:-master}
 while true
 do
     # Find next commit to rebase to
+    NEXT_COMMIT=
     COMMON_ANCESTOR=$(git merge-base HEAD $BASE)
     for COMMIT in $(git rev-list ..$BASE --reverse)
     do
