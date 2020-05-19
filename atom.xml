@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-04-27T15:24:SZ</updated>
+  <updated>2020-05-19T08:43:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -34,10 +34,24 @@
 <span id="cb1-3"><a href="#cb1-3"></a><span class="va">BASE=${1:-</span>master<span class="va">}</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="kw">while</span> <span class="fu">true</span></span>
 <span id="cb1-5"><a href="#cb1-5"></a><span class="kw">do</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>    <span class="va">NEXT_COMMIT=$(</span><span class="fu">git</span> rev-list ..<span class="va">$BASE</span> <span class="kw">|</span> <span class="fu">tail</span> -n 1<span class="va">)</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a>    [<span class="st">&quot;</span><span class="va">$NEXT_COMMIT</span><span class="st">&quot;</span> == <span class="st">&quot;&quot;</span>] <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;Done&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">exit</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a>    <span class="fu">git</span> rebase <span class="va">$NEXT_COMMIT</span> <span class="kw">||</span> <span class="bu">exit</span> 1</span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">done</span></span></code></pre></div>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="co"># Find next commit to rebase to</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="va">COMMON_ANCESTOR=$(</span><span class="fu">git</span> merge-base HEAD <span class="va">$BASE)</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>    <span class="kw">for</span> <span class="ex">COMMIT</span> in <span class="va">$(</span><span class="fu">git</span> rev-list ..<span class="va">$BASE</span> --reverse<span class="va">)</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="kw">do</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>        <span class="kw">if</span><span class="bu"> [</span> <span class="va">$(</span><span class="fu">git</span> merge-base HEAD <span class="va">$COMMIT)</span> <span class="ot">==</span> <span class="va">$COMMON_ANCESTOR</span><span class="bu"> ]</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>        <span class="kw">then</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>            <span class="co"># Rebasing on this commit will strictly progress towards our goal</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>            <span class="va">NEXT_COMMIT=$COMMIT</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>            <span class="bu">break</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a>        <span class="kw">fi</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a>        <span class="co"># The commit is not strictly ahead of BASE</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a>        <span class="bu">echo</span> Skipping <span class="va">$COMMIT</span> as it is not strictly ahead of <span class="va">$BASE</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a>    <span class="kw">done</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a></span>
+<span id="cb1-20"><a href="#cb1-20"></a>    [ <span class="st">&quot;</span><span class="va">$NEXT_COMMIT</span><span class="st">&quot;</span> == <span class="st">&quot;&quot;</span> ] <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;Done&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">exit</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a>    <span class="bu">echo</span> Rebasing over <span class="va">$NEXT_COMMIT</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a>    <span class="fu">git</span> rebase <span class="va">$NEXT_COMMIT</span> <span class="kw">||</span> <span class="bu">exit</span> 1</span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="kw">done</span></span></code></pre></div>
 <p>It rebases up to the first parent of the base branch which has any merge conflicts to address (so it doesn't accumulate conflicts from multiple commits).</p>
 <p>Apply it to advance towards your complete merge in smaller, testable pieces.</p>
 <p>Notes:</p>
@@ -45,6 +59,10 @@
 <li>This process works well when we commit often in small commits.</li>
 <li>For resolving the conflicts, <a href="/posts/git-mediate-stops-fear">I recommend using git-mediate</a></li>
 <li>Image from <a href="https://www.reddit.com/r/funny/comments/ub7x3/fail_shape_sorter_college_campus_level/">this meme</a></li>
+</ul>
+<p>Updates:</p>
+<ul>
+<li>2020.05.19: Updated script to skip over commits that are not strictly ahead of the common ancestor with the base branch</li>
 </ul>]]></content>
   </entry>
   <entry>
