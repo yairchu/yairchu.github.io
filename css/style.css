@@ -237,7 +237,7 @@ a.tag, a.category {
       background: #DDD;
       text-decoration: none; }
 
-.post {
+.post, .table-of-contents {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -247,13 +247,14 @@ a.tag, a.category {
           flex-flow: column nowrap;
   width: auto;
   min-width: 100px;
-  max-width: 720px;
-  /*min-height: 100%;*/
   padding: 0px 20px;
   margin: 3em auto;
   -webkit-transition: color 2s;
           transition: color 2s;
   font-size: 1.1em; }
+
+.post {
+  max-width: 720px; }
   .post p {
     line-height: 1.6em;
     letter-spacing: 0.02em;
@@ -289,8 +290,7 @@ a.tag, a.category {
 }
 
 .table-of-contents {
-  clear: both;
-  width: 100%; }
+  max-width: 860px; }
   .table-of-contents h1 {
     font-size: 3em;
     text-align: center;
@@ -304,8 +304,7 @@ a.tag, a.category {
     box-sizing: border-box;
     border-top: 1px solid #ccc;
     padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    width: 50%; }
+    padding-bottom: 0.5em; }
     .table-of-contents li a.post {
       color: #333;
       font-weight: normal;
