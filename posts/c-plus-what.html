@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="UTF-8">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="C++ is the undefined language - DRAFT!">
+  <meta name="twitter:description" content="C++ is the least standard language in popular used">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/elves-cplusplus.jpg">
+  <title>C++ is the undefined language - DRAFT!</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="C++ is the undefined language - DRAFT!" />
+  <meta property="og:image" content="https://yairchu.github.io/images/elves-cplusplus.jpg" />
+</head>
+<body>
+  <header>
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        C++ is the undefined language - DRAFT!
+      </span>
+      <br>
+
+      <img class="post-image" src="/images/elves-cplusplus.jpg">
+      <br>
+      <span class="byline">by Yair Chuchem</span>
+      <br>
+      <span class="date">2020.06.16</span>
+      <br>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/c++" class="tag">c++</a>
+        <a href="/tag/history" class="tag">history</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p>C++ <a href="https://en.wikipedia.org/wiki/C%2B%2B">is standardized by the international standards body ISO</a>, so one might expect it to be similar across different operating systems. Ironically, it is the only popular programming language that doesn't provide a consistent cross platform experience.</p>
+<h2 id="some-examples-of-c-incompatability">Some examples of C++ incompatability</h2>
+<p>By no means are these complete lists:</p>
+<h3 id="compile-time">Compile time</h3>
+<ul>
+<li>The global namespace is littered differently across platforms. Can you use an innocent looking name like <code>Point</code>?</li>
+<li>Xcode limits usage of C++ features if you wish to support older macOS versions</li>
+<li>Which standard library functions are available depends on your compiler version. If you used <code>std::gcd</code> then your code won't work on Visual Studio before VS2019</li>
+<li>Standard C constants like <code>M_PI</code> are missing in Visual Studio (unless you <code>#define _USE_MATH_DEFINES</code> before <code>#include &lt;math.h&gt;</code>)
+<ul>
+<li>This means that changing the order of includes could easily break compilation!</li>
+</ul></li>
+<li>VS often requires <code>std::max&lt;int&gt;</code> when <code>std::max</code> suffices for Xcode</li>
+<li>Fake compilation errors: We only get them in the presence of other errors, and upon fixing the "real" errors they disappear along, and these are unique across different compilers</li>
+</ul>
+<h3 id="run-time">Run time</h3>
+<ul>
+<li>Run-time crashes in Windows upon using <code>dynamic_cast</code> with virtual inheritence they work fine on macOS</li>
+</ul>
+<h2 id="how-did-we-get-there">How did we get there</h2>
+<h3 id="the-original-sin---compatibility-for-your-soul">The original sin - compatibility for your soul</h3>
+<p>C++ owes its success to being a superset of C, which made the transition to it easy for the users of popular systems programming language of the time.</p>
+<p>There are many choices to make when designing a language, and the choices should work together if we want a cohesive and sensible design. By inheriting all of C's choices, C++ handicapped its ability of doing this.</p>
+<h3 id="embrace-extend-and-extinguish">Embrace, extend, and extinguish</h3>
+<p>Microsoft of the 1990s and early 2000s famously used <a href="https://en.wikipedia.org/wiki/Embrace,_extend,_and_extinguish">the EEE strategy</a> in the browser wars.</p>
+<p>They have clearly also used it in the PL/OS wars:</p>
+<ul>
+<li>Make the best IDE for C++ (Visual Studio), gain users, and gradually break compatability with other implementations</li>
+<li>Code developed in the IDE will not work in other OSs, less software for those means users will keep preferring Windows</li>
+<li>Profit!</li>
+</ul>
+<h3 id="complicated-standards-are-bug-prone">Complicated standards are bug prone</h3>
+<p>We all know that programming is difficult. And standartisation is a form of programming. Relatively simple standards like the shapes and sizes of screws can be implemented successfully, but implementing a complicated standard like C++ without errors is not feasable.</p>
+<h2 id="whats-next">What's next</h2>
+<p>C++ is still strong in many industries (games, real-time audio), because no other popular language addresses their needs. Sadly, I don't see this changing in the near future.</p>
+<p>Perhaps one day Rust, Pony, D, Zig, Jai, or something I haven't heard about will overtake C++'s throne. Let's hope, anything but this!</p>
+<ul>
+<li>Image source: <a href="http://gregmanshow.blogspot.com/2016/12/bd-37-le-travail-des-lutins.html">Le Gregman Show</a>, translated by <a href="https://www.reddit.com/r/ProgrammerHumor/comments/d2qfm9/hang_in_there_little_guy_stolen_translated_source/">Monjipour</a></li>
+</ul>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: C++ is the undefined language - DRAFT! - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
