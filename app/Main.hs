@@ -73,6 +73,7 @@ data Post
         url :: String,
         date :: String,
         image :: Maybe String,
+        draft :: Maybe (),
         tags :: [String]
       }
   deriving (Generic, Eq, Ord, Show, FromJSON, ToJSON, Binary)
@@ -196,14 +197,16 @@ buildRules = do
   (allPosts, postsInner) <- buildPosts "posts" <&> _1 %~ reverse . sortOn date
   (allProjects, projInner) <- buildPosts "projects"
   allPosts <> postsInner <> allProjects <> projInner
+    & filter (has _Nothing . draft)
     & makeTags
     & traverse_ (uncurry buildTag)
+  let published = filter (has _Nothing . draft) allPosts
   makeTags allPosts
     & filter (not . null . drop 1 . snd)
     & sortOn tagOrder
     <&> fst
-    & buildIndex allPosts allProjects
-  buildFeed allPosts
+    & buildIndex published allProjects
+  buildFeed published
   copyStaticFiles
   where
     tagOrder (t, posts) = (negate (length posts), length t)
