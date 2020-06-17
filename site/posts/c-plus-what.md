@@ -3,7 +3,7 @@ title: "C++ is the undefined language - DRAFT!"
 author: Yair Chuchem
 date: 2020.06.16
 tags: [code, c++, history]
-description: C++ is the least standard language in popular used
+description: C++ is the least standard language in popular use
 image: elves-cplusplus.jpg
 draft: []
 ---
@@ -22,7 +22,7 @@ By no means are these complete lists:
   * Some things are available under different names, like `std::array` vs `std::tr1::array`
   * While not unique to C++, it does have it much worse because due to a lack of package management, developers are encouraged to use the standard library as much as possible
 * Xcode limits usage of C++ features if you wish to support older macOS versions
-* Standard C constants like `M_PI` are missing in Visual Studio (unless you `#define _USE_MATH_DEFINES` before `#include <math.h>`)
+* Standard C constants like `M_PI` are missing in Visual Studio unless you `#define _USE_MATH_DEFINES` before `#include <math.h>`
   * As a consequence, changing the order of includes often breaks compilation!
 * Xcode accepts lambda syntax of `[]{}` while VS requires `[](){}`
 * Equivalent attributes have different syntaxes - `__attribute__((aligned(32)))` vs `__declspec(align(32))`
@@ -36,9 +36,9 @@ By no means are these complete lists:
 
 ### The original sin - compatibility for your soul
 
-C++ owes its success to being a superset of C, which made the transition to it easy for the users of popular systems programming language of the time.
+C++ owes its success to being a superset of C, which made the transition easy for users of the popular systems language of the time.
 
-There are many choices to make when designing a language, and the choices should work together if we want a cohesive and sensible design. By inheriting all of C's choices, C++ handicapped its ability of doing this.
+There are many choices to make when designing a language, and the choices should work together if we want to reach a cohesive and sensible design. By inheriting all of C's choices, C++ handicapped its ability of doing this.
 
 C++ has went so far that even its own name is a reference to [a C++ anti-pattern](https://stackoverflow.com/a/24904/40916).
 
@@ -58,8 +58,8 @@ We all know that programming is difficult. And standartisation is a form of prog
 
 ## What's next
 
-C++ is still strong in many industries (games, real-time audio), because no other popular language addresses their needs. Sadly, I don't see this changing in the near future.
+C++ is currently the king in some industries (games, audio) because no other popular language addresses their needs. Sadly, I don't see this changing in the near future.
 
-Perhaps one day Rust, Pony, D, Zig, Jai, or something I haven't heard about will overtake C++'s throne. Let's hope, anything but this!
+Perhaps one day Rust, Pony, D, Zig, Jai, or something that I haven't heard about will overtake C++'s throne. Let's hope, anything but this!
 
 * Image source: [Le Gregman Show](http://gregmanshow.blogspot.com/2016/12/bd-37-le-travail-des-lutins.html), translated by [Monjipour](https://www.reddit.com/r/ProgrammerHumor/comments/d2qfm9/hang_in_there_little_guy_stolen_translated_source/)
