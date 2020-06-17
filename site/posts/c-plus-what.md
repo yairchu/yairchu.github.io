@@ -1,23 +1,18 @@
 ---
-title: "C++ is the undefined language - DRAFT!"
+title: "C++ is the undefined language"
 author: Yair Chuchem
-date: 2020.06.16
+date: 2020.06.17
 tags: [code, c++, history]
 description: C++ is the least standard language in popular use
 image: elves-cplusplus.jpg
-draft: []
 ---
 
 C++ [is standardized by the international standards body ISO](https://en.wikipedia.org/wiki/C%2B%2B), so one might expect it to be similar across different operating systems. Ironically, it is the only popular programming language that doesn't provide a consistent cross platform experience.
 
-## Some examples of C++ incompatability
-
-By no means are these complete lists:
-
-### Compile time
+## Some examples of incompatability
 
 * The global namespace is littered differently across platforms. Can you use an innocent looking name like `Point`?
-  * VS often won't handle `std::max` but `std::max<int>` or [`(std::max)` will work](https://stackoverflow.com/a/2789509/40916)
+  * `max` often breaks `std::max` in Visual Studio, while `std::max<int>` or [`(std::max)` work fine](https://stackoverflow.com/a/2789509/40916)
 * Which standard library functions are available depend on your compiler version. Use `std::gcd`? Your code won't work on Visual Studio 2015
   * Some things are available under different names, like `std::array` vs `std::tr1::array`
   * While not unique to C++, it does have it much worse because due to a lack of package management, developers are encouraged to use the standard library as much as possible
@@ -25,11 +20,8 @@ By no means are these complete lists:
 * Standard C constants like `M_PI` are missing in Visual Studio unless you `#define _USE_MATH_DEFINES` before `#include <math.h>`
   * As a consequence, changing the order of includes often breaks compilation!
 * Xcode accepts lambda syntax of `[]{}` while VS requires `[](){}`
+* Want to use `__has_include` to conditionally compile parts of your library? It's only available in C++17 so check `__cplusplus` to see if you can use it. But in VS it doesn't really tell you the language version so be sure to check `_MSC_VER` too..
 * Equivalent attributes have different syntaxes - `__attribute__((aligned(32)))` vs `__declspec(align(32))`
-* Fake compilation errors: We only get them in the presence of other errors, and upon fixing the "real" errors they disappear along, and these are unique across different compilers
-
-### Run time
-
 * Run-time crashes in Windows upon using `dynamic_cast` with virtual inheritence while they work fine on macOS
 
 ## How did we get there
@@ -48,13 +40,13 @@ Microsoft of the 1990s and early 2000s famously used [the EEE strategy](https://
 
 They have clearly also used it in the PL/OS wars:
 
-* Make the best IDE for C++ (Visual Studio), gain users, and gradually break compatability with other implementations
+* Make Visual Studio the best IDE for C++, gain users, and gradually break compatability with other implementations
 * Code developed in the IDE will not work in other OSs, less software for those means users will keep preferring Windows
 * Profit!
 
 ### Complicated standards are bug prone
 
-We all know that programming is difficult. And standartisation is a form of programming. Relatively simple standards like the shapes and sizes of screws can be implemented successfully, but implementing a complicated standard like C++ without errors is not feasable.
+We all know that programming is difficult. And standartisation is a form of programming. Relatively simple standards like the shapes and sizes of screws can be implemented successfully, but implementing a complicated standard like C++ without errors is unfeasable.
 
 ## What's next
 
