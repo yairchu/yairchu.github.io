@@ -66,24 +66,33 @@
 <p>By no means are these complete lists:</p>
 <h3 id="compile-time">Compile time</h3>
 <ul>
-<li>The global namespace is littered differently across platforms. Can you use an innocent looking name like <code>Point</code>?</li>
+<li>The global namespace is littered differently across platforms. Can you use an innocent looking name like <code>Point</code>?
+<ul>
+<li>VS often won't handle <code>std::max</code> but <code>std::max&lt;int&gt;</code> or <a href="https://stackoverflow.com/a/2789509/40916"><code>(std::max)</code> will work</a></li>
+</ul></li>
+<li>Which standard library functions are available depend on your compiler version. Use <code>std::gcd</code>? Your code won't work on Visual Studio 2015
+<ul>
+<li>Some things are available under different names, like <code>std::array</code> vs <code>std::tr1::array</code></li>
+<li>While not unique to C++, it does have it much worse because due to a lack of package management, developers are encouraged to use the standard library as much as possible</li>
+</ul></li>
 <li>Xcode limits usage of C++ features if you wish to support older macOS versions</li>
-<li>Which standard library functions are available depends on your compiler version. If you used <code>std::gcd</code> then your code won't work on Visual Studio before VS2019</li>
 <li>Standard C constants like <code>M_PI</code> are missing in Visual Studio (unless you <code>#define _USE_MATH_DEFINES</code> before <code>#include &lt;math.h&gt;</code>)
 <ul>
-<li>This means that changing the order of includes could easily break compilation!</li>
+<li>As a consequence, changing the order of includes often breaks compilation!</li>
 </ul></li>
-<li>VS often requires <code>std::max&lt;int&gt;</code> when <code>std::max</code> suffices for Xcode</li>
+<li>Xcode accepts lambda syntax of <code>[]{}</code> while VS requires <code>[](){}</code></li>
+<li>Equivalent attributes have different syntaxes - <code>__attribute__((aligned(32)))</code> vs <code>__declspec(align(32))</code></li>
 <li>Fake compilation errors: We only get them in the presence of other errors, and upon fixing the "real" errors they disappear along, and these are unique across different compilers</li>
 </ul>
 <h3 id="run-time">Run time</h3>
 <ul>
-<li>Run-time crashes in Windows upon using <code>dynamic_cast</code> with virtual inheritence they work fine on macOS</li>
+<li>Run-time crashes in Windows upon using <code>dynamic_cast</code> with virtual inheritence while they work fine on macOS</li>
 </ul>
 <h2 id="how-did-we-get-there">How did we get there</h2>
 <h3 id="the-original-sin---compatibility-for-your-soul">The original sin - compatibility for your soul</h3>
 <p>C++ owes its success to being a superset of C, which made the transition to it easy for the users of popular systems programming language of the time.</p>
 <p>There are many choices to make when designing a language, and the choices should work together if we want a cohesive and sensible design. By inheriting all of C's choices, C++ handicapped its ability of doing this.</p>
+<p>C++ has went so far that even its own name is a reference to <a href="https://stackoverflow.com/a/24904/40916">a C++ anti-pattern</a>.</p>
 <h3 id="embrace-extend-and-extinguish">Embrace, extend, and extinguish</h3>
 <p>Microsoft of the 1990s and early 2000s famously used <a href="https://en.wikipedia.org/wiki/Embrace,_extend,_and_extinguish">the EEE strategy</a> in the browser wars.</p>
 <p>They have clearly also used it in the PL/OS wars:</p>
