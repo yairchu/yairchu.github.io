@@ -8,13 +8,13 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@yairchu">
 <meta name="twitter:creator" content="@yairchu">
-<meta name="twitter:title" content="C++ is the undefined language - DRAFT!">
+<meta name="twitter:title" content="C++ is the undefined language">
   <meta name="twitter:description" content="C++ is the least standard language in popular use">
   <meta name="twitter:image" content="https://yairchu.github.io//images/elves-cplusplus.jpg">
-  <title>C++ is the undefined language - DRAFT!</title>
+  <title>C++ is the undefined language</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/syntax.css">
-  <meta property="og:title" content="C++ is the undefined language - DRAFT!" />
+  <meta property="og:title" content="C++ is the undefined language" />
   <meta property="og:image" content="https://yairchu.github.io/images/elves-cplusplus.jpg" />
 </head>
 <body>
@@ -41,7 +41,7 @@
   <div class="wrapper">
     <div class="masthead">
       <span class="title">
-        C++ is the undefined language - DRAFT!
+        C++ is the undefined language
       </span>
       <br>
 
@@ -49,7 +49,7 @@
       <br>
       <span class="byline">by Yair Chuchem</span>
       <br>
-      <span class="date">2020.06.16</span>
+      <span class="date">2020.06.17</span>
       <br>
       <div class="metadata">
       </div>
@@ -62,13 +62,11 @@
   </div>
   <article class="post">
     <p>C++ <a href="https://en.wikipedia.org/wiki/C%2B%2B">is standardized by the international standards body ISO</a>, so one might expect it to be similar across different operating systems. Ironically, it is the only popular programming language that doesn't provide a consistent cross platform experience.</p>
-<h2 id="some-examples-of-c-incompatability">Some examples of C++ incompatability</h2>
-<p>By no means are these complete lists:</p>
-<h3 id="compile-time">Compile time</h3>
+<h2 id="some-examples-of-incompatability">Some examples of incompatability</h2>
 <ul>
 <li>The global namespace is littered differently across platforms. Can you use an innocent looking name like <code>Point</code>?
 <ul>
-<li>VS often won't handle <code>std::max</code> but <code>std::max&lt;int&gt;</code> or <a href="https://stackoverflow.com/a/2789509/40916"><code>(std::max)</code> will work</a></li>
+<li><code>max</code> often breaks <code>std::max</code> in Visual Studio, while <code>std::max&lt;int&gt;</code> or <a href="https://stackoverflow.com/a/2789509/40916"><code>(std::max)</code> work fine</a></li>
 </ul></li>
 <li>Which standard library functions are available depend on your compiler version. Use <code>std::gcd</code>? Your code won't work on Visual Studio 2015
 <ul>
@@ -81,11 +79,8 @@
 <li>As a consequence, changing the order of includes often breaks compilation!</li>
 </ul></li>
 <li>Xcode accepts lambda syntax of <code>[]{}</code> while VS requires <code>[](){}</code></li>
+<li>Want to use <code>__has_include</code> to conditionally compile parts of your library? It's only available in C++17 so check <code>__cplusplus</code> to see if you can use it. But in VS it doesn't really tell you the language version so be sure to check <code>_MSC_VER</code> too..</li>
 <li>Equivalent attributes have different syntaxes - <code>__attribute__((aligned(32)))</code> vs <code>__declspec(align(32))</code></li>
-<li>Fake compilation errors: We only get them in the presence of other errors, and upon fixing the "real" errors they disappear along, and these are unique across different compilers</li>
-</ul>
-<h3 id="run-time">Run time</h3>
-<ul>
 <li>Run-time crashes in Windows upon using <code>dynamic_cast</code> with virtual inheritence while they work fine on macOS</li>
 </ul>
 <h2 id="how-did-we-get-there">How did we get there</h2>
@@ -97,12 +92,12 @@
 <p>Microsoft of the 1990s and early 2000s famously used <a href="https://en.wikipedia.org/wiki/Embrace,_extend,_and_extinguish">the EEE strategy</a> in the browser wars.</p>
 <p>They have clearly also used it in the PL/OS wars:</p>
 <ul>
-<li>Make the best IDE for C++ (Visual Studio), gain users, and gradually break compatability with other implementations</li>
+<li>Make Visual Studio the best IDE for C++, gain users, and gradually break compatability with other implementations</li>
 <li>Code developed in the IDE will not work in other OSs, less software for those means users will keep preferring Windows</li>
 <li>Profit!</li>
 </ul>
 <h3 id="complicated-standards-are-bug-prone">Complicated standards are bug prone</h3>
-<p>We all know that programming is difficult. And standartisation is a form of programming. Relatively simple standards like the shapes and sizes of screws can be implemented successfully, but implementing a complicated standard like C++ without errors is not feasable.</p>
+<p>We all know that programming is difficult. And standartisation is a form of programming. Relatively simple standards like the shapes and sizes of screws can be implemented successfully, but implementing a complicated standard like C++ without errors is unfeasable.</p>
 <h2 id="whats-next">What's next</h2>
 <p>C++ is currently the king in some industries (games, audio) because no other popular language addresses their needs. Sadly, I don't see this changing in the near future.</p>
 <p>Perhaps one day Rust, Pony, D, Zig, Jai, or something that I haven't heard about will overtake C++'s throne. Let's hope, anything but this!</p>
@@ -115,7 +110,7 @@
 
     <!--Share buttons-->
     <div class="social-buttons">
-      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: C++ is the undefined language - DRAFT! - " data-via="yairchu">Tweet</a>
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: C++ is the undefined language - " data-via="yairchu">Tweet</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
       <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
