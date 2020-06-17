@@ -17,16 +17,20 @@ By no means are these complete lists:
 ### Compile time
 
 * The global namespace is littered differently across platforms. Can you use an innocent looking name like `Point`?
+  * VS often won't handle `std::max` but `std::max<int>` or [`(std::max)` will work](https://stackoverflow.com/a/2789509/40916)
+* Which standard library functions are available depend on your compiler version. Use `std::gcd`? Your code won't work on Visual Studio 2015
+  * Some things are available under different names, like `std::array` vs `std::tr1::array`
+  * While not unique to C++, it does have it much worse because due to a lack of package management, developers are encouraged to use the standard library as much as possible
 * Xcode limits usage of C++ features if you wish to support older macOS versions
-* Which standard library functions are available depends on your compiler version. If you used `std::gcd` then your code won't work on Visual Studio before VS2019
 * Standard C constants like `M_PI` are missing in Visual Studio (unless you `#define _USE_MATH_DEFINES` before `#include <math.h>`)
-  * This means that changing the order of includes could easily break compilation!
-* VS often requires `std::max<int>` when `std::max` suffices for Xcode
+  * As a consequence, changing the order of includes often breaks compilation!
+* Xcode accepts lambda syntax of `[]{}` while VS requires `[](){}`
+* Equivalent attributes have different syntaxes - `__attribute__((aligned(32)))` vs `__declspec(align(32))`
 * Fake compilation errors: We only get them in the presence of other errors, and upon fixing the "real" errors they disappear along, and these are unique across different compilers
 
 ### Run time
 
-* Run-time crashes in Windows upon using `dynamic_cast` with virtual inheritence they work fine on macOS
+* Run-time crashes in Windows upon using `dynamic_cast` with virtual inheritence while they work fine on macOS
 
 ## How did we get there
 
@@ -35,6 +39,8 @@ By no means are these complete lists:
 C++ owes its success to being a superset of C, which made the transition to it easy for the users of popular systems programming language of the time.
 
 There are many choices to make when designing a language, and the choices should work together if we want a cohesive and sensible design. By inheriting all of C's choices, C++ handicapped its ability of doing this.
+
+C++ has went so far that even its own name is a reference to [a C++ anti-pattern](https://stackoverflow.com/a/24904/40916).
 
 ### Embrace, extend, and extinguish
 
