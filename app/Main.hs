@@ -201,7 +201,7 @@ buildRules = do
     & makeTags
     & traverse_ (uncurry buildTag)
   let published = filter (has _Nothing . draft) allPosts
-  makeTags allPosts
+  makeTags published
     & filter (not . null . drop 1 . snd)
     & sortOn tagOrder
     <&> fst
