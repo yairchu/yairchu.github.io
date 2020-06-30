@@ -19,7 +19,6 @@ C++ [is standardized by the international standards body ISO](https://en.wikiped
 * Xcode limits usage of C++ features if you wish to support older macOS versions
 * Standard C constants like `M_PI` are missing in Visual Studio unless you `#define _USE_MATH_DEFINES` before `#include <math.h>`
   * As a consequence, changing the order of includes often breaks compilation!
-* Xcode accepts lambda syntax of `[]{}` while VS requires `[](){}`
 * Want to use `__has_include` to conditionally compile parts of your library? It's only available in C++17 so check `__cplusplus` to see if you can use it. But in VS it doesn't really tell you the language version so be sure to check `_MSC_VER` too..
 * Equivalent attributes have different syntaxes - `__attribute__((aligned(32)))` vs `__declspec(align(32))`
 * Run-time crashes in Windows upon using `dynamic_cast` with virtual inheritence while they work fine on macOS
@@ -54,4 +53,8 @@ C++ is currently the king in some industries (games, audio) because no other pop
 
 Perhaps one day Rust, Pony, D, Zig, Jai, or something that I haven't heard about will overtake C++'s throne. Let's hope, anything but this!
 
+## Misc
+
+* <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/cpp](https://www.reddit.com/r/cpp/comments/hiiogp/c_is_the_undefined_language/) discussion
+* Removed mistake from the list after getting corrections from [mjklaim](https://www.reddit.com/r/cpp/comments/hiiogp/c_is_the_undefined_language/fwgfrev/) and [encyclopedist](https://www.reddit.com/user/encyclopedist/)
 * Image source: [Le Gregman Show](http://gregmanshow.blogspot.com/2016/12/bd-37-le-travail-des-lutins.html), translated by [Monjipour](https://www.reddit.com/r/ProgrammerHumor/comments/d2qfm9/hang_in_there_little_guy_stolen_translated_source/)
