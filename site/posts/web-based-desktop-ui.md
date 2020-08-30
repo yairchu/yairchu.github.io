@@ -5,7 +5,6 @@ date: 2020.08.30
 tags: [code, gui, web]
 description: Is using web technology for desktop UIs something we should want
 image: umbrella.jpg
-draft: []
 ---
 
 Over the years I've had my fair share of GUI development, using Qt, GTK, JUCE, FLTK, Kivy, GLFW, and web technologies.
