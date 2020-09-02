@@ -193,7 +193,9 @@ footer {
 .post-image {
   height: auto;
   width: 400px;
-  max-width: 400px; }
+  max-width: 400px;
+  margin-top: 10px;
+  margin-bottom: 10px; }
 
 .metadata {
   text-align: center; }
