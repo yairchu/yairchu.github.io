@@ -10,9 +10,9 @@ image: back-to-future-lego.jpg
 For existing projects, considering switching libraries can be intimidating.
 We may not even be certain that the alternative is worth the switch.
 
-Often we'd first evaluate candidate libraries with smaller example projects. This evaluation takes time, it can save us a bigger time sink that could had happened if we discover that the library is actually not a good fit after already having put a lot of work into integrating it.
+Often we'd first evaluate candidate libraries with smaller example projects. This evaluation takes time, but it can save us a bigger time sink that could had happened if we discover that the library is actually not a good fit after already having put a lot of work into integrating it.
 
-There' a middle approach between integrating with a toy and just switching on the actual project. In this approach we choose a very specific toy example for evaluation: an early, simpler version of the real project, which we can obtain from our version control history!
+There's a middle approach between integrating with a toy and just switching on the actual project. In this approach we choose a very specific toy example for evaluation: an early, simpler version of the real project, which we can obtain from our version control history!
 
 When possible, this has several benefits:
 
