@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="UTF-8">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="Time Travelling Refactor - Experience Report">
+  <meta name="twitter:description" content="Refactoring back in time">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/back-to-future-lego.jpg">
+  <title>Time Travelling Refactor - Experience Report</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="Time Travelling Refactor - Experience Report" />
+  <meta property="og:image" content="https://yairchu.github.io/images/back-to-future-lego.jpg" />
+</head>
+<body>
+  <header>
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        Time Travelling Refactor - Experience Report
+      </span>
+
+      <img class="post-image" src="/images/back-to-future-lego.jpg">
+      <span class="byline">by Yair Chuchem</span>
+      <span class="date">2020.09.02</span>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/git" class="tag">git</a>
+        <a href="/tag/rebase" class="tag">rebase</a>
+        <a href="/tag/refactoring" class="tag">refactoring</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p>For existing projects, considering switching libraries can be intimidating. We may not even be certain that the alternative is worth the switch.</p>
+<p>Often we'd first evaluate candidate libraries with smaller example projects. This evaluation takes time, it can save us a bigger time sink that could had happened if we discover that the library is actually not a good fit after already having put a lot of work into integrating it.</p>
+<p>There' a middle approach between integrating with a toy and just switching on the actual project. In this approach we choose a very specific toy example for evaluation: an early, simpler version of the real project, which we can obtain from our version control history!</p>
+<p>When possible, this has several benefits:</p>
+<ul>
+<li>Our evaluation is with something similar to the real project</li>
+<li>The work we're doing for evaluation could be reused for integration in the real project!</li>
+</ul>
+<p>Re-using the work for the real project relies on our ability to <a href="/tag/merge">merge effectively</a>. I call this a "time travelling refactor", because we do the refactor of switching libraries "in the past" and then by merging we apply the effects of past changes to the present.</p>
+<h2 id="experience-report">Experience report</h2>
+<p>I've recently implemented this approach successfully, performing a library switch that I would otherwise feel intimidated from doing. I used <a href="/posts/split-merge-to-smaller-pieces"><code>sub-rebase</code> for splitting the merges to smaller steps</a> and <a href="/posts/git-mediate-stops-fear"><code>git-mediate</code> to resolve the conflicts</a>.</p>
+<p>Did you ever do the "time travelling refactor"? Let me know if you did, how did your experience go, as well as if you know of any existing post on the topic.</p>
+<ul>
+<li><a href="https://www.flickr.com/photos/jjackowski/12236722024/">Image by Jeff Jacowski</a></li>
+</ul>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: Time Travelling Refactor - Experience Report - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
