@@ -49,4 +49,6 @@ It's good to split commits to coherent units, where renames are separate from bu
 
 ## Notes
 
+* This isn't my own original concept, I'm just documenting it. From my experience this practice is moderately, but not universally, wide-spread.
+* Why did I write this: I wanted to explain this to a friend but I couldn't find any article in the Internet that I could send, so I wrote this one. Btw if you do know a good article on this topic, please direct me to it!
 * Image by <a href="https://pixabay.com/users/CapsandCapital-11428599/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=4250499">Stu G</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=4250499">Pixabay</a>
