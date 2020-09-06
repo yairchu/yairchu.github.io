@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-09-03T11:36:SZ</updated>
+  <updated>2020-09-06T14:52:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -41,6 +41,8 @@
 <p>It's good to split commits to coherent units, where renames are separate from bugfixes, etc. It's not only good when working in a team, but even when developing something alone. But note that there's no need to take it to the extreme and split them even further to microscopic commits (then just reviewing the list of commits will become tedious).</p>
 <h2 id="notes">Notes</h2>
 <ul>
+<li>This isn't my own original concept, I'm just documenting it. From my experience this practice is moderately, but not universally, wide-spread.</li>
+<li>Why did I write this: I wanted to explain this to a friend but I couldn't find any article in the Internet that I could send, so I wrote this one. Btw if you do know a good article on this topic, please direct me to it!</li>
 <li>Image by <a href="https://pixabay.com/users/CapsandCapital-11428599/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=4250499">Stu G</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=4250499">Pixabay</a></li>
 </ul>]]></content>
   </entry>
