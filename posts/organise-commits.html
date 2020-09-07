@@ -74,6 +74,8 @@
 <p>You may discover some bug in the future, and do a <code>git bisect</code> to find what change introduced it. With the commits separate, you'll get better more specific information when it pinpoints which commit introduced it.</p>
 <h3 id="resolving-conflicts">Resolving conflicts</h3>
 <p>When resolving merge conflicts in <a href="/posts/split-merge-to-smaller-pieces">the "small pieces" flow</a>, a lot less mental effort is involved when the changes are separated and explained in their commit messages. For example when resolving the conflicts resulting from the rename, sometimes just repeating <a href="https://github.com/da-x/git-search-replace">the <code>git-search-replace</code></a> followed <a href="/posts/git-mediate-stops-fear">by <code>git-mediate</code></a> will be enough to resolve them.</p>
+<h3 id="code-archeology">Code archeology</h3>
+<p>When trying to find where code originated using tools like <a href="https://www.syntevo.com/deepgit/">DeepGit</a> or <a href="https://magit.vc/">magit</a>, these tools are inteligent enough to recognize file renames and find the actual origin of the code before the rename. But if we mix too many changes together then their heuristics for recognizing renames may fail.</p>
 <h2 id="how-to-make-the-commits-well-organised">How to make the commits well organised</h2>
 <p>Example situation: You made the colors change commit, then the rename, and then did another color change.</p>
 <p>Assuming that you didn't already push the previous commits, then you can still "rewrite the history" using <code>git rebase</code> and put the color changes together in a single commit.</p>
