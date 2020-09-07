@@ -37,6 +37,10 @@ You may discover some bug in the future, and do a `git bisect` to find what chan
 When resolving merge conflicts in [the "small pieces" flow](/posts/split-merge-to-smaller-pieces), a lot less mental effort is involved when the changes are separated and explained in their commit messages.
 For example when resolving the conflicts resulting from the rename, sometimes just repeating [the `git-search-replace`](https://github.com/da-x/git-search-replace) followed [by `git-mediate`](/posts/git-mediate-stops-fear) will be enough to resolve them.
 
+### Code archeology
+
+When trying to find where code originated using tools like [DeepGit](https://www.syntevo.com/deepgit/) or [magit](https://magit.vc/), these tools are inteligent enough to recognize file renames and find the actual origin of the code before the rename. But if we mix too many changes together then their heuristics for recognizing renames may fail.
+
 ## How to make the commits well organised
 
 Example situation: You made the colors change commit, then the rename, and then did another color change.
