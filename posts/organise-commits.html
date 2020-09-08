@@ -77,8 +77,9 @@
 <h3 id="code-archeology">Code archeology</h3>
 <p>When trying to find where code originated using tools like <a href="https://www.syntevo.com/deepgit/">DeepGit</a> or <a href="https://magit.vc/">magit</a>, these tools are inteligent enough to recognize file renames and find the actual origin of the code before the rename. But if we mix too many changes together then their heuristics for recognizing renames may fail.</p>
 <h2 id="how-to-make-the-commits-well-organised">How to make the commits well organised</h2>
-<p>Example situation: You made the colors change commit, then the rename, and then did another color change.</p>
-<p>Assuming that you didn't already push the previous commits, then you can still "rewrite the history" using <code>git rebase</code> and put the color changes together in a single commit.</p>
+<p>Example situation: You made the colors change, then the rename, and then did another color change.</p>
+<p>The way I usually work, if I switch from one task to the other, I make a commit for it. In the example scenario I already would have two new commits before working on the second color change. Assuming that I didn't already push the previous commits, I'll temporarily make a third commit with the color change and then "rewrite the history" using <code>git rebase -i</code> to squash it with the first colors change to group them together to a single commit.</p>
+<p>Alternatively, if I didn't yet commit the rename and noticed that I need to keep changing colors I might temporarily put it aside using <code>git stash</code> and then <code>git commit --amend</code> to add the second color change to the first.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>It's good to split commits to coherent units, where renames are separate from bugfixes, etc. It's not only good when working in a team, but even when developing something alone. But note that there's no need to take it to the extreme and split them even further to microscopic commits (then just reviewing the list of commits will become tedious).</p>
 <h2 id="notes">Notes</h2>
