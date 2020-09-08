@@ -43,9 +43,11 @@ When trying to find where code originated using tools like [DeepGit](https://www
 
 ## How to make the commits well organised
 
-Example situation: You made the colors change commit, then the rename, and then did another color change.
+Example situation: You made the colors change, then the rename, and then did another color change.
 
-Assuming that you didn't already push the previous commits, then you can still "rewrite the history" using `git rebase` and put the color changes together in a single commit.
+The way I usually work, if I switch from one task to the other, I make a commit for it. In the example scenario I already would have two new commits before working on the second color change. Assuming that I didn't already push the previous commits, I'll temporarily make a third commit with the color change and then "rewrite the history" using `git rebase -i` to squash it with the first colors change to group them together to a single commit.
+
+Alternatively, if I didn't yet commit the rename and noticed that I need to keep changing colors I might temporarily put it aside using `git stash` and then `git commit --amend` to add the second color change to the first.
 
 ## Conclusion
 
