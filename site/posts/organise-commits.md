@@ -45,9 +45,7 @@ When trying to find where code originated using tools like [DeepGit](https://www
 
 Example situation: You made the colors change, then the rename, and then did another color change.
 
-The way I usually work, if I switch from one task to the other, I make a commit for it. In the example scenario I already would have two new commits before working on the second color change. Assuming that I didn't already push the previous commits, I'll temporarily make a third commit with the color change and then "rewrite the history" using `git rebase -i` to squash it with the first colors change to group them together to a single commit.
-
-Alternatively, if I didn't yet commit the rename and noticed that I need to keep changing colors I might temporarily put it aside using `git stash` and then `git commit --amend` to add the second color change to the first.
+One way to do things is to make a local commit after each change (one should use `git add -p` to make sure they're only adding the relevant changes to each commit). Doing this, after these changes you'll have three commits. Then before pushing, a `git rebase -i` can be used to squash the two color changes into one commit.
 
 ## Conclusion
 
