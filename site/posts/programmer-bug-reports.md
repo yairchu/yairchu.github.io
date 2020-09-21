@@ -47,7 +47,7 @@ Is the problem specific to the kind of hardware that you have? Does it only happ
 
 ### Fix the problem
 
-Did you try the previous steps? With any luck, those already provides a lot of insight about the bug, and hopefully even made it obvious. If it's an easy fix, consider adding a PR to your bug report!
+Did you try the previous steps? With any luck, those already provide a lot of insight about the bug, and hopefully even made it obvious. If it's an easy fix, consider adding a PR to your bug report!
 
 ### Notes
 
