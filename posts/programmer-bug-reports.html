@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="UTF-8">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="How programmers should report bugs">
+  <meta name="twitter:description" content="How programmers should report bugs">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/lego-ninja.webp">
+  <title>How programmers should report bugs</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="How programmers should report bugs" />
+  <meta property="og:image" content="https://yairchu.github.io/images/lego-ninja.webp" />
+</head>
+<body>
+  <header>
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        How programmers should report bugs
+      </span>
+
+      <img class="post-image" src="/images/lego-ninja.webp">
+      <span class="byline">by Yair Chuchem</span>
+      <span class="date">2020.09.21</span>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/git" class="tag">git</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p>Programmers can submit better bug reports than normal users or QA engineers can.</p>
+<p>First, let's recap the basics which apply to everyone -</p>
+<h2 id="the-basic-bug-report-checklist">The basic bug report checklist</h2>
+<ul>
+<li>Verify that the issue still exists on the latest version</li>
+<li>Search to see if the issue was already reported (avoid duplicates)</li>
+<li>Provide all of the relevant steps to reproduce, with relevant details like software version and system details</li>
+<li>Report additional info like whether the problem is a regression (it used to work in an older version)</li>
+</ul>
+<h2 id="going-futher-as-a-programmer">Going futher as a programmer</h2>
+<p>Programmers can provide additional insight that normal users can't. The following is phrased for libraries but also applies for internal bug reports -</p>
+<h3 id="reproduce-the-problem-with-the-example-programs">Reproduce the problem with the example programs</h3>
+<p>Try to reproduce the problem with the library's example programs.</p>
+<p>Reproducing the problem with the example is useful because everyone has access to it, and it is a better indicator that the bug is actually in the library rather than in user code.</p>
+<p>If the bug cannot be reproduced in the example programs, try to see if you can extend them to reproduce it.</p>
+<h3 id="add-a-failing-test">Add a failing test</h3>
+<p>Can the problem be reproduced nicely in a test? A test to reproduce is can be invaluable to the developer trying to solve it, and having the test in the test suite will help assure that the problem won't resurface in the future!</p>
+<h3 id="is-it-a-regression-bisect">Is it a regression? Bisect</h3>
+<p>Is this problem new? Did it work fine in a previous version? Use <code>git bisect</code> to find where it broke! Finding the breaking commit can be invaluable in pinpointing the regression.</p>
+<p>You could also leave a comment on the breaking commit and its author may notice. They may have relevant knowledge and be able to help!</p>
+<h3 id="platform-specific-issues">Platform specific issues</h3>
+<p>Is the problem specific to the kind of hardware that you have? Does it only happen on a specific OS version or distribution? It might be the case that the developers of the library don't have access to a system like yours. So any additional work you can do to offer insight might be invaluable for getting the problem fixed for you!</p>
+<h3 id="fix-the-problem">Fix the problem</h3>
+<p>Did you try the previous steps? With any luck, those already provides a lot of insight about the bug, and hopefully even made it obvious. If it's an easy fix, consider adding a PR to your bug report!</p>
+<h3 id="notes">Notes</h3>
+<ul>
+<li>Image <a href="https://commons.wikimedia.org/wiki/File:Lloyd.webp">by LEGO</a>, found in wikimedia commons</li>
+</ul>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: How programmers should report bugs - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>

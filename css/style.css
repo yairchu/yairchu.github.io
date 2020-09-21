@@ -191,9 +191,8 @@ footer {
   margin: auto; }
 
 .post-image {
-  height: auto;
-  width: 400px;
-  max-width: 400px;
+  width: auto;
+  height: 300px;
   margin-top: 10px;
   margin-bottom: 10px; }
 
@@ -544,11 +543,6 @@ a.tag, a.category {
     padding-bottom: 1em;
     font-size: 1em;
     line-height: 1.8em; }
-
-  .post-image {
-    height: auto;
-    width: auto;
-    max-width: 280px; }
 
   .page > p:first-of-type:first-letter {
     font-size: 4em;

@@ -2,12 +2,49 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-09-09T07:33:SZ</updated>
+  <updated>2020-09-21T13:46:SZ</updated>
   <author>
       <name></name>
   </author>
   <id>https://yairchu.github.io//</id>
 
+  <entry>
+      <title>How programmers should report bugs</title>
+      <link href="https://yairchu.github.io/posts/programmer-bug-reports"/>
+      <id>https://yairchu.github.io/posts/programmer-bug-reports</id>
+      <updated>2020-09-21T00:00:SZ</updated>
+      <category term="code"/>
+      <category term="git"/>
+      <summary>How programmers should report bugs</summary>
+      <content type="html"><![CDATA[<p>Programmers can submit better bug reports than normal users or QA engineers can.</p>
+<p>First, let's recap the basics which apply to everyone -</p>
+<h2 id="the-basic-bug-report-checklist">The basic bug report checklist</h2>
+<ul>
+<li>Verify that the issue still exists on the latest version</li>
+<li>Search to see if the issue was already reported (avoid duplicates)</li>
+<li>Provide all of the relevant steps to reproduce, with relevant details like software version and system details</li>
+<li>Report additional info like whether the problem is a regression (it used to work in an older version)</li>
+</ul>
+<h2 id="going-futher-as-a-programmer">Going futher as a programmer</h2>
+<p>Programmers can provide additional insight that normal users can't. The following is phrased for libraries but also applies for internal bug reports -</p>
+<h3 id="reproduce-the-problem-with-the-example-programs">Reproduce the problem with the example programs</h3>
+<p>Try to reproduce the problem with the library's example programs.</p>
+<p>Reproducing the problem with the example is useful because everyone has access to it, and it is a better indicator that the bug is actually in the library rather than in user code.</p>
+<p>If the bug cannot be reproduced in the example programs, try to see if you can extend them to reproduce it.</p>
+<h3 id="add-a-failing-test">Add a failing test</h3>
+<p>Can the problem be reproduced nicely in a test? A test to reproduce is can be invaluable to the developer trying to solve it, and having the test in the test suite will help assure that the problem won't resurface in the future!</p>
+<h3 id="is-it-a-regression-bisect">Is it a regression? Bisect</h3>
+<p>Is this problem new? Did it work fine in a previous version? Use <code>git bisect</code> to find where it broke! Finding the breaking commit can be invaluable in pinpointing the regression.</p>
+<p>You could also leave a comment on the breaking commit and its author may notice. They may have relevant knowledge and be able to help!</p>
+<h3 id="platform-specific-issues">Platform specific issues</h3>
+<p>Is the problem specific to the kind of hardware that you have? Does it only happen on a specific OS version or distribution? It might be the case that the developers of the library don't have access to a system like yours. So any additional work you can do to offer insight might be invaluable for getting the problem fixed for you!</p>
+<h3 id="fix-the-problem">Fix the problem</h3>
+<p>Did you try the previous steps? With any luck, those already provides a lot of insight about the bug, and hopefully even made it obvious. If it's an easy fix, consider adding a PR to your bug report!</p>
+<h3 id="notes">Notes</h3>
+<ul>
+<li>Image <a href="https://commons.wikimedia.org/wiki/File:Lloyd.webp">by LEGO</a>, found in wikimedia commons</li>
+</ul>]]></content>
+  </entry>
   <entry>
       <title>How to organise your git commits</title>
       <link href="https://yairchu.github.io/posts/organise-commits"/>
