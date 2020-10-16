@@ -113,6 +113,12 @@ a, a:visited, a:hover {
     color: #EB0978;
     text-decoration: underline; }
 
+.dark a, .dark a:visited, .dark a:hover {
+  color: #f8a; }
+  .dark a:hover, .dark a:visited:hover, .dark a:hover:hover {
+    color: #e79;
+    text-decoration: underline; }
+
 header {
   position: fixed;
   /*color: $night-white;*/
