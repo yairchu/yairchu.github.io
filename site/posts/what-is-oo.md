@@ -7,7 +7,7 @@ description: What is OOP
 draft: []
 ---
 
-[Wikipedia's definition of OOP](https://en.wikipedia.org/wiki/Object-oriented_programming) is as follows:
+Wikipedia's [definition of OOP](https://en.wikipedia.org/wiki/Object-oriented_programming) is as follows:
 
 > **Object-oriented programming (OOP)** is a programming paradigm based on the concept of "objects" ... programs are designed by making them out of objects ... typically in combination with imperative, procedural programming ... multi-paradigm ...  **TL;DR**
 
