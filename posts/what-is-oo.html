@@ -65,17 +65,18 @@
 <p>It's a vague and long definition, which as a programmer I'm less attracted to. I prefer descriptions that are useful and succinct.</p>
 <p>In this post I'll give a short description of OOP, and demonstrate it by comparing C and C++. Here it is:</p>
 <h2 id="oop">OOP</h2>
-<p><em>Object-oriented programming</em> extended procedural programming with <em>encapsulation</em> and <em>method namespacing</em>. These now-common features were made popular by the OOP movement.</p>
-<h2 id="method-namespacing">Method namespacing</h2>
+<p><em>Object-oriented programming</em> extended procedural programming with <em>encapsulation</em> and <em>namespacing</em> (initially for "methods"). These now-common features were made popular by the OOP movement.</p>
+<p>In modern day, the only distinguishingly OOP feature (which non-OO languages lack) is method namespacing.</p>
+<h2 id="namespacing">Namespacing</h2>
+<h3 id="methods">Methods</h3>
 <p>Method namespacing allows us to give the same name to different "methods" (aka "functions").</p>
 <p>Tedious C-style code which looked like this:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1"></a>window_set_size (window, widget_desired_size (widget));</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="co">/* ^ Note how we manually prefix our function names with type names */</span></span></code></pre></div>
-<p>would look much better in C++ style:</p>
+<p>reads much nicer in C++ style:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1"></a>window.set_size (widget.desired_size());</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="co">// ^ Implicitly calls the Window::set_size method</span></span></code></pre></div>
-<h3 id="method-namespacing-vs-other-namespace-mechanisms">Method namespacing vs other namespace mechanisms</h3>
-<p>Nowadays, programming languages often have other features that already provide a lot of the benefit that method namespacing does:</p>
+<p>This form of namespacing is the first one to make namespaces popular. Other forms of namespacing however are available in all modern programming languages and provide overlapping benefits.</p>
 <h4 id="moduleexplicit-namespaces">Module/explicit namespaces</h4>
 <p>Modern languages offer mechanisms to import symbols from modules (<code>namespace</code>s in C++) either with or without qualification (<code>using</code> in C++).</p>
 <p>Demonstrated in Python:</p>
@@ -84,9 +85,7 @@
 <span id="cb3-3"><a href="#cb3-3"></a></span>
 <span id="cb3-4"><a href="#cb3-4"></a>x <span class="op">=</span> numpy.sin(arange(<span class="dv">15</span>))</span></code></pre></div>
 <h4 id="interfaces-and-typeclasses">Interfaces and Typeclasses</h4>
-<p>Interfaces, and their FP generalization <a href="https://en.wikipedia.org/wiki/Type_class">typeclasses</a>, allow the same "interface method" call to invoke different methods for different instances. This provides a limited form of disambiguation that has overlap with hte value provided by method namespacing.</p>
-<h3 id="should-new-languages-have-method-namespacing">Should new languages have method namespacing</h3>
-<p>Given that module namespacing is in concensus, and my inclination towards typeclasses, if I were to design a PL today I would not add method namespacing to th mix, because the value it adds is diminished by overlap with other features.</p>
+<p>Interfaces, and their FP generalization, <a href="https://en.wikipedia.org/wiki/Type_class">typeclasses</a>, are not commonly considered a namespacing feature, but they do allow a form of name re-use in that an interface method call may invoke different methods for different types.</p>
 <h2 id="encapsulation">Encapsulation</h2>
 <p>Encapsulation lets us limit member variable access to class methods (ie <code>private</code> in C++).</p>
 <p>Encapsulation provides several benefits -</p>
@@ -94,15 +93,15 @@
 <p>Users use explicitly defined clean APIs, rather than willy-nilly accessing internals that may be prone to change. This is great!</p>
 <h3 id="enforcing-invariants">Enforcing invariants</h3>
 <p>Accessing the structure indirectly via class methods allows class implementors to easily impose invariants on the class state.</p>
-<p><em>Or at least this used to be the case</em> until the rise of concurrency (aka multi-threading). Nowadays maintaining invariants with mutable state became a challenge involving <code>std::mutex</code>es, <code>std::atomic</code>es, and lots of headaches.</p>
-<h3 id="but-is-encapsulation-really-an-oo-feature">But is encapsulation really an OO feature</h3>
-<p>Procedural languages like C already had some forms of encapsulation in the form of unexposed symbols (ie <code>static</code>) and opaque types.</p>
+<p><em>Or at least this used to be the case until the rise of concurrency</em> (aka multi-threading). Nowadays maintaining invariants with mutable state became a challenge involving <code>std::mutex</code>es, <code>std::atomic</code>es, and migraines.</p>
+<h3 id="non-oo-styles-of-encapsulation">Non-OO styles of encapsulation</h3>
+<p>Procedural languages like C already had some forms of encapsulation with unexposed symbols (ie <code>static</code>) and opaque types.</p>
 <p>Modern languages support modules with explicit export lists, which provide the same benefits with a more general interface.</p>
 <h2 id="appendix-whatabouts">Appendix: Whatabouts</h2>
-<p>According to Wikipedia there is more to OOP than the two ideas that I mentioned above. In this section I will attempt to refute that.</p>
+<p>According to Wikipedia there is more to OOP than the two concepts that I mentioned above.</p>
+<p>In this section I will attempt to refute this claim.</p>
 <h3 id="dynamic-dispatch">Dynamic dispatch</h3>
-<p>Dynamic dispatch is not uniquely an OO feature. Procedural languages already supported dynamic dispatch via function pointers.</p>
-<p>Granted, OO did popularize it for a while, but in practice many of the use cases of dynamic dispatch can often be replaced nicely with other mechanisms available in modern PL such as anonymous functions.</p>
+<p>Dynamic dispatch is not uniquely an OO feature. Procedural languages already supported dynamic dispatch via function pointers. Granted, OO did popularize it for a while, but in practice many of the use cases of dynamic dispatch can often be replaced nicely with other mechanisms available in modern PLs such as anonymous functions.</p>
 <p>The following OOP style code -</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1"></a>MyWidget::MyWidget()</span>
 <span id="cb4-2"><a href="#cb4-2"></a>{</span>
@@ -124,10 +123,10 @@
 <span id="cb5-4"><a href="#cb5-4"></a>    <span class="va">m_submit</span>.onClick = [=]{ ... };</span>
 <span id="cb5-5"><a href="#cb5-5"></a>    ...</span>
 <span id="cb5-6"><a href="#cb5-6"></a>}</span></code></pre></div>
+<h3 id="design-patterns">Design patterns</h3>
+<p>OOP design patterns are disappearing and being replaced with trivial code using new features, as demonstrated above with the listener pattern is being replaced by using function values. Likewise the visitor pattern was often used to emulate sum-types, and is getting replaced by built-in PL sum-types support.</p>
 <h3 id="inheritence">Inheritence</h3>
 <p>Inheritence is a famous OOP concept which isn't commonly used in practice. As an example, Google's C++ style guide <a href="https://google.github.io/styleguide/cppguide.html#Inheritance">recommends against using it</a>. Given that modern OOP style avoids it, it doesn't belong in a modern description of OOP style.</p>
-<h3 id="design-patterns">Design patterns</h3>
-<p>OOP design patterns are disappearing and being replaced with trivial code using new features. The listener pattern is being replaced by using function objects. The visitor pattern was often used to emulate sum-types, and is getting replaced by sum-types.</p>
 
     <br>
     <br>
