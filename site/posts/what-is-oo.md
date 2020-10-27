@@ -18,9 +18,13 @@ In this post I'll give a short description of OOP, and demonstrate it by compari
 
 ## OOP
 
-*Object-oriented programming* extended procedural programming with *encapsulation* and *method namespacing*. These now-common features were made popular by the OOP movement.
+*Object-oriented programming* extended procedural programming with *encapsulation* and *namespacing* (initially for "methods"). These now-common features were made popular by the OOP movement.
 
-## Method namespacing
+In modern day, the only distinguishingly OOP feature (which non-OO languages lack) is method namespacing.
+
+## Namespacing
+
+### Methods
 
 Method namespacing allows us to give the same name to different "methods" (aka "functions").
 
@@ -31,16 +35,14 @@ window_set_size (window, widget_desired_size (widget));
 /* ^ Note how we manually prefix our function names with type names */
 ```
 
-would look much better in C++ style:
+reads much nicer in C++ style:
 
 ```C++
 window.set_size (widget.desired_size());
 // ^ Implicitly calls the Window::set_size method
 ```
 
-### Method namespacing vs other namespace mechanisms
-
-Nowadays, programming languages often have other features that already provide a lot of the benefit that method namespacing does:
+This form of namespacing is the first one to make namespaces popular. Other forms of namespacing however are available in all modern programming languages and provide overlapping benefits.
 
 #### Module/explicit namespaces
 
@@ -57,11 +59,7 @@ x = numpy.sin(arange(15))
 
 #### Interfaces and Typeclasses
 
-Interfaces, and their FP generalization [typeclasses](https://en.wikipedia.org/wiki/Type_class), allow the same "interface method" call to invoke different methods for different instances. This provides a limited form of disambiguation that has overlap with hte value provided by method namespacing.
-
-### Should new languages have method namespacing
-
-Given that module namespacing is in concensus, and my inclination towards typeclasses, if I were to design a PL today I would not add method namespacing to th mix, because the value it adds is diminished by overlap with other features.
+Interfaces, and their FP generalization, [typeclasses](https://en.wikipedia.org/wiki/Type_class), are not commonly considered a namespacing feature, but they do allow a form of name re-use in that an interface method call may invoke different methods for different types.
 
 ## Encapsulation
 
@@ -77,24 +75,23 @@ Users use explicitly defined clean APIs, rather than willy-nilly accessing inter
 
 Accessing the structure indirectly via class methods allows class implementors to easily impose invariants on the class state.
 
-*Or at least this used to be the case* until the rise of concurrency (aka multi-threading). Nowadays maintaining invariants with mutable state became a challenge involving `std::mutex`es, `std::atomic`es, and lots of headaches.
+*Or at least this used to be the case until the rise of concurrency* (aka multi-threading). Nowadays maintaining invariants with mutable state became a challenge involving `std::mutex`es, `std::atomic`es, and migraines.
 
-### But is encapsulation really an OO feature
+### Non-OO styles of encapsulation
 
-Procedural languages like C already had some forms of encapsulation in the form of unexposed symbols (ie `static`) and opaque types.
+Procedural languages like C already had some forms of encapsulation with unexposed symbols (ie `static`) and opaque types.
 
 Modern languages support modules with explicit export lists, which provide the same benefits with a more general interface.
 
 ## Appendix: Whatabouts
 
-According to Wikipedia there is more to OOP than the two ideas that I mentioned above.
-In this section I will attempt to refute that.
+According to Wikipedia there is more to OOP than the two concepts that I mentioned above.
+
+In this section I will attempt to refute this claim.
 
 ### Dynamic dispatch
 
-Dynamic dispatch is not uniquely an OO feature. Procedural languages already supported dynamic dispatch via function pointers.
-
-Granted, OO did popularize it for a while, but in practice many of the use cases of dynamic dispatch can often be replaced nicely with other mechanisms available in modern PL such as anonymous functions.
+Dynamic dispatch is not uniquely an OO feature. Procedural languages already supported dynamic dispatch via function pointers. Granted, OO did popularize it for a while, but in practice many of the use cases of dynamic dispatch can often be replaced nicely with other mechanisms available in modern PLs such as anonymous functions.
 
 The following OOP style code -
 
@@ -125,12 +122,11 @@ MyWidget::MyWidget()
 }
 ```
 
+### Design patterns
+
+OOP design patterns are disappearing and being replaced with trivial code using new features, as demonstrated above with the listener pattern is being replaced by using function values. Likewise the visitor pattern was often used to emulate sum-types, and is getting replaced by built-in PL sum-types support.
+
 ### Inheritence
 
 Inheritence is a famous OOP concept which isn't commonly used in practice.
 As an example, Google's C++ style guide [recommends against using it](https://google.github.io/styleguide/cppguide.html#Inheritance). Given that modern OOP style avoids it, it doesn't belong in a modern description of OOP style.
-
-### Design patterns
-
-OOP design patterns are disappearing and being replaced with trivial code using new features.
-The listener pattern is being replaced by using function objects. The visitor pattern was often used to emulate sum-types, and is getting replaced by sum-types.
