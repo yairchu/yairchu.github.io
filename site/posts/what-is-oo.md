@@ -4,7 +4,6 @@ author: Yair Chuchem
 date: 2020.10.27
 tags: [code, c, c++, oop]
 description: What is OOP
-image: elves-cplusplus.jpg
 draft: []
 ---
 
@@ -18,37 +17,35 @@ In this post I'll give a short description of OOP, and demonstrate it by compari
 
 ## OOP
 
-*Object-oriented programming* extended procedural programming with *encapsulation* and *namespacing* (initially for "methods"). These now-common features were made popular by the OOP movement.
+*Object-oriented programming* extended procedural programming with *namespacing* (especially for *methods*) and *encapsulation*. These features are widespread today, but they were popularized by the OOP movement.
 
-In modern day, the only distinguishingly OOP feature (which non-OO languages lack) is method namespacing.
+Some additional concepts used to be considered integral to this style, but their importance has dwindled. Notable among them is *inheritence*, which many old texts considered to be the main concept of OOP. Today, *the only distinguishing feature of OOP is method namespacing*.
 
 ## Namespacing
 
-### Methods
+Method namespacing allows us to give the same name to different *methods* (aka *functions*).
 
-Method namespacing allows us to give the same name to different "methods" (aka "functions").
-
-Tedious C-style code which looked like this:
+Consider the following C code:
 
 ```C
-window_set_size (window, widget_desired_size (widget));
+button_add_listener (submit, this);
 /* ^ Note how we manually prefix our function names with type names */
 ```
 
-reads much nicer in C++ style:
+It reads much nicer in C++:
 
 ```C++
-window.set_size (widget.desired_size());
-// ^ Implicitly calls the Window::set_size method
+submit.addListener (this);
+// ^ Calls the Button::addListener method
 ```
 
-This form of namespacing is the first one to make namespaces popular. Other forms of namespacing however are available in all modern programming languages and provide overlapping benefits.
+Another common OO form of namespacing is *overloading*, where the compiler infers which function of the same name to call according to which one best fits the types.
 
-#### Module/explicit namespaces
+---
 
-Modern languages offer mechanisms to import symbols from modules (`namespace`s in C++) either with or without qualification (`using` in C++).
+Nowadays, there are additional namespacing mechanisms which are universally adopted in all modern programming languages, also in non-object-oriented ones:
 
-Demonstrated in Python:
+Explicit namespaces (`namespace` in C++) provide a general mechanism to disambiguate names. The following Python snippet demonstrates them in the form of module imports:
 
 ```Python
 import numpy # Qualified import
@@ -57,15 +54,13 @@ from numpy import arange # Unqualified import, like "using" in C++.
 x = numpy.sin(arange(15))
 ```
 
-#### Interfaces and Typeclasses
+An additional form of namespacing is *interfaces*, or the more general [*typeclasses*](https://en.wikipedia.org/wiki/Type_class). These are not mainly a namespacing feature, but they do allow a form of name reuse in that an interface method call may invoke different methods for different types.
 
-Interfaces, and their FP generalization, [typeclasses](https://en.wikipedia.org/wiki/Type_class), are not commonly considered a namespacing feature, but they do allow a form of name re-use in that an interface method call may invoke different methods for different types.
+Given the overlapping benefits between the various forms of namespacing, some modern PLs choose not to include the OO concepts of *methods* and *overloading*, and in practice those remains the only distinguishers for whether a language is object-oriented or not.
 
 ## Encapsulation
 
-Encapsulation lets us limit member variable access to class methods (ie `private` in C++).
-
-Encapsulation provides several benefits -
+Encapsulation lets us limit member variable access to class methods (ie `private` in C++). It provides several benefits -
 
 ### Stable APIs
 

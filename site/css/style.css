@@ -12,6 +12,9 @@ html, body, div, span, object, h1, h2, h3, h4, h5, h6, p, a, abbr, acronym, em, 
 h4 {
   margin-top: 20px }
 
+hr {
+  width: 80%; }
+
 html {
   box-sizing: border-box; }
 
@@ -194,7 +197,7 @@ footer {
       -ms-flex-align: space-around;
           align-items: space-around;
   width: 100%;
-  min-height: 400px;
+  min-height: 300px;
   padding: 2em 10px;
   text-align: center;
   margin: auto; }
@@ -222,7 +225,8 @@ footer {
   width: 100%;
   max-width: 500px;
   display: block;
-  margin: auto; }
+  margin-left: auto;
+  margin-right: auto; }
 
 a.tag, a.category {
   padding: 0px 5px;
