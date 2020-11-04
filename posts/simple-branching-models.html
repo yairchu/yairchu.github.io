@@ -58,7 +58,7 @@
   <article class="post">
     <p>In this post I'll present two simple software development models, each suitable for different needs:</p>
 <ul>
-<li>The "Model Flow", for very small or single-person teams that make releases occasionally (not often)</li>
+<li>The "Modal Flow", for very small or single-person teams that make releases occasionally (not often)</li>
 <li>The "Light Flow", for teams releasing updates regularly (weekly/monthly). It is a simplified variant of the well known <a href="https://nvie.com/posts/a-successful-git-branching-model/">"GitFlow"</a></li>
 </ul>
 <p><strong>TODO: Better names for the flows?</strong></p>
@@ -69,75 +69,70 @@
 <li>Free dev. At this stage you are more likely to do big changes in the codebase.</li>
 <li>Preparing to ship, aka <a href="https://en.wikipedia.org/wiki/Freeze_(software_engineering)">"code freeze"</a>. At this stage you're only fixing bugs and problems in the product.</li>
 </ul>
-<p>If you ever shipped software by yourself, most likely you've implicitly been using this flow, just without calling it by name.</p>
-<p>When a team works by this model they have to communicate their current stages and plans of development. If you heard a manager announce "next month we enter a feature freeze!", then you probably used this model.</p>
-<h3 id="code-freeze">Code freeze</h3>
-<p>A freeze doesn't necessarily mean that all developers should stop working on longer term features. It only means that bug fixing currently take priority, and that long-term work has to temporarily stay in <em>feature branches</em> and not be merged into the <code>main</code> branch.</p>
-<p><em>The mutex analogy: The freeze, and adding features to <code>main</code>, are mutually exclusive.</em></p>
-<p>In this period more extensive testing is done including manual testing and testing of release candidates by beta testers.</p>
-<p>Once the release is finalized, the team reverts to the free dev mode and resume normal development for future versions.</p>
+<p>Even when not specifically planning to use this flow, many teams may find themselves using it. It tends to happen when you need to cut a release and find that there are two many bugs in the main branch. In that case it tends to come naturally to decide: "let's focus on fixing these bugs now and keep the new features for later".</p>
+<p><em>The mutex analogy: A freeze is mutually exclusive with adding features to <code>main</code>.</em></p>
 <h3 id="the-burden-of-modality">The burden of modality</h3>
-<p>If you hear an <em>"Oh, I wasn't aware we're in a feature freeze"</em>, that's because communication is tricky. Someone may have missed the meeting, and the announcements in the chat channel might have been drowned by other messages.</p>
-<p>At this point it might make sense to consider an alternate flow that formalizes the stages in the git branches themselves.</p>
+<p>If you ever hear an <em>"Oh, I wasn't aware we're in a feature freeze"</em>, that's because communication is tricky. Someone may have missed a meeting, or announcements in the chat channel may have been drowned by other messages. If you find coordinating the state to be tricky it may make sense to use a flow that formalizes the modes of development in the structure of the git branches.</p>
 <h2 id="the-light-flow">The Light Flow</h2>
 <p><img src="/images/light-flow.svg" alt="Light Flow Commit Tree" /></p>
-<p>The different types of branches in the diagram:</p>
+<p>The different types of branches and commits in the diagram:</p>
 <ul>
 <li>The main branch in the middle is colored in yellow</li>
-<li>Feature branches are colored purple, and are surrounded by dashes to signify that they are temporary. Some might be aborted, others will be rebased and will ultimately become normal commits in the main branch</li>
-<li>Release branches are colored in green. When a release is finalized, a <code>git tag</code> is used (signified in a rectangular node), and the release branch is then merged back into <code>main</code>.</li>
+<li>Feature branches are colored purple. They are surrounded by dashes to signify that they are temporary: some might be aborted, others will be rebased and will ultimately become normal commits in <code>main</code></li>
+<li>Release branches are colored in green. They end up with a release and are merged into <code>main</code></li>
+<li>Releases are given <code>git tag</code>s, and are displayed as rectangular nodes</li>
 </ul>
-<p><em>(the colors are inherited from the diagram for the slightly more complicated <a href="https://nvie.com/posts/a-successful-git-branching-model/">GitFlow</a>)</em></p>
+<p><em>(the colors are inherited from the diagram for <a href="https://nvie.com/posts/a-successful-git-branching-model/">GitFlow</a>)</em></p>
 <h3 id="how-the-flow-works">How the flow works</h3>
 <ul>
 <li>Developers can freely add new features to <code>main</code> at all times!</li>
 <li>A bug tracker is used to keep track of tasks
 <ul>
 <li>A list of known "blocker" bugs that shouldn't be in a release is maintained</li>
-<li>A list of new, not yet well tested features in the <code>main</code> branch is also maintained</li>
+<li>A list of new and not yet well tested features in the <code>main</code> branch is also maintained</li>
 <li>For each blocker bug or new feature, the commit which introduced it is identified in its issue</li>
 <li>When fixing bugs, the commit messages should specify which bugs were fixed</li>
 </ul></li>
 <li>Preparing a release
 <ul>
-<li>If the <code>main</code> branch happens to be in a good, bug-free state, then we're in luck! A release candidate can be tagged directly on the main branch (like in the simpler <a href="https://guides.github.com/introduction/flow/">"GitHub Flow"</a>)</li>
-<li>If we still have bugs to fix for the release requires fixing some bugs, then we open a release branch</li>
+<li>If the <code>main</code> branch happens to be in a good, bug-free state, then we're in luck, and we just <code>git tag</code> it as a release candidate!</li>
+<li>If we still have bugs to fix for the release, then we open a release branch</li>
 </ul></li>
 </ul>
 <h3 id="opening-a-release-branch">Opening a release branch</h3>
 <p>When the <code>main</code> branch is not suitable for release as is, the person in charge of the release will create a branch from a selected commit in the <code>main</code> branch, calling it <code>fixes-VERSION</code>, or informally "the release branch".</p>
 <ul>
-<li>The bug fixes are added to the release branch</li>
+<li>Bug fixes are added to the release branch</li>
 <li>Once the known bugs appear to be fixed
 <ul>
 <li>A release candidates is tagged from the release branch</li>
-<li>If new problems are discovered, fix them and create new release candidates</li>
-<li>If the candidate is good, ship the release, tag it, and the branch back into <code>main</code>. Merged it with a real merge commit rather than a rebase, to keep the real release in the git history!</li>
+<li>If new problems are discovered, we keep fixing them and later create a new release candidate and repeat</li>
+<li>When the candidate is good: ship the release, tag it, and merge the branch back into <code>main</code>. Merge it with a real merge commit rather than rebasing, to keep the actual release in <code>main</code>'s history</li>
 </ul></li>
 </ul>
 <h4 id="how-to-choose-a-branching-point-for-the-release-branch">How to choose a branching point for the release branch</h4>
 <p>The commit messages and the bug tracker help us "taint" the states in the <code>main</code> branch with existence of various bugs.</p>
 <ul>
-<li>Some blocker bugs still need to be fixed and are tainting the branch since they were introduced</li>
-<li>Some bugs were already fixed and they are tainting a range of commits</li>
+<li>Unfixed bugs taint <code>main</code> since they were introduced</li>
+<li>Bugs that were fixed taint only a specific range of commits</li>
 </ul>
-<p>A good point to start the release branch, is one which is relatively untainted, and also includes valueable features and fixes which improve upon the previous release.</p>
-<p>If the chosen point doesn't include all the fixes currently available in the main branch, the fixes should be cherry-picked to it.</p>
-<p><em>TODO: Find or create tooling to assist this process.</em></p>
+<p>A good point to start the release branch is one which is relatively clean, yet also includes valueable features which improve upon the previous release.</p>
+<p>If the chosen point doesn't include all the fixes currently available in <code>main</code>, we'll <code>git cherry-pick</code> these fixes into the release branch.</p>
 <h2 id="how-does-the-light-flow-compare-to-other-flows">How does the Light Flow compare to other flows</h2>
 <h3 id="differences-from-the-github-flow">Differences from the GitHub Flow</h3>
-<p>The <a href="https://guides.github.com/introduction/flow/">GitHub Flow</a> is a very lightweight flow. It has no release branches, and the <code>main</code> branch is deployed to production as is (after testing).</p>
-<p>Down-side: This requires a very strict standard of quality on the <code>main</code> branch that may slow development down. The Light Flow adds release branches which may branch out of the most stable recent state of the <code>main</code> branch, and add crucial fixes on top of it. This may add a burden on the developer creating the release, but in return it avoids modality and enables fast-paced development on the <code>main</code> branch.</p>
+<p>The <a href="https://guides.github.com/introduction/flow/">GitHub Flow</a> is very lightweight. It has no release branches, and the <code>main</code> branch is deployed to production as is (after testing).</p>
+<p>I believe that to really make it work, one has to, either explicitly or implicitly, impose feature freezes, and this means that for projects where stability is a priority, the GitHub Flow tends to actually be the Modal Flow describes above.</p>
 <h3 id="differences-from-gitflow">Differences from GitFlow</h3>
-<p><em>Note that Vincent Driessen, the creator of GitFlow, <a href="https://nvie.com/posts/a-successful-git-branching-model/">currently recommends</a> the <a href="https://guides.github.com/introduction/flow/">"GitHub flow"</a> instead.</em></p>
+<p><em>Note that Vincent Driessen, the creator of GitFlow, <a href="https://nvie.com/posts/a-successful-git-branching-model/">currently recommends</a> most projects to adopt the <a href="https://guides.github.com/introduction/flow/">"GitHub flow"</a> instead.</em></p>
 <ul>
 <li>GitFlow calls the main branch <code>develop</code></li>
-<li>GitFlow also has a <code>master</code> branch pointing to the latest release</li>
-<li>GitFlow explicitly describes hotfix branches, which branch out of previous releases and add fixes to them. I deliberately chose to omit their explicit description as I believe that they are merely an extension of the release branch, and describing them explicitly might set the wrong examples</li>
+<li>GitFlow additionally has a <code>master</code> branch pointing to the latest release</li>
+<li>GitFlow explicitly describes a process for <em>hotfix branches</em>, which branch out of previous releases and add fixes to them. This makes sense for projects which maintain multiple versions, and for such projects GitFlow is probably a good choice.</li>
 </ul>
-<p>The Light Flow's omission of hotfix branches aims to change the focus and incentivize releasing new developments from the <code>main</code> branch more often, to avoid accumulating a gap of unreleased and unstable features. Or in three words: faster feedback cycle.</p>
+<p>The Light Flow's omission of hotfix branches aims to put an emphasis on releasing new developments from <code>main</code> more often, to avoid accumulating a gap of unreleased and unstable features.</p>
 <h3 id="does-the-light-flow-work">Does the Light Flow work</h3>
-<p>I wrote this post to suggest this model for the development of <a href="https://pajam.live/">Pajam</a>. If we choose to adopt this model, after a while I will update this section with our results.</p>
+<p>I wrote this post in order to suggest this model for the development of <a href="https://pajam.live/">Pajam</a> (btw, if you happen to be a musician that wants to jam with their friends remotely, I highly recommend you to give Pajam a try!)</p>
+<p>If we indeed decide to adopt this model, then after a while I will update this section with our results.</p>
 <h2 id="notes">Notes</h2>
 <ul>
 <li>Image credit: <a href="https://en.m.wikipedia.org/wiki/File:Eso1733s_Artist%27s_impression_of_merging_neutron_stars.jpg">University of Warwick/Mark Garlick</a></li>

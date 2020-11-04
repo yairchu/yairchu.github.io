@@ -11,6 +11,7 @@ digraph {
             node [fillcolor="#eecc33"]
             main1 -> main2 -> main3 -> main4 -> main5 -> main6 -> main
             main [label="main"]
+            main1 [label="release-2.3" shape=rectangle]
         }
 
         node [fillcolor="#33cc33"]
@@ -18,25 +19,25 @@ digraph {
         {
             rela0 -> rela
 
-            rela [label="release-2.0" shape=rect]
+            rela [label="release-2.4" shape=rect]
         }
 
         subgraph cluster_relb
         {
             relb0 -> relb
-            relb [label="fixes-2.1"]
+            relb [label="fixes-2.5"]
         }
 
         node [fillcolor="#cc88dd"]
         subgraph cluster_feata
         {
-            graph [color=black style=dashed]
+            graph [color=black style="dashed,rounded"]
             feata0 -> feata1 -> feata2 -> feata3
         }
 
         subgraph cluster_featb
         {
-            graph [color=black style=dashed]
+            graph [color=black style="dashed,rounded"]
             featb0 -> featb1
         }
 
