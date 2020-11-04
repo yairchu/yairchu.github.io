@@ -212,6 +212,9 @@ buildRules = do
     tagOrder (t, posts) = (negate (length posts), length t)
 
 main :: IO ()
-main = do
-  let shOpts = forwardOptions $ shakeOptions {shakeVerbosity = Chatty}
+main =
   shakeArgsForward shOpts buildRules
+  where
+    shOpts =
+      shakeOptions {shakeVerbosity = Chatty, shakeLintInside = ["docs"]}
+        & forwardOptions
