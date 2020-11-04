@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="UTF-8">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="Simple Git branching models (DRAFT)">
+  <meta name="twitter:description" content="Two simple Git branching models">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/merging-neutron-stars.jpg">
+  <title>Simple Git branching models (DRAFT)</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="Simple Git branching models (DRAFT)" />
+  <meta property="og:image" content="https://yairchu.github.io/images/merging-neutron-stars.jpg" />
+</head>
+<body>
+  <header>
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        Simple Git branching models (DRAFT)
+      </span>
+
+      <img class="post-image" src="/images/merging-neutron-stars.jpg">
+      <span class="byline">by Yair Chuchem</span>
+      <span class="date">2020.11.4</span>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/git" class="tag">git</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p>In this post I'll present two simple software development models, each suitable for different needs:</p>
+<ul>
+<li>The "Model Flow", for very small or single-person teams that make releases occasionally (not often)</li>
+<li>The "Light Flow", for teams releasing updates regularly (weekly/monthly). It is a simplified variant of the well known <a href="https://nvie.com/posts/a-successful-git-branching-model/">"GitFlow"</a></li>
+</ul>
+<p><strong>TODO: Better names for the flows?</strong></p>
+<h2 id="the-modal-flow">The Modal Flow</h2>
+<p><img src="/images/modal-flow.svg" alt="Modal Flow State Machine" /></p>
+<p>Modality means that the development has cycles that switch between two modes:</p>
+<ul>
+<li>Free dev. At this stage you are more likely to do big changes in the codebase.</li>
+<li>Preparing to ship, aka <a href="https://en.wikipedia.org/wiki/Freeze_(software_engineering)">"code freeze"</a>. At this stage you're only fixing bugs and problems in the product.</li>
+</ul>
+<p>If you ever shipped software by yourself, most likely you've implicitly been using this flow, just without calling it by name.</p>
+<p>When a team works by this model they have to communicate their current stages and plans of development. If you heard a manager announce "next month we enter a feature freeze!", then you probably used this model.</p>
+<h3 id="code-freeze">Code freeze</h3>
+<p>A freeze doesn't necessarily mean that all developers should stop working on longer term features. It only means that bug fixing currently take priority, and that long-term work has to temporarily stay in <em>feature branches</em> and not be merged into the <code>main</code> branch.</p>
+<p><em>The mutex analogy: The freeze, and adding features to <code>main</code>, are mutually exclusive.</em></p>
+<p>In this period more extensive testing is done including manual testing and testing of release candidates by beta testers.</p>
+<p>Once the release is finalized, the team reverts to the free dev mode and resume normal development for future versions.</p>
+<h3 id="the-burden-of-modality">The burden of modality</h3>
+<p>If you hear an <em>"Oh, I wasn't aware we're in a feature freeze"</em>, that's because communication is tricky. Someone may have missed the meeting, and the announcements in the chat channel might have been drowned by other messages.</p>
+<p>At this point it might make sense to consider an alternate flow that formalizes the stages in the git branches themselves.</p>
+<h2 id="the-light-flow">The Light Flow</h2>
+<p><img src="/images/light-flow.svg" alt="Light Flow Commit Tree" /></p>
+<p>The different types of branches in the diagram:</p>
+<ul>
+<li>The main branch in the middle is colored in yellow</li>
+<li>Feature branches are colored purple, and are surrounded by dashes to signify that they are temporary. Some might be aborted, others will be rebased and will ultimately become normal commits in the main branch</li>
+<li>Release branches are colored in green. When a release is finalized, a <code>git tag</code> is used (signified in a rectangular node), and the release branch is then merged back into <code>main</code>.</li>
+</ul>
+<p><em>(the colors are inherited from the diagram for the slightly more complicated <a href="https://nvie.com/posts/a-successful-git-branching-model/">GitFlow</a>)</em></p>
+<h3 id="how-the-flow-works">How the flow works</h3>
+<ul>
+<li>Developers can freely add new features to <code>main</code> at all times!</li>
+<li>A bug tracker is used to keep track of tasks
+<ul>
+<li>A list of known "blocker" bugs that shouldn't be in a release is maintained</li>
+<li>A list of new, not yet well tested features in the <code>main</code> branch is also maintained</li>
+<li>For each blocker bug or new feature, the commit which introduced it is identified in its issue</li>
+<li>When fixing bugs, the commit messages should specify which bugs were fixed</li>
+</ul></li>
+<li>Preparing a release
+<ul>
+<li>If the <code>main</code> branch happens to be in a good, bug-free state, then we're in luck! A release candidate can be tagged directly on the main branch (like in the simpler <a href="https://guides.github.com/introduction/flow/">"GitHub Flow"</a>)</li>
+<li>If we still have bugs to fix for the release requires fixing some bugs, then we open a release branch</li>
+</ul></li>
+</ul>
+<h3 id="opening-a-release-branch">Opening a release branch</h3>
+<p>When the <code>main</code> branch is not suitable for release as is, the person in charge of the release will create a branch from a selected commit in the <code>main</code> branch, calling it <code>fixes-VERSION</code>, or informally "the release branch".</p>
+<ul>
+<li>The bug fixes are added to the release branch</li>
+<li>Once the known bugs appear to be fixed
+<ul>
+<li>A release candidates is tagged from the release branch</li>
+<li>If new problems are discovered, fix them and create new release candidates</li>
+<li>If the candidate is good, ship the release, tag it, and the branch back into <code>main</code>. Merged it with a real merge commit rather than a rebase, to keep the real release in the git history!</li>
+</ul></li>
+</ul>
+<h4 id="how-to-choose-a-branching-point-for-the-release-branch">How to choose a branching point for the release branch</h4>
+<p>The commit messages and the bug tracker help us "taint" the states in the <code>main</code> branch with existence of various bugs.</p>
+<ul>
+<li>Some blocker bugs still need to be fixed and are tainting the branch since they were introduced</li>
+<li>Some bugs were already fixed and they are tainting a range of commits</li>
+</ul>
+<p>A good point to start the release branch, is one which is relatively untainted, and also includes valueable features and fixes which improve upon the previous release.</p>
+<p>If the chosen point doesn't include all the fixes currently available in the main branch, the fixes should be cherry-picked to it.</p>
+<p><em>TODO: Find or create tooling to assist this process.</em></p>
+<h2 id="how-does-the-light-flow-compare-to-other-flows">How does the Light Flow compare to other flows</h2>
+<h3 id="differences-from-the-github-flow">Differences from the GitHub Flow</h3>
+<p>The <a href="https://guides.github.com/introduction/flow/">GitHub Flow</a> is a very lightweight flow. It has no release branches, and the <code>main</code> branch is deployed to production as is (after testing).</p>
+<p>Down-side: This requires a very strict standard of quality on the <code>main</code> branch that may slow development down. The Light Flow adds release branches which may branch out of the most stable recent state of the <code>main</code> branch, and add crucial fixes on top of it. This may add a burden on the developer creating the release, but in return it avoids modality and enables fast-paced development on the <code>main</code> branch.</p>
+<h3 id="differences-from-gitflow">Differences from GitFlow</h3>
+<p><em>Note that Vincent Driessen, the creator of GitFlow, <a href="https://nvie.com/posts/a-successful-git-branching-model/">currently recommends</a> the <a href="https://guides.github.com/introduction/flow/">"GitHub flow"</a> instead.</em></p>
+<ul>
+<li>GitFlow calls the main branch <code>develop</code></li>
+<li>GitFlow also has a <code>master</code> branch pointing to the latest release</li>
+<li>GitFlow explicitly describes hotfix branches, which branch out of previous releases and add fixes to them. I deliberately chose to omit their explicit description as I believe that they are merely an extension of the release branch, and describing them explicitly might set the wrong examples</li>
+</ul>
+<p>The Light Flow's omission of hotfix branches aims to change the focus and incentivize releasing new developments from the <code>main</code> branch more often, to avoid accumulating a gap of unreleased and unstable features. Or in three words: faster feedback cycle.</p>
+<h3 id="does-the-light-flow-work">Does the Light Flow work</h3>
+<p>I wrote this post to suggest this model for the development of <a href="https://pajam.live/">Pajam</a>. If we choose to adopt this model, after a while I will update this section with our results.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Image credit: <a href="https://en.m.wikipedia.org/wiki/File:Eso1733s_Artist%27s_impression_of_merging_neutron_stars.jpg">University of Warwick/Mark Garlick</a></li>
+</ul>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: Simple Git branching models (DRAFT) - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
