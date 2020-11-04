@@ -68,19 +68,19 @@
 <h2 id="namespacing">Namespacing</h2>
 <p>Method namespacing allows us to give the same name to different <em>methods</em> (aka <em>functions</em>).</p>
 <p>Consider the following C code:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1"></a>button_add_listener (submit, this);</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="co">/* ^ Note how we manually prefix our function names with type names */</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>button_add_listener (submit, this);</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="co">/* ^ Note how we manually prefix our function names with type names */</span></span></code></pre></div>
 <p>It reads much nicer in C++:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1"></a>submit.addListener (<span class="kw">this</span>);</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="co">// ^ Calls the Button::addListener method</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>submit.addListener (<span class="kw">this</span>);</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="co">// ^ Calls the Button::addListener method</span></span></code></pre></div>
 <p>Another common OO form of namespacing is <em>overloading</em>, where the compiler infers which function of the same name to call according to which one best fits the types.</p>
 <hr />
 <p>Nowadays, there are additional namespacing mechanisms which are universally adopted in all modern programming languages, also in non-object-oriented ones:</p>
 <p>Explicit namespaces (<code>namespace</code> in C++) provide a general mechanism to disambiguate names. The following Python snippet demonstrates them in the form of module imports:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> numpy <span class="co"># Qualified import</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="im">from</span> numpy <span class="im">import</span> arange <span class="co"># Unqualified import, like &quot;using&quot; in C++.</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a>x <span class="op">=</span> numpy.sin(arange(<span class="dv">15</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="im">import</span> numpy <span class="co"># Qualified import</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="im">from</span> numpy <span class="im">import</span> arange <span class="co"># Unqualified import, like &quot;using&quot; in C++.</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>x <span class="op">=</span> numpy.sin(arange(<span class="dv">15</span>))</span></code></pre></div>
 <p>An additional form of namespacing is <em>interfaces</em>, or the more general <a href="https://en.wikipedia.org/wiki/Type_class"><em>typeclasses</em></a>. These are not mainly a namespacing feature, but they do allow a form of name reuse in that an interface method call may invoke different methods for different types.</p>
 <p>Given the overlapping benefits between the various forms of namespacing, some modern PLs choose not to include the OO concepts of <em>methods</em> and <em>overloading</em>, and in practice those remains the only distinguishers for whether a language is object-oriented or not.</p>
 <h2 id="encapsulation">Encapsulation</h2>
@@ -99,26 +99,26 @@
 <h3 id="dynamic-dispatch">Dynamic dispatch</h3>
 <p>Dynamic dispatch is not uniquely an OO feature. Procedural languages already supported dynamic dispatch via function pointers. Granted, OO did popularize it for a while, but in practice many of the use cases of dynamic dispatch can often be replaced nicely with other mechanisms available in modern PLs such as anonymous functions.</p>
 <p>The following OOP style code -</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1"></a>MyWidget::MyWidget()</span>
-<span id="cb4-2"><a href="#cb4-2"></a>{</span>
-<span id="cb4-3"><a href="#cb4-3"></a>    ...</span>
-<span id="cb4-4"><a href="#cb4-4"></a>    <span class="va">m_submit</span>.addListener (<span class="kw">this</span>);</span>
-<span id="cb4-5"><a href="#cb4-5"></a>    ...</span>
-<span id="cb4-6"><a href="#cb4-6"></a>}</span>
-<span id="cb4-7"><a href="#cb4-7"></a></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="dt">void</span> MyWidget::onClick (Button* button)</span>
-<span id="cb4-9"><a href="#cb4-9"></a>{</span>
-<span id="cb4-10"><a href="#cb4-10"></a>    <span class="cf">if</span> (button == <span class="va">m_submit</span>) { ... }</span>
-<span id="cb4-11"><a href="#cb4-11"></a>    <span class="cf">else</span> ...</span>
-<span id="cb4-12"><a href="#cb4-12"></a>    <span class="cf">else</span> abort (<span class="st">&quot;Unexpected button!&quot;</span>);</span>
-<span id="cb4-13"><a href="#cb4-13"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>MyWidget::MyWidget()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>{</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    ...</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="va">m_submit</span>.addListener (<span class="kw">this</span>);</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    ...</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>}</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="dt">void</span> MyWidget::onClick (Button* button)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>{</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>    <span class="cf">if</span> (button == <span class="va">m_submit</span>) { ... }</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>    <span class="cf">else</span> ...</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    <span class="cf">else</span> abort (<span class="st">&quot;Unexpected button!&quot;</span>);</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>}</span></code></pre></div>
 <p>Is nicer in "modern style":</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1"></a>MyWidget::MyWidget()</span>
-<span id="cb5-2"><a href="#cb5-2"></a>{</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    ...</span>
-<span id="cb5-4"><a href="#cb5-4"></a>    <span class="va">m_submit</span>.onClick = [=]{ ... };</span>
-<span id="cb5-5"><a href="#cb5-5"></a>    ...</span>
-<span id="cb5-6"><a href="#cb5-6"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>MyWidget::MyWidget()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>{</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    ...</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>    <span class="va">m_submit</span>.onClick = [=]{ ... };</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    ...</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>}</span></code></pre></div>
 <h3 id="design-patterns">Design patterns</h3>
 <p>OOP design patterns are disappearing and being replaced with trivial code using new features, as demonstrated above with the listener pattern is being replaced by using function values. Likewise the visitor pattern was often used to emulate sum-types, and is getting replaced by built-in PL sum-types support.</p>
 <h3 id="inheritence">Inheritence</h3>

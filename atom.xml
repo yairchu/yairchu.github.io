@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-10-27T17:14:SZ</updated>
+  <updated>2020-11-04T17:06:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -230,30 +230,30 @@
 <p>One way to resolve the history issue is to rewrite it, which one can do with <code>git rebase</code>.</p>
 <p>If we rebase rather than merge, the following script makes the process easy by automating it:</p>
 <h2 id="sub-rebasesh">sub-rebase.sh</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="va">BASE=${1:-</span>master<span class="va">}</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">while</span> <span class="fu">true</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">do</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>    <span class="co"># Find next commit to rebase to</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a>    <span class="va">NEXT_COMMIT=</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a>    <span class="va">COMMON_ANCESTOR=$(</span><span class="fu">git</span> merge-base HEAD <span class="va">$BASE)</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a>    <span class="kw">for</span> <span class="ex">COMMIT</span> in <span class="va">$(</span><span class="fu">git</span> rev-list ..<span class="va">$BASE</span> --reverse<span class="va">)</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a>    <span class="kw">do</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a>        <span class="kw">if</span><span class="bu"> [</span> <span class="va">$(</span><span class="fu">git</span> merge-base HEAD <span class="va">$COMMIT)</span> <span class="ot">==</span> <span class="va">$COMMON_ANCESTOR</span><span class="bu"> ]</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a>        <span class="kw">then</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a>            <span class="co"># Rebasing on this commit will strictly progress towards our goal</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a>            <span class="va">NEXT_COMMIT=$COMMIT</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a>            <span class="bu">break</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a>        <span class="kw">fi</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a>        <span class="co"># The commit is not strictly ahead of BASE</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a>        <span class="bu">echo</span> Skipping <span class="va">$COMMIT</span> as it is not strictly ahead of <span class="va">$BASE</span></span>
-<span id="cb1-19"><a href="#cb1-19"></a>    <span class="kw">done</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a></span>
-<span id="cb1-21"><a href="#cb1-21"></a>    [ <span class="st">&quot;</span><span class="va">$NEXT_COMMIT</span><span class="st">&quot;</span> == <span class="st">&quot;&quot;</span> ] <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;Done&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">exit</span></span>
-<span id="cb1-22"><a href="#cb1-22"></a>    <span class="bu">echo</span> Rebasing over <span class="va">$NEXT_COMMIT</span></span>
-<span id="cb1-23"><a href="#cb1-23"></a>    <span class="fu">git</span> rebase <span class="va">$NEXT_COMMIT</span> <span class="kw">||</span> <span class="bu">exit</span> 1</span>
-<span id="cb1-24"><a href="#cb1-24"></a><span class="kw">done</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="va">BASE=${1:-</span>master<span class="va">}</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">while</span> <span class="fu">true</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="kw">do</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="co"># Find next commit to rebase to</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    <span class="va">NEXT_COMMIT=</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="va">COMMON_ANCESTOR=$(</span><span class="fu">git</span> merge-base HEAD <span class="va">$BASE)</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    <span class="kw">for</span> <span class="ex">COMMIT</span> in <span class="va">$(</span><span class="fu">git</span> rev-list ..<span class="va">$BASE</span> --reverse<span class="va">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="kw">do</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>        <span class="kw">if</span><span class="bu"> [</span> <span class="va">$(</span><span class="fu">git</span> merge-base HEAD <span class="va">$COMMIT)</span> <span class="ot">==</span> <span class="va">$COMMON_ANCESTOR</span><span class="bu"> ]</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>        <span class="kw">then</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>            <span class="co"># Rebasing on this commit will strictly progress towards our goal</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>            <span class="va">NEXT_COMMIT=$COMMIT</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>            <span class="bu">break</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>        <span class="kw">fi</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>        <span class="co"># The commit is not strictly ahead of BASE</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>        <span class="bu">echo</span> Skipping <span class="va">$COMMIT</span> as it is not strictly ahead of <span class="va">$BASE</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>    <span class="kw">done</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a>    [ <span class="st">&quot;</span><span class="va">$NEXT_COMMIT</span><span class="st">&quot;</span> == <span class="st">&quot;&quot;</span> ] <span class="kw">&amp;&amp;</span> <span class="bu">echo</span> <span class="st">&quot;Done&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">exit</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a>    <span class="bu">echo</span> Rebasing over <span class="va">$NEXT_COMMIT</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a>    <span class="fu">git</span> rebase <span class="va">$NEXT_COMMIT</span> <span class="kw">||</span> <span class="bu">exit</span> 1</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a><span class="kw">done</span></span></code></pre></div>
 <p>It rebases up to the first parent of the base branch which has any merge conflicts to address (so it doesn't accumulate conflicts from multiple commits).</p>
 <p>Apply it to advance towards your complete merge in smaller, testable pieces.</p>
 <p>Notes:</p>
@@ -278,107 +278,107 @@
       <summary>Adding error reportinh to folds, traversals and prisms</summary>
       <content type="html"><![CDATA[<p>When <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#v:-94--63-"><code>^?</code></a> returns <code>Nothing</code>, it is often desired to know why.</p>
 <p>Let's define a <code>^??</code> operator which returns an <code>Either</code> instead of a <code>Maybe</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">newtype</span> <span class="dt">ConstEither</span> e r a <span class="ot">=</span> <span class="dt">ConstEither</span> {<span class="ot"> getConstEither ::</span> <span class="dt">Either</span> e r }</span>
-<span id="cb1-2"><a href="#cb1-2"></a>    <span class="kw">deriving</span> <span class="dt">Functor</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">infixl</span> <span class="dv">8</span> <span class="op">^??</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="ot">(^??) ::</span> s <span class="ot">-&gt;</span> <span class="dt">LensLike&#39;</span> (<span class="dt">ConstEither</span> e a) s a <span class="ot">-&gt;</span> <span class="dt">Either</span> e a</span>
-<span id="cb1-6"><a href="#cb1-6"></a>whole <span class="op">^??</span> f <span class="ot">=</span> f (<span class="dt">ConstEither</span> <span class="op">.</span> <span class="dt">Right</span>) whole <span class="op">&amp;</span> getConstEither</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">newtype</span> <span class="dt">ConstEither</span> e r a <span class="ot">=</span> <span class="dt">ConstEither</span> {<span class="ot"> getConstEither ::</span> <span class="dt">Either</span> e r }</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="kw">deriving</span> <span class="dt">Functor</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">infixl</span> <span class="dv">8</span> <span class="op">^??</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="ot">(^??) ::</span> s <span class="ot">-&gt;</span> <span class="dt">LensLike&#39;</span> (<span class="dt">ConstEither</span> e a) s a <span class="ot">-&gt;</span> <span class="dt">Either</span> e a</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>whole <span class="op">^??</span> f <span class="ot">=</span> f (<span class="dt">ConstEither</span> <span class="op">.</span> <span class="dt">Right</span>) whole <span class="op">&amp;</span> getConstEither</span></code></pre></div>
 <p>The standard optics (<code>Traversal</code>, <code>Prism</code>, etc) do not work with our new combinator, so let's see how we can define ones which would.</p>
 <p><a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Traversal.html#v:Traversal"><code>Traversal s t a b</code></a> is <code>forall f. Applicative f =&gt; (a -&gt; f b) -&gt; s -&gt; f t</code> and it uses <code>f</code>'s <code>pure</code> in the empty case, so we'll replace the <code>Applicative</code> with a verbose variant which supplies error information in the empty case:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">class</span> <span class="dt">Apply</span> f <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e f <span class="kw">where</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="ot">    vpure ::</span> e <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> f a</span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">type</span> <span class="dt">VerboseTraversal</span> e s t a b <span class="ot">=</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>    <span class="kw">forall</span> f<span class="op">.</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>    <span class="dt">VerboseApplicative</span> e f <span class="ot">=&gt;</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>    <span class="dt">LensLike</span> f s t a b</span>
-<span id="cb2-8"><a href="#cb2-8"></a></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="kw">type</span> <span class="dt">VerbosePrism</span> e s t a b <span class="ot">=</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a>    <span class="kw">forall</span> p f<span class="op">.</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a>    (<span class="dt">Choice</span> p, <span class="dt">VerboseApplicative</span> e f) <span class="ot">=&gt;</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a>    <span class="dt">Optic</span> p f s t a b</span>
-<span id="cb2-13"><a href="#cb2-13"></a></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="kw">type</span> <span class="dt">VerboseTraversal&#39;</span> e s a <span class="ot">=</span> <span class="dt">VerboseTraversal</span> e s s a a</span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="kw">type</span> <span class="dt">VerbosePrism&#39;</span> e s a <span class="ot">=</span> <span class="dt">VerbosePrism</span> e s s a a</span>
-<span id="cb2-16"><a href="#cb2-16"></a></span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="co">-- Verbose optics support for (^.) and (^..)</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a><span class="kw">instance</span> <span class="dt">Monoid</span> r <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e (<span class="dt">Const</span> r) <span class="kw">where</span></span>
-<span id="cb2-19"><a href="#cb2-19"></a>    vpure _ <span class="ot">=</span> <span class="fu">pure</span></span>
-<span id="cb2-20"><a href="#cb2-20"></a></span>
-<span id="cb2-21"><a href="#cb2-21"></a><span class="co">-- Verbose optics support for `preview`, aka (#)</span></span>
-<span id="cb2-22"><a href="#cb2-22"></a><span class="kw">instance</span> <span class="dt">VerboseApplicative</span> e <span class="dt">Identity</span> <span class="kw">where</span></span>
-<span id="cb2-23"><a href="#cb2-23"></a>    vpure _ <span class="ot">=</span> <span class="fu">pure</span></span>
-<span id="cb2-24"><a href="#cb2-24"></a></span>
-<span id="cb2-25"><a href="#cb2-25"></a><span class="co">-- Verbose optics support for our (^??)</span></span>
-<span id="cb2-26"><a href="#cb2-26"></a><span class="kw">instance</span> <span class="dt">Apply</span> (<span class="dt">ConstEither</span> e r) <span class="kw">where</span></span>
-<span id="cb2-27"><a href="#cb2-27"></a>    <span class="dt">ConstEither</span> x <span class="op">&lt;.&gt;</span> _ <span class="ot">=</span> <span class="dt">ConstEither</span> x</span>
-<span id="cb2-28"><a href="#cb2-28"></a><span class="kw">instance</span> e <span class="op">~</span> e&#39; <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e (<span class="dt">ConstEither</span> e&#39; r) <span class="kw">where</span></span>
-<span id="cb2-29"><a href="#cb2-29"></a>    vpure e _ <span class="ot">=</span> <span class="dt">ConstEither</span> (<span class="dt">Left</span> e)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">Apply</span> f <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e f <span class="kw">where</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="ot">    vpure ::</span> e <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> f a</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">VerboseTraversal</span> e s t a b <span class="ot">=</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    <span class="kw">forall</span> f<span class="op">.</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    <span class="dt">VerboseApplicative</span> e f <span class="ot">=&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>    <span class="dt">LensLike</span> f s t a b</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">VerbosePrism</span> e s t a b <span class="ot">=</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>    <span class="kw">forall</span> p f<span class="op">.</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>    (<span class="dt">Choice</span> p, <span class="dt">VerboseApplicative</span> e f) <span class="ot">=&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    <span class="dt">Optic</span> p f s t a b</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">VerboseTraversal&#39;</span> e s a <span class="ot">=</span> <span class="dt">VerboseTraversal</span> e s s a a</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">VerbosePrism&#39;</span> e s a <span class="ot">=</span> <span class="dt">VerbosePrism</span> e s s a a</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a><span class="co">-- Verbose optics support for (^.) and (^..)</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Monoid</span> r <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e (<span class="dt">Const</span> r) <span class="kw">where</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>    vpure _ <span class="ot">=</span> <span class="fu">pure</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a><span class="co">-- Verbose optics support for `preview`, aka (#)</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">VerboseApplicative</span> e <span class="dt">Identity</span> <span class="kw">where</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>    vpure _ <span class="ot">=</span> <span class="fu">pure</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a><span class="co">-- Verbose optics support for our (^??)</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Apply</span> (<span class="dt">ConstEither</span> e r) <span class="kw">where</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a>    <span class="dt">ConstEither</span> x <span class="op">&lt;.&gt;</span> _ <span class="ot">=</span> <span class="dt">ConstEither</span> x</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a><span class="kw">instance</span> e <span class="op">~</span> e&#39; <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e (<span class="dt">ConstEither</span> e&#39; r) <span class="kw">where</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a>    vpure e _ <span class="ot">=</span> <span class="dt">ConstEither</span> (<span class="dt">Left</span> e)</span></code></pre></div>
 <p>Now we may want an operator to transform optics into verbose optics:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">-- Given an error message constructor, turns:</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">-- * Traversal to VerboseTraversal</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="co">-- * Prism to VerbosePrism</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="ot">verbose ::</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>    (<span class="dt">Profunctor</span> p, <span class="dt">VerboseApplicative</span> e f) <span class="ot">=&gt;</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>    (t <span class="ot">-&gt;</span> e) <span class="ot">-&gt;</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>    <span class="dt">Optic</span> p (<span class="dt">Lift</span> f) s t a b <span class="ot">-&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a>    <span class="dt">Optic</span> p f s t a b</span>
-<span id="cb3-9"><a href="#cb3-9"></a>verbose e t <span class="ot">=</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a>    rmap f <span class="op">.</span> t <span class="op">.</span> rmap <span class="dt">Other</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a>    <span class="kw">where</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>        f (<span class="dt">Other</span> r) <span class="ot">=</span> r</span>
-<span id="cb3-13"><a href="#cb3-13"></a>        f (<span class="dt">Pure</span> r) <span class="ot">=</span> vpure (e r) r</span>
-<span id="cb3-14"><a href="#cb3-14"></a></span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="co">-- A fixed variant of transformers:Control.Applicative.Lift -</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="co">-- Turns an Apply to an Applicative</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a><span class="co">-- (transformer&#39;s versions Applicative instance requires Applicative f)</span></span>
-<span id="cb3-18"><a href="#cb3-18"></a><span class="kw">data</span> <span class="dt">Lift</span> f a <span class="ot">=</span> <span class="dt">Pure</span> a <span class="op">|</span> <span class="dt">Other</span> (f a)</span>
-<span id="cb3-19"><a href="#cb3-19"></a>    <span class="kw">deriving</span> <span class="dt">Functor</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a></span>
-<span id="cb3-21"><a href="#cb3-21"></a><span class="kw">instance</span> <span class="dt">Apply</span> f <span class="ot">=&gt;</span> <span class="dt">Applicative</span> (<span class="dt">Lift</span> f) <span class="kw">where</span></span>
-<span id="cb3-22"><a href="#cb3-22"></a>    <span class="fu">pure</span> <span class="ot">=</span> <span class="dt">Pure</span></span>
-<span id="cb3-23"><a href="#cb3-23"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Pure</span> (f x)</span>
-<span id="cb3-24"><a href="#cb3-24"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Other</span> x <span class="ot">=</span> <span class="dt">Other</span> (f <span class="op">&lt;$&gt;</span> x)</span>
-<span id="cb3-25"><a href="#cb3-25"></a>    <span class="dt">Other</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Other</span> (f <span class="op">&lt;&amp;&gt;</span> (<span class="op">$</span> x))</span>
-<span id="cb3-26"><a href="#cb3-26"></a>    <span class="dt">Other</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Other</span> x <span class="ot">=</span> <span class="dt">Other</span> (liftF2 (<span class="op">$</span>) f x)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co">-- Given an error message constructor, turns:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="co">-- * Traversal to VerboseTraversal</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co">-- * Prism to VerbosePrism</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="ot">verbose ::</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    (<span class="dt">Profunctor</span> p, <span class="dt">VerboseApplicative</span> e f) <span class="ot">=&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>    (t <span class="ot">-&gt;</span> e) <span class="ot">-&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    <span class="dt">Optic</span> p (<span class="dt">Lift</span> f) s t a b <span class="ot">-&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    <span class="dt">Optic</span> p f s t a b</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>verbose e t <span class="ot">=</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>    rmap f <span class="op">.</span> t <span class="op">.</span> rmap <span class="dt">Other</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>    <span class="kw">where</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>        f (<span class="dt">Other</span> r) <span class="ot">=</span> r</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>        f (<span class="dt">Pure</span> r) <span class="ot">=</span> vpure (e r) r</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="co">-- A fixed variant of transformers:Control.Applicative.Lift -</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a><span class="co">-- Turns an Apply to an Applicative</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a><span class="co">-- (transformer&#39;s versions Applicative instance requires Applicative f)</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Lift</span> f a <span class="ot">=</span> <span class="dt">Pure</span> a <span class="op">|</span> <span class="dt">Other</span> (f a)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a>    <span class="kw">deriving</span> <span class="dt">Functor</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Apply</span> f <span class="ot">=&gt;</span> <span class="dt">Applicative</span> (<span class="dt">Lift</span> f) <span class="kw">where</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a>    <span class="fu">pure</span> <span class="ot">=</span> <span class="dt">Pure</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Pure</span> (f x)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Other</span> x <span class="ot">=</span> <span class="dt">Other</span> (f <span class="op">&lt;$&gt;</span> x)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a>    <span class="dt">Other</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Other</span> (f <span class="op">&lt;&amp;&gt;</span> (<span class="op">$</span> x))</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true"></a>    <span class="dt">Other</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Other</span> x <span class="ot">=</span> <span class="dt">Other</span> (liftF2 (<span class="op">$</span>) f x)</span></code></pre></div>
 <p>Note that I haven't found how to make <code>verbose</code> also turn a <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#t:Fold"><code>Fold</code></a> to a verbose variant.</p>
 <p>To see our verbose optics in action we'll make some verbose variants of optics from <a href="https://hackage.haskell.org/package/lens-aeson/docs/Data-Aeson-Lens.html"><code>lens-aeson</code></a>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">type</span> <span class="dt">Err</span> <span class="ot">=</span> <span class="dt">String</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="ot">v_Value ::</span> (<span class="dt">AsValue</span> t, <span class="dt">Show</span> t) <span class="ot">=&gt;</span> <span class="dt">VerbosePrism&#39;</span> <span class="dt">Err</span> t <span class="dt">Value</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>v_Value <span class="ot">=</span> verbose (\x <span class="ot">-&gt;</span> <span class="st">&quot;Doesn&#39;t parse as JSON: &quot;</span> <span class="op">&lt;&gt;</span> <span class="fu">show</span> x) _Value</span>
-<span id="cb4-5"><a href="#cb4-5"></a></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="ot">v_Double ::</span> (<span class="dt">ToJSON</span> t, <span class="dt">AsNumber</span> t) <span class="ot">=&gt;</span> <span class="dt">VerbosePrism&#39;</span> <span class="dt">Err</span> t <span class="dt">Double</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>v_Double <span class="ot">=</span> verbose (expectJson <span class="st">&quot;number&quot;</span>) _Double</span>
-<span id="cb4-8"><a href="#cb4-8"></a></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="ot">vnth ::</span> (<span class="dt">ToJSON</span> t, <span class="dt">AsValue</span> t) <span class="ot">=&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">VerboseTraversal&#39;</span> <span class="dt">Err</span> t <span class="dt">Value</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>vnth i <span class="ot">=</span> verbose (expectJson (<span class="st">&quot;item at index &quot;</span> <span class="op">&lt;&gt;</span> <span class="fu">show</span> i)) (nth i)</span>
-<span id="cb4-11"><a href="#cb4-11"></a></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="ot">expectJson ::</span> <span class="dt">ToJSON</span> a <span class="ot">=&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Err</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>expectJson e x <span class="ot">=</span></span>
-<span id="cb4-14"><a href="#cb4-14"></a>    <span class="st">&quot;Expected &quot;</span> <span class="op">&lt;&gt;</span> e <span class="op">&lt;&gt;</span> <span class="st">&quot; but found &quot;</span> <span class="op">&lt;&gt;</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a>    Data.ByteString.Lazy.Char8.unpack (encode x)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Err</span> <span class="ot">=</span> <span class="dt">String</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="ot">v_Value ::</span> (<span class="dt">AsValue</span> t, <span class="dt">Show</span> t) <span class="ot">=&gt;</span> <span class="dt">VerbosePrism&#39;</span> <span class="dt">Err</span> t <span class="dt">Value</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>v_Value <span class="ot">=</span> verbose (\x <span class="ot">-&gt;</span> <span class="st">&quot;Doesn&#39;t parse as JSON: &quot;</span> <span class="op">&lt;&gt;</span> <span class="fu">show</span> x) _Value</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="ot">v_Double ::</span> (<span class="dt">ToJSON</span> t, <span class="dt">AsNumber</span> t) <span class="ot">=&gt;</span> <span class="dt">VerbosePrism&#39;</span> <span class="dt">Err</span> t <span class="dt">Double</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>v_Double <span class="ot">=</span> verbose (expectJson <span class="st">&quot;number&quot;</span>) _Double</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="ot">vnth ::</span> (<span class="dt">ToJSON</span> t, <span class="dt">AsValue</span> t) <span class="ot">=&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">VerboseTraversal&#39;</span> <span class="dt">Err</span> t <span class="dt">Value</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>vnth i <span class="ot">=</span> verbose (expectJson (<span class="st">&quot;item at index &quot;</span> <span class="op">&lt;&gt;</span> <span class="fu">show</span> i)) (nth i)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="ot">expectJson ::</span> <span class="dt">ToJSON</span> a <span class="ot">=&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Err</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>expectJson e x <span class="ot">=</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>    <span class="st">&quot;Expected &quot;</span> <span class="op">&lt;&gt;</span> e <span class="op">&lt;&gt;</span> <span class="st">&quot; but found &quot;</span> <span class="op">&lt;&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>    Data.ByteString.Lazy.Char8.unpack (encode x)</span></code></pre></div>
 <p>Now let's see they work:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="pp"># Verbose traversals can work like regular traversals</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^?</span> _Value <span class="op">.</span> nth <span class="dv">0</span> <span class="op">.</span> _Double</span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="dt">Just</span> <span class="fl">1.0</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^?</span> v_Value <span class="op">.</span> vnth <span class="dv">0</span> <span class="op">.</span> v_Double</span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="dt">Just</span> <span class="fl">1.0</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^?</span> v_Value <span class="op">.</span> vnth <span class="dv">1</span> <span class="op">.</span> v_Double</span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="dt">Nothing</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="pp"># But using ^?? rather than ^? we can also get error info</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> vnth <span class="dv">0</span> <span class="op">.</span> v_Double</span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="dt">Right</span> <span class="fl">1.0</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> vnth <span class="dv">1</span> <span class="op">.</span> v_Double</span>
-<span id="cb5-15"><a href="#cb5-15"></a><span class="dt">Left</span> <span class="st">&quot;Expected number but found \&quot;x\&quot;&quot;</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> vnth <span class="dv">2</span> <span class="op">.</span> v_Double</span>
-<span id="cb5-17"><a href="#cb5-17"></a><span class="dt">Left</span> <span class="st">&quot;Expected item at index 2 but found [1,\&quot;x\&quot;]&quot;</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a><span class="op">&gt;</span> <span class="st">&quot;hello&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> v_Double</span>
-<span id="cb5-19"><a href="#cb5-19"></a><span class="dt">Left</span> <span class="st">&quot;Doesn&#39;t parse as JSON: \&quot;hello\&quot;&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="pp"># Verbose traversals can work like regular traversals</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^?</span> _Value <span class="op">.</span> nth <span class="dv">0</span> <span class="op">.</span> _Double</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="dt">Just</span> <span class="fl">1.0</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^?</span> v_Value <span class="op">.</span> vnth <span class="dv">0</span> <span class="op">.</span> v_Double</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="dt">Just</span> <span class="fl">1.0</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^?</span> v_Value <span class="op">.</span> vnth <span class="dv">1</span> <span class="op">.</span> v_Double</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="dt">Nothing</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a><span class="pp"># But using ^?? rather than ^? we can also get error info</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> vnth <span class="dv">0</span> <span class="op">.</span> v_Double</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="dt">Right</span> <span class="fl">1.0</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> vnth <span class="dv">1</span> <span class="op">.</span> v_Double</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a><span class="dt">Left</span> <span class="st">&quot;Expected number but found \&quot;x\&quot;&quot;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> vnth <span class="dv">2</span> <span class="op">.</span> v_Double</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a><span class="dt">Left</span> <span class="st">&quot;Expected item at index 2 but found [1,\&quot;x\&quot;]&quot;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;hello&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> v_Double</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true"></a><span class="dt">Left</span> <span class="st">&quot;Doesn&#39;t parse as JSON: \&quot;hello\&quot;&quot;</span></span></code></pre></div>
 <h2 id="notes">Notes</h2>
 <p><a href="https://www.reddit.com/r/haskell/comments/eh4gpg/elegant_ast_parsing_and_building_with_prisms/fcl7dvv/">In the previous post's discussion</a>, <a href="https://github.com/ekmett/lens"><code>lens</code></a>'s creator Edward Kmett noted that in <code>lens</code>'s early days they experimented with a different formulation of error-reporting optics that placed the extra information in <code>Optic p f s t a b</code>'s <code>p</code> rather than <code>f</code>, but that with that formulation they ran into problems with inference and that this new formulation may work better.</p>
 <h2 id="request-for-feedback">Request for feedback</h2>
@@ -407,30 +407,30 @@
       <summary>Declarative parsing and pretty printing for language ASTs</summary>
       <content type="html"><![CDATA[<p>Following my <a href="codecs-as-prisms">previous post</a> which suggested the use of <code>Prism</code>s for parsing and building, using a binary format example - I also want to show how the same idea can work nicely for parsing and building programming language syntax.</p>
 <h2 id="simple-ast-example">Simple AST example</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">data</span> <span class="dt">Expr</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>    <span class="ot">=</span> <span class="dt">Lit</span> <span class="dt">Int</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    <span class="op">|</span> <span class="dt">Add</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>    <span class="op">|</span> <span class="dt">Mul</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>    <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Generic</span>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a>makePrisms &#39;<span class="dt">&#39;Expr</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="ot">=</span> <span class="dt">Lit</span> <span class="dt">Int</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="op">|</span> <span class="dt">Add</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="op">|</span> <span class="dt">Mul</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Generic</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>makePrisms &#39;<span class="dt">&#39;Expr</span></span></code></pre></div>
 <p>Here's our <code>Prism</code> for parsing and building the above AST:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;</span> expr <span class="op">#</span> <span class="dt">Mul</span> (<span class="dt">Add</span> (<span class="dt">Lit</span> <span class="dv">1</span>) (<span class="dt">Lit</span> <span class="dv">2</span>)) (<span class="dt">Lit</span> <span class="dv">3</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="st">&quot;(1 + 2) * 3&quot;</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="ot">expr ::</span> <span class="dt">Prism&#39;</span> <span class="dt">String</span> <span class="dt">Expr</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>expr <span class="ot">=</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>    tokens <span class="op">.</span>      <span class="co">-- convert string to tokens</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>    takeExpr <span class="op">.</span>    <span class="co">-- take the expression</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a>    secondOnly [] <span class="co">-- and there should be no remaining tokens</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="ot">takeExpr ::</span> <span class="dt">Prism&#39;</span> [<span class="dt">String</span>] (<span class="dt">Expr</span>, [<span class="dt">String</span>])</span>
-<span id="cb2-11"><a href="#cb2-11"></a>takeExpr <span class="ot">=</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a>    infixOpLeftRecursion <span class="st">&quot;+&quot;</span> _Add <span class="op">$</span> <span class="co">-- Additions of</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a>    infixOpLeftRecursion <span class="st">&quot;*&quot;</span> _Mul <span class="op">$</span> <span class="co">-- multiplications of</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a>    tryMatch (asideFirst _Lit)      <span class="co">-- literals or</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a>        (_Cons <span class="op">.</span> asideFirst _Show) <span class="op">$</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a>    _Cons <span class="op">.</span> firstOnly <span class="st">&quot;(&quot;</span> <span class="op">.</span>         <span class="co">-- expressions in parentheses</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a>        takeExpr <span class="op">.</span> aside (_Cons <span class="op">.</span> firstOnly <span class="st">&quot;)&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="op">&gt;</span> expr <span class="op">#</span> <span class="dt">Mul</span> (<span class="dt">Add</span> (<span class="dt">Lit</span> <span class="dv">1</span>) (<span class="dt">Lit</span> <span class="dv">2</span>)) (<span class="dt">Lit</span> <span class="dv">3</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="st">&quot;(1 + 2) * 3&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="ot">expr ::</span> <span class="dt">Prism&#39;</span> <span class="dt">String</span> <span class="dt">Expr</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>expr <span class="ot">=</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    tokens <span class="op">.</span>      <span class="co">-- convert string to tokens</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>    takeExpr <span class="op">.</span>    <span class="co">-- take the expression</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>    secondOnly [] <span class="co">-- and there should be no remaining tokens</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="ot">takeExpr ::</span> <span class="dt">Prism&#39;</span> [<span class="dt">String</span>] (<span class="dt">Expr</span>, [<span class="dt">String</span>])</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>takeExpr <span class="ot">=</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    infixOpLeftRecursion <span class="st">&quot;+&quot;</span> _Add <span class="op">$</span> <span class="co">-- Additions of</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    infixOpLeftRecursion <span class="st">&quot;*&quot;</span> _Mul <span class="op">$</span> <span class="co">-- multiplications of</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>    tryMatch (asideFirst _Lit)      <span class="co">-- literals or</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>        (_Cons <span class="op">.</span> asideFirst _Show) <span class="op">$</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>    _Cons <span class="op">.</span> firstOnly <span class="st">&quot;(&quot;</span> <span class="op">.</span>         <span class="co">-- expressions in parentheses</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>        takeExpr <span class="op">.</span> aside (_Cons <span class="op">.</span> firstOnly <span class="st">&quot;)&quot;</span>)</span></code></pre></div>
 <p>This uses the following combinators:</p>
 <ul>
 <li><a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Cons.html"><code>_Cons</code></a>, <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:_Show"><code>_Show</code></a>, and <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:aside"><code>aside</code></a> from <a href="http://hackage.haskell.org/package/lens"><code>Control.Lens</code></a></li>
@@ -442,20 +442,20 @@
 <p>Note how we harness optics' parametricity and composition. In the previous post we parsed <code>ByteString</code>s but here we parse <code>String</code> and we start by converting them to tokens (ie <code>[String]</code>) and parse that.</p>
 <h3 id="renegade-prisms">Renegade prisms</h3>
 <p>Unlike the previous post's lawful <code>Prism</code>s, this post's parsing is lossy, so it breaks the <a href="https://artyom.me/lens-over-tea-2#traversal-laws"><code>Traversal</code> laws</a>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;</span> <span class="st">&quot;1 + (2*3)&quot;</span> <span class="op">&amp;</span> expr <span class="op">%~</span> <span class="fu">id</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="st">&quot;1 + 2 * 3&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;1 + (2*3)&quot;</span> <span class="op">&amp;</span> expr <span class="op">%~</span> <span class="fu">id</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="st">&quot;1 + 2 * 3&quot;</span></span></code></pre></div>
 <p>If one desires lawful parsing Prisms, their AST representation has to represent white-space and redundant parentheses.</p>
 <p>A <code>Prism</code> law that is kept is that if you parse what you built you do get it back:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">import</span> <span class="dt">Test.QuickCheck.Arbitrary.ADT</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a>propParseBack e <span class="ot">=</span> (expr <span class="op">#</span> e) <span class="op">^?</span> expr <span class="op">==</span> <span class="dt">Just</span> e</span>
-<span id="cb4-4"><a href="#cb4-4"></a></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">instance</span> <span class="dt">Arbitrary</span> <span class="dt">Expr</span> <span class="kw">where</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>    arbitrary <span class="ot">=</span> genericArbitrary</span>
-<span id="cb4-7"><a href="#cb4-7"></a>    shrink <span class="ot">=</span> genericShrink</span>
-<span id="cb4-8"><a href="#cb4-8"></a></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="op">&gt;</span> quickCheck propParseBack</span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="op">+++</span> <span class="dt">OK</span>, passed <span class="dv">100</span> tests<span class="op">.</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">import</span> <span class="dt">Test.QuickCheck.Arbitrary.ADT</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>propParseBack e <span class="ot">=</span> (expr <span class="op">#</span> e) <span class="op">^?</span> expr <span class="op">==</span> <span class="dt">Just</span> e</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Arbitrary</span> <span class="dt">Expr</span> <span class="kw">where</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    arbitrary <span class="ot">=</span> genericArbitrary</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    shrink <span class="ot">=</span> genericShrink</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="op">&gt;</span> quickCheck propParseBack</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="op">+++</span> <span class="dt">OK</span>, passed <span class="dv">100</span> tests<span class="op">.</span></span></code></pre></div>
 <h3 id="caveat-meaninful-parse-errors">Caveat: meaninful parse errors</h3>
 <p>When parsing with this <code>Prism</code> fails, it offers no useful error-reporting. But do I believe that this is solvable and I'll address it in future posts.</p>
 <h2 id="request-for-feedback">Request for feedback</h2>
@@ -472,69 +472,69 @@
 </ul>
 <h2 id="appendix">Appendix</h2>
 <h3 id="ast-parse-build-prism-combinators">AST parse-build prism combinators</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">-- Extend a base parsing prism with applications of an operator</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="ot">infixOpLeftRecursion ::</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="dt">Eq</span> a <span class="ot">=&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>    a <span class="ot">-&gt;</span>                        <span class="co">-- The operator&#39;s text</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>    <span class="dt">Prism&#39;</span> expr (expr, expr) <span class="ot">-&gt;</span> <span class="co">-- The operator constructor&#39;s prism</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>    <span class="dt">Prism&#39;</span> [a] (expr, [a]) <span class="ot">-&gt;</span>   <span class="co">-- The base parsing prism</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="dt">Prism&#39;</span> [a] (expr, [a])</span>
-<span id="cb5-8"><a href="#cb5-8"></a>infixOpLeftRecursion operatorText cons sub <span class="ot">=</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a>    leftRecursion cons</span>
-<span id="cb5-10"><a href="#cb5-10"></a>    (aside (_Cons <span class="op">.</span> firstOnly operatorText <span class="op">.</span> sub) <span class="op">.</span> retuple)</span>
-<span id="cb5-11"><a href="#cb5-11"></a>    sub</span>
-<span id="cb5-12"><a href="#cb5-12"></a></span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="co">-- Extend a base parsing prism with extensions to its right side</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="ot">leftRecursion ::</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a>    <span class="dt">Prism&#39;</span> whole cons <span class="ot">-&gt;</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a>    <span class="dt">Prism&#39;</span> (whole, state) (cons, state) <span class="ot">-&gt;</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a>    <span class="dt">Prism&#39;</span> state (whole, state) <span class="ot">-&gt;</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a>    <span class="dt">Prism&#39;</span> state (whole, state)</span>
-<span id="cb5-19"><a href="#cb5-19"></a>leftRecursion cons extend base <span class="ot">=</span></span>
-<span id="cb5-20"><a href="#cb5-20"></a>    prism&#39; build (<span class="fu">fmap</span> parseExtends <span class="op">.</span> (<span class="op">^?</span> base))</span>
-<span id="cb5-21"><a href="#cb5-21"></a>    <span class="kw">where</span></span>
-<span id="cb5-22"><a href="#cb5-22"></a>        build (x, state) <span class="ot">=</span></span>
-<span id="cb5-23"><a href="#cb5-23"></a>            <span class="fu">maybe</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a>            (base <span class="op">#</span> (x, state))</span>
-<span id="cb5-25"><a href="#cb5-25"></a>            (build <span class="op">.</span> (extend <span class="op">#</span>) <span class="op">.</span> (, state)) (x <span class="op">^?</span> cons)</span>
-<span id="cb5-26"><a href="#cb5-26"></a>        parseExtends x <span class="ot">=</span></span>
-<span id="cb5-27"><a href="#cb5-27"></a>            x <span class="op">^?</span> extend <span class="op">&lt;&amp;&gt;</span> _1 <span class="op">%~</span> (cons <span class="op">#</span>) <span class="op">&amp;</span> <span class="fu">maybe</span> x parseExtends</span>
-<span id="cb5-28"><a href="#cb5-28"></a></span>
-<span id="cb5-29"><a href="#cb5-29"></a><span class="co">-- Add an encoding for a sum-type constructor to an existing prism</span></span>
-<span id="cb5-30"><a href="#cb5-30"></a><span class="ot">tryMatch ::</span></span>
-<span id="cb5-31"><a href="#cb5-31"></a>    <span class="dt">Prism&#39;</span> whole cons <span class="ot">-&gt;</span> <span class="co">-- The sum-type constructor prism</span></span>
-<span id="cb5-32"><a href="#cb5-32"></a>    <span class="dt">Prism&#39;</span> src cons <span class="ot">-&gt;</span>   <span class="co">-- Parse the constructor contents</span></span>
-<span id="cb5-33"><a href="#cb5-33"></a>    <span class="dt">Prism&#39;</span> src whole <span class="ot">-&gt;</span>  <span class="co">-- Prism to encode the other options</span></span>
-<span id="cb5-34"><a href="#cb5-34"></a>    <span class="dt">Prism&#39;</span> src whole</span>
-<span id="cb5-35"><a href="#cb5-35"></a>tryMatch cons parse fallback <span class="ot">=</span></span>
-<span id="cb5-36"><a href="#cb5-36"></a>    prism&#39; build (\x <span class="ot">-&gt;</span> (x <span class="op">^?</span> parse <span class="op">&lt;&amp;&gt;</span> (cons <span class="op">#</span>)) <span class="op">&lt;|&gt;</span> x <span class="op">^?</span> fallback)</span>
-<span id="cb5-37"><a href="#cb5-37"></a>    <span class="kw">where</span></span>
-<span id="cb5-38"><a href="#cb5-38"></a>        build x <span class="ot">=</span> <span class="fu">maybe</span> (fallback <span class="op">#</span> x) (parse <span class="op">#</span>) (x <span class="op">^?</span> cons)</span>
-<span id="cb5-39"><a href="#cb5-39"></a></span>
-<span id="cb5-40"><a href="#cb5-40"></a><span class="co">-- Transform a string into tokens</span></span>
-<span id="cb5-41"><a href="#cb5-41"></a><span class="ot">tokens ::</span> <span class="dt">Iso&#39;</span> <span class="dt">String</span> [<span class="dt">String</span>]</span>
-<span id="cb5-42"><a href="#cb5-42"></a>tokens <span class="ot">=</span></span>
-<span id="cb5-43"><a href="#cb5-43"></a>    iso splitTokens (<span class="fu">foldr</span> addToken <span class="st">&quot;&quot;</span>)</span>
-<span id="cb5-44"><a href="#cb5-44"></a>    <span class="kw">where</span></span>
-<span id="cb5-45"><a href="#cb5-45"></a>        addToken x <span class="st">&quot;&quot;</span> <span class="ot">=</span> x</span>
-<span id="cb5-46"><a href="#cb5-46"></a>        addToken [x] y</span>
-<span id="cb5-47"><a href="#cb5-47"></a>            <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span>generalCategory x <span class="op">==</span> <span class="dt">Char</span><span class="op">.</span><span class="dt">OpenPunctuation</span> <span class="ot">=</span> x <span class="op">:</span> y</span>
-<span id="cb5-48"><a href="#cb5-48"></a>        addToken x (y<span class="op">:</span>ys)</span>
-<span id="cb5-49"><a href="#cb5-49"></a>            <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span>generalCategory y <span class="op">==</span> <span class="dt">Char</span><span class="op">.</span><span class="dt">ClosePunctuation</span> <span class="ot">=</span> x <span class="op">&lt;&gt;</span> (y<span class="op">:</span>ys)</span>
-<span id="cb5-50"><a href="#cb5-50"></a>        addToken x y <span class="ot">=</span> x <span class="op">&lt;&gt;</span> <span class="st">&quot; &quot;</span> <span class="op">&lt;&gt;</span> y</span>
-<span id="cb5-51"><a href="#cb5-51"></a>        isOp <span class="ot">=</span></span>
-<span id="cb5-52"><a href="#cb5-52"></a>            (<span class="ot">`elem`</span> [<span class="dt">Char</span><span class="op">.</span><span class="dt">MathSymbol</span>, <span class="dt">Char</span><span class="op">.</span><span class="dt">OtherPunctuation</span>]) <span class="op">.</span></span>
-<span id="cb5-53"><a href="#cb5-53"></a>            <span class="dt">Char</span><span class="op">.</span>generalCategory</span>
-<span id="cb5-54"><a href="#cb5-54"></a>        isParen <span class="ot">=</span> (<span class="ot">`elem`</span> <span class="st">&quot;()[]{}&quot;</span>)</span>
-<span id="cb5-55"><a href="#cb5-55"></a>        splitTokens <span class="st">&quot;&quot;</span> <span class="ot">=</span> []</span>
-<span id="cb5-56"><a href="#cb5-56"></a>        splitTokens (x<span class="op">:</span>s<span class="op">:</span>xs) <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span><span class="fu">isSpace</span> s <span class="ot">=</span> [x] <span class="op">:</span> splitTokens xs</span>
-<span id="cb5-57"><a href="#cb5-57"></a>        splitTokens (s<span class="op">:</span>xs) <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span><span class="fu">isSpace</span> s <span class="ot">=</span> splitTokens xs</span>
-<span id="cb5-58"><a href="#cb5-58"></a>        splitTokens (x<span class="op">:</span>xs) <span class="op">|</span> isParen x <span class="ot">=</span> [x] <span class="op">:</span> splitTokens xs</span>
-<span id="cb5-59"><a href="#cb5-59"></a>        splitTokens (x<span class="op">:</span>xs) <span class="ot">=</span></span>
-<span id="cb5-60"><a href="#cb5-60"></a>            <span class="kw">case</span> splitTokens xs <span class="kw">of</span></span>
-<span id="cb5-61"><a href="#cb5-61"></a>            [] <span class="ot">-&gt;</span> [[x]]</span>
-<span id="cb5-62"><a href="#cb5-62"></a>            ((y<span class="op">:</span>ys) <span class="op">:</span> zs) <span class="op">|</span> <span class="fu">not</span> (isParen y) <span class="op">&amp;&amp;</span> isOp x <span class="op">==</span> isOp y <span class="ot">-&gt;</span> (x<span class="op">:</span>y<span class="op">:</span>ys) <span class="op">:</span> zs</span>
-<span id="cb5-63"><a href="#cb5-63"></a>            ys <span class="ot">-&gt;</span> [x] <span class="op">:</span> ys</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co">-- Extend a base parsing prism with applications of an operator</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="ot">infixOpLeftRecursion ::</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    <span class="dt">Eq</span> a <span class="ot">=&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>    a <span class="ot">-&gt;</span>                        <span class="co">-- The operator&#39;s text</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> expr (expr, expr) <span class="ot">-&gt;</span> <span class="co">-- The operator constructor&#39;s prism</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> [a] (expr, [a]) <span class="ot">-&gt;</span>   <span class="co">-- The base parsing prism</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> [a] (expr, [a])</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>infixOpLeftRecursion operatorText cons sub <span class="ot">=</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>    leftRecursion cons</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>    (aside (_Cons <span class="op">.</span> firstOnly operatorText <span class="op">.</span> sub) <span class="op">.</span> retuple)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>    sub</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="co">-- Extend a base parsing prism with extensions to its right side</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a><span class="ot">leftRecursion ::</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> whole cons <span class="ot">-&gt;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> (whole, state) (cons, state) <span class="ot">-&gt;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> state (whole, state) <span class="ot">-&gt;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> state (whole, state)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true"></a>leftRecursion cons extend base <span class="ot">=</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true"></a>    prism&#39; build (<span class="fu">fmap</span> parseExtends <span class="op">.</span> (<span class="op">^?</span> base))</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true"></a>    <span class="kw">where</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true"></a>        build (x, state) <span class="ot">=</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true"></a>            <span class="fu">maybe</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true"></a>            (base <span class="op">#</span> (x, state))</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true"></a>            (build <span class="op">.</span> (extend <span class="op">#</span>) <span class="op">.</span> (, state)) (x <span class="op">^?</span> cons)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true"></a>        parseExtends x <span class="ot">=</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true"></a>            x <span class="op">^?</span> extend <span class="op">&lt;&amp;&gt;</span> _1 <span class="op">%~</span> (cons <span class="op">#</span>) <span class="op">&amp;</span> <span class="fu">maybe</span> x parseExtends</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true"></a><span class="co">-- Add an encoding for a sum-type constructor to an existing prism</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true"></a><span class="ot">tryMatch ::</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> whole cons <span class="ot">-&gt;</span> <span class="co">-- The sum-type constructor prism</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> src cons <span class="ot">-&gt;</span>   <span class="co">-- Parse the constructor contents</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> src whole <span class="ot">-&gt;</span>  <span class="co">-- Prism to encode the other options</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> src whole</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true"></a>tryMatch cons parse fallback <span class="ot">=</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true"></a>    prism&#39; build (\x <span class="ot">-&gt;</span> (x <span class="op">^?</span> parse <span class="op">&lt;&amp;&gt;</span> (cons <span class="op">#</span>)) <span class="op">&lt;|&gt;</span> x <span class="op">^?</span> fallback)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true"></a>    <span class="kw">where</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true"></a>        build x <span class="ot">=</span> <span class="fu">maybe</span> (fallback <span class="op">#</span> x) (parse <span class="op">#</span>) (x <span class="op">^?</span> cons)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true"></a><span class="co">-- Transform a string into tokens</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true"></a><span class="ot">tokens ::</span> <span class="dt">Iso&#39;</span> <span class="dt">String</span> [<span class="dt">String</span>]</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true"></a>tokens <span class="ot">=</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true"></a>    iso splitTokens (<span class="fu">foldr</span> addToken <span class="st">&quot;&quot;</span>)</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true"></a>    <span class="kw">where</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true"></a>        addToken x <span class="st">&quot;&quot;</span> <span class="ot">=</span> x</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true"></a>        addToken [x] y</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true"></a>            <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span>generalCategory x <span class="op">==</span> <span class="dt">Char</span><span class="op">.</span><span class="dt">OpenPunctuation</span> <span class="ot">=</span> x <span class="op">:</span> y</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true"></a>        addToken x (y<span class="op">:</span>ys)</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true"></a>            <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span>generalCategory y <span class="op">==</span> <span class="dt">Char</span><span class="op">.</span><span class="dt">ClosePunctuation</span> <span class="ot">=</span> x <span class="op">&lt;&gt;</span> (y<span class="op">:</span>ys)</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true"></a>        addToken x y <span class="ot">=</span> x <span class="op">&lt;&gt;</span> <span class="st">&quot; &quot;</span> <span class="op">&lt;&gt;</span> y</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true"></a>        isOp <span class="ot">=</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true"></a>            (<span class="ot">`elem`</span> [<span class="dt">Char</span><span class="op">.</span><span class="dt">MathSymbol</span>, <span class="dt">Char</span><span class="op">.</span><span class="dt">OtherPunctuation</span>]) <span class="op">.</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true"></a>            <span class="dt">Char</span><span class="op">.</span>generalCategory</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true"></a>        isParen <span class="ot">=</span> (<span class="ot">`elem`</span> <span class="st">&quot;()[]{}&quot;</span>)</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true"></a>        splitTokens <span class="st">&quot;&quot;</span> <span class="ot">=</span> []</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true"></a>        splitTokens (x<span class="op">:</span>s<span class="op">:</span>xs) <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span><span class="fu">isSpace</span> s <span class="ot">=</span> [x] <span class="op">:</span> splitTokens xs</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true"></a>        splitTokens (s<span class="op">:</span>xs) <span class="op">|</span> <span class="dt">Char</span><span class="op">.</span><span class="fu">isSpace</span> s <span class="ot">=</span> splitTokens xs</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true"></a>        splitTokens (x<span class="op">:</span>xs) <span class="op">|</span> isParen x <span class="ot">=</span> [x] <span class="op">:</span> splitTokens xs</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true"></a>        splitTokens (x<span class="op">:</span>xs) <span class="ot">=</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true"></a>            <span class="kw">case</span> splitTokens xs <span class="kw">of</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true"></a>            [] <span class="ot">-&gt;</span> [[x]]</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true"></a>            ((y<span class="op">:</span>ys) <span class="op">:</span> zs) <span class="op">|</span> <span class="fu">not</span> (isParen y) <span class="op">&amp;&amp;</span> isOp x <span class="op">==</span> isOp y <span class="ot">-&gt;</span> (x<span class="op">:</span>y<span class="op">:</span>ys) <span class="op">:</span> zs</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true"></a>            ys <span class="ot">-&gt;</span> [x] <span class="op">:</span> ys</span></code></pre></div>
 <ul>
 <li>The <code>retuple</code> <code>Iso</code> was <a href="codecs-as-prisms#parse-build-prism-combinators">defined in the previous post</a></li>
 <li><code>tryMatch</code> takes two prisms from the unparsed source and from the resulting structure to the matched pattern. If there were optics for inversed prisms and <a href="https://stackoverflow.com/questions/59426379/optic-for-partial-conversion-on-both-sides/59441415#59441415">partial isomorphisms</a> then these could be combined into one argument and the existing <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Combinators.html#v:failing"><code>failing</code></a> combinator could replace <code>tryMatch</code>.</li>
@@ -562,28 +562,28 @@
 <p>What do I mean by that? A declarative implementation of a parser should describe the format, not how to parse it!</p>
 <p>From this description, the computer will automatically figure out how to parse. Not only that, it will also know how to build, and ideally even generate extra artifacts like documentation for the format!</p>
 <p>Here's how Construct defines the format of IPv4 packets:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>ipv4 <span class="op">=</span> Struct(</span>
-<span id="cb1-2"><a href="#cb1-2"></a>    <span class="st">&quot;header&quot;</span> <span class="op">/</span> BitStruct(</span>
-<span id="cb1-3"><a href="#cb1-3"></a>        <span class="st">&quot;version&quot;</span> <span class="op">/</span> Const(<span class="dv">4</span>, Nibble),</span>
-<span id="cb1-4"><a href="#cb1-4"></a>        <span class="st">&quot;length&quot;</span> <span class="op">/</span> ExprAdapter(Nibble,</span>
-<span id="cb1-5"><a href="#cb1-5"></a>            decoder <span class="op">=</span> <span class="kw">lambda</span> obj, ctx: obj <span class="op">*</span> <span class="dv">4</span>,</span>
-<span id="cb1-6"><a href="#cb1-6"></a>            encoder <span class="op">=</span> <span class="kw">lambda</span> obj, ctx: obj <span class="op">//</span> <span class="dv">4</span>,</span>
-<span id="cb1-7"><a href="#cb1-7"></a>        ),</span>
-<span id="cb1-8"><a href="#cb1-8"></a>    ),</span>
-<span id="cb1-9"><a href="#cb1-9"></a>    ...</span>
-<span id="cb1-10"><a href="#cb1-10"></a>    <span class="st">&quot;total_length&quot;</span> <span class="op">/</span> Int16ub,</span>
-<span id="cb1-11"><a href="#cb1-11"></a>    ...</span>
-<span id="cb1-12"><a href="#cb1-12"></a>    <span class="st">&quot;options&quot;</span> <span class="op">/</span> Bytes(this.header.length <span class="op">-</span> <span class="dv">20</span>),</span>
-<span id="cb1-13"><a href="#cb1-13"></a>    <span class="st">&quot;body&quot;</span> <span class="op">/</span> Bytes(this.total_length <span class="op">-</span> this.header.length),</span>
-<span id="cb1-14"><a href="#cb1-14"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>ipv4 <span class="op">=</span> Struct(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="st">&quot;header&quot;</span> <span class="op">/</span> BitStruct(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>        <span class="st">&quot;version&quot;</span> <span class="op">/</span> Const(<span class="dv">4</span>, Nibble),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>        <span class="st">&quot;length&quot;</span> <span class="op">/</span> ExprAdapter(Nibble,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>            decoder <span class="op">=</span> <span class="kw">lambda</span> obj, ctx: obj <span class="op">*</span> <span class="dv">4</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>            encoder <span class="op">=</span> <span class="kw">lambda</span> obj, ctx: obj <span class="op">//</span> <span class="dv">4</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>        ),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    ),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    ...</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="st">&quot;total_length&quot;</span> <span class="op">/</span> Int16ub,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>    ...</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>    <span class="st">&quot;options&quot;</span> <span class="op">/</span> Bytes(this.header.length <span class="op">-</span> <span class="dv">20</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    <span class="st">&quot;body&quot;</span> <span class="op">/</span> Bytes(this.total_length <span class="op">-</span> this.header.length),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>)</span></code></pre></div>
 <p>In this simple declaration we created a parser, builder, and the data type for IPv4 packets!</p>
 <p>Also, I'd like to highlight the richness of the format. It isn't a simple "struct" with fields of known types, but rather a "dependently-typed" one, where the size of the <code>options</code> field depends on the value of <code>header.length</code>! Haskell parser combinators libraries which support such dependencies tend to identify as <a href="http://hackage.haskell.org/package/parsec">"monadic parser combinators" libraries</a>, in constrast to <a href="http://hackage.haskell.org/package/regex-applicative">"applicative parser combinators"</a> which don't support them.</p>
 <h2 id="parsers-and-builders-as-prisms">Parsers and builders as prisms</h2>
 <p>What is the essence of parsing and building?</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">data</span> <span class="dt">Codec</span> myType encoded <span class="ot">=</span> <span class="dt">Codec</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>    {<span class="ot"> build ::</span> myType <span class="ot">-&gt;</span> encoded</span>
-<span id="cb2-3"><a href="#cb2-3"></a>    ,<span class="ot"> parse ::</span> encoded <span class="ot">-&gt;</span> <span class="dt">Maybe</span> myType</span>
-<span id="cb2-4"><a href="#cb2-4"></a>    }</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Codec</span> myType encoded <span class="ot">=</span> <span class="dt">Codec</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    {<span class="ot"> build ::</span> myType <span class="ot">-&gt;</span> encoded</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    ,<span class="ot"> parse ::</span> encoded <span class="ot">-&gt;</span> <span class="dt">Maybe</span> myType</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    }</span></code></pre></div>
 <p>(Caveat: one may desire meaningful parse errors using <code>Either ParseError</code> rather of <code>Maybe</code>. We'll ignore this issue for now)</p>
 <p>Looking for a principled solution, one may notice that this type is equivalent to <a href="https://hackage.haskell.org/package/lens/docs/Control-Lens-Prism.html"><code>Prism</code></a> from the popular <a href="https://hackage.haskell.org/package/lens"><code>lens</code></a> package!</p>
 <blockquote>
@@ -598,71 +598,71 @@
 <li>Word16: Destination address</li>
 <li>Body-length bytes: Packet body</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;</span> simplifiedIp <span class="op">#</span> ((<span class="dv">2</span>, <span class="dv">3</span>), <span class="st">&quot;Hello World!&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="st">&quot;\a\NUL\f\NUL\STX\NUL\ETXHello World!&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="op">&gt;</span> <span class="st">&quot;\a\NUL\f\NUL\STX\NUL\ETXHello World!&quot;</span> <span class="op">^?</span> simplifiedIp</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="dt">Just</span> ((<span class="dv">2</span>,<span class="dv">3</span>),<span class="st">&quot;Hello World!&quot;</span>)</span>
-<span id="cb3-6"><a href="#cb3-6"></a></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="ot">simplifiedIp ::</span> <span class="dt">Prism&#39;</span> <span class="dt">ByteString</span> ((<span class="dt">Word16</span>, <span class="dt">Word16</span>), <span class="dt">ByteString</span>)</span>
-<span id="cb3-8"><a href="#cb3-8"></a>simplifiedIp <span class="ot">=</span> takeSimplifiedIp <span class="op">.</span> secondOnly <span class="st">&quot;&quot;</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="ot">takeSimplifiedIp ::</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a>    <span class="dt">Prism&#39;</span> <span class="dt">ByteString</span> (((<span class="dt">Word16</span>, <span class="dt">Word16</span>), <span class="dt">ByteString</span>), <span class="dt">ByteString</span>)</span>
-<span id="cb3-12"><a href="#cb3-12"></a>takeSimplifiedIp <span class="ot">=</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a>    _Cons <span class="op">.</span> firstOnly <span class="dv">7</span> <span class="op">.</span> <span class="co">-- Remove the constant byte 7</span></span>
-<span id="cb3-14"><a href="#cb3-14"></a>    takeWord16 <span class="op">.</span>          <span class="co">-- (bodyLen, rest)</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a>    aside (takeWord16 <span class="op">.</span> aside takeWord16) <span class="op">.</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a>                          <span class="co">-- (bodyLen, (origin, (dest, rest)))</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a></span>
-<span id="cb3-18"><a href="#cb3-18"></a>    <span class="co">-- Reordering (this is somewhat painful):</span></span>
-<span id="cb3-19"><a href="#cb3-19"></a>    aside retuple <span class="op">.</span>       <span class="co">-- (bodyLen, ((origin, dest), rest))</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a>    retuple <span class="op">.</span>             <span class="co">-- ((bodyLen, (origin, dest)), rest)</span></span>
-<span id="cb3-21"><a href="#cb3-21"></a>    asideFirst swapped <span class="op">.</span>  <span class="co">-- (((origin, dest), bodyLen), rest)</span></span>
-<span id="cb3-22"><a href="#cb3-22"></a>    from retuple <span class="op">.</span>        <span class="co">-- ((origin, dest), (bodyLen, rest))</span></span>
-<span id="cb3-23"><a href="#cb3-23"></a></span>
-<span id="cb3-24"><a href="#cb3-24"></a>    aside takeBytes <span class="op">.</span>     <span class="co">-- ((origin, dest), (body, remainder))</span></span>
-<span id="cb3-25"><a href="#cb3-25"></a>    retuple               <span class="co">-- (((origin, dest), body), remainder)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="op">&gt;</span> simplifiedIp <span class="op">#</span> ((<span class="dv">2</span>, <span class="dv">3</span>), <span class="st">&quot;Hello World!&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="st">&quot;\a\NUL\f\NUL\STX\NUL\ETXHello World!&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;\a\NUL\f\NUL\STX\NUL\ETXHello World!&quot;</span> <span class="op">^?</span> simplifiedIp</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="dt">Just</span> ((<span class="dv">2</span>,<span class="dv">3</span>),<span class="st">&quot;Hello World!&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="ot">simplifiedIp ::</span> <span class="dt">Prism&#39;</span> <span class="dt">ByteString</span> ((<span class="dt">Word16</span>, <span class="dt">Word16</span>), <span class="dt">ByteString</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>simplifiedIp <span class="ot">=</span> takeSimplifiedIp <span class="op">.</span> secondOnly <span class="st">&quot;&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a><span class="ot">takeSimplifiedIp ::</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> <span class="dt">ByteString</span> (((<span class="dt">Word16</span>, <span class="dt">Word16</span>), <span class="dt">ByteString</span>), <span class="dt">ByteString</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>takeSimplifiedIp <span class="ot">=</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>    _Cons <span class="op">.</span> firstOnly <span class="dv">7</span> <span class="op">.</span> <span class="co">-- Remove the constant byte 7</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>    takeWord16 <span class="op">.</span>          <span class="co">-- (bodyLen, rest)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>    aside (takeWord16 <span class="op">.</span> aside takeWord16) <span class="op">.</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>                          <span class="co">-- (bodyLen, (origin, (dest, rest)))</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>    <span class="co">-- Reordering (this is somewhat painful):</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a>    aside retuple <span class="op">.</span>       <span class="co">-- (bodyLen, ((origin, dest), rest))</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>    retuple <span class="op">.</span>             <span class="co">-- ((bodyLen, (origin, dest)), rest)</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a>    asideFirst swapped <span class="op">.</span>  <span class="co">-- (((origin, dest), bodyLen), rest)</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a>    from retuple <span class="op">.</span>        <span class="co">-- ((origin, dest), (bodyLen, rest))</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true"></a>    aside takeBytes <span class="op">.</span>     <span class="co">-- ((origin, dest), (body, remainder))</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a>    retuple               <span class="co">-- (((origin, dest), body), remainder)</span></span></code></pre></div>
 <p>This uses some combinators from <code>Control.Lens</code> and some extra combinators defined below:</p>
 <h3 id="parse-build-prism-combinators">Parse-build prism combinators</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="ot">firstOnly ::</span> <span class="dt">Eq</span> e <span class="ot">=&gt;</span> e <span class="ot">-&gt;</span> <span class="dt">Prism&#39;</span> (e, a) a</span>
-<span id="cb4-2"><a href="#cb4-2"></a>firstOnly x <span class="ot">=</span> asideFirst (only x) <span class="op">.</span> iso <span class="fu">snd</span> ((,) ())</span>
-<span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="ot">secondOnly ::</span> <span class="dt">Eq</span> e <span class="ot">=&gt;</span> e <span class="ot">-&gt;</span> <span class="dt">Prism&#39;</span> (a, e) a</span>
-<span id="cb4-5"><a href="#cb4-5"></a>secondOnly x <span class="ot">=</span> swapped <span class="op">.</span> firstOnly x</span>
-<span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="ot">asideFirst ::</span> <span class="dt">APrism</span> s t a b <span class="ot">-&gt;</span> <span class="dt">Prism</span> (s, e) (t, e) (a, e) (b, e)</span>
-<span id="cb4-8"><a href="#cb4-8"></a>asideFirst l <span class="ot">=</span> swapped <span class="op">.</span> aside l <span class="op">.</span> swapped</span>
-<span id="cb4-9"><a href="#cb4-9"></a></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="co">-- Tuple shuffling Iso</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="ot">retuple ::</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a>    <span class="dt">Iso</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>    (a0, (a1, a2)) (b0, (b1, b2))</span>
-<span id="cb4-14"><a href="#cb4-14"></a>    ((a0, a1), a2) ((b0, b1), b2)</span>
-<span id="cb4-15"><a href="#cb4-15"></a>retuple <span class="ot">=</span></span>
-<span id="cb4-16"><a href="#cb4-16"></a>    iso</span>
-<span id="cb4-17"><a href="#cb4-17"></a>    (\(w0, (w1, r)) <span class="ot">-&gt;</span> ((w0, w1), r))</span>
-<span id="cb4-18"><a href="#cb4-18"></a>    (\((w0, w1), r) <span class="ot">-&gt;</span> (w0, (w1, r)))</span>
-<span id="cb4-19"><a href="#cb4-19"></a></span>
-<span id="cb4-20"><a href="#cb4-20"></a><span class="ot">takeWord16 ::</span> <span class="dt">Prism&#39;</span> <span class="dt">ByteString</span> (<span class="dt">Word16</span>, <span class="dt">ByteString</span>)</span>
-<span id="cb4-21"><a href="#cb4-21"></a>takeWord16 <span class="ot">=</span> _Cons <span class="op">.</span> aside _Cons <span class="op">.</span> retuple <span class="op">.</span> asideFirst (from word16Bytes)</span>
-<span id="cb4-22"><a href="#cb4-22"></a></span>
-<span id="cb4-23"><a href="#cb4-23"></a><span class="ot">word16Bytes ::</span> <span class="dt">Iso&#39;</span> <span class="dt">Word16</span> (<span class="dt">Word8</span>, <span class="dt">Word8</span>)</span>
-<span id="cb4-24"><a href="#cb4-24"></a>word16Bytes <span class="ot">=</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a>    iso</span>
-<span id="cb4-26"><a href="#cb4-26"></a>    ((both <span class="op">%~</span> <span class="fu">fromIntegral</span>) <span class="op">.</span> (<span class="ot">`divMod`</span> <span class="dv">256</span>))</span>
-<span id="cb4-27"><a href="#cb4-27"></a>    (\(w1, w0) <span class="ot">-&gt;</span> <span class="fu">fromIntegral</span> w1 <span class="op">*</span> <span class="dv">256</span> <span class="op">+</span> <span class="fu">fromIntegral</span> w0)</span>
-<span id="cb4-28"><a href="#cb4-28"></a></span>
-<span id="cb4-29"><a href="#cb4-29"></a><span class="ot">takeBytes ::</span></span>
-<span id="cb4-30"><a href="#cb4-30"></a>    <span class="dt">Integral</span> a <span class="ot">=&gt;</span></span>
-<span id="cb4-31"><a href="#cb4-31"></a>    <span class="dt">Prism&#39;</span> (a, <span class="dt">ByteString</span>) (<span class="dt">ByteString</span>, <span class="dt">ByteString</span>)</span>
-<span id="cb4-32"><a href="#cb4-32"></a>takeBytes <span class="ot">=</span></span>
-<span id="cb4-33"><a href="#cb4-33"></a>    prism&#39;</span>
-<span id="cb4-34"><a href="#cb4-34"></a>    ( \(x, y) <span class="ot">-&gt;</span></span>
-<span id="cb4-35"><a href="#cb4-35"></a>        (<span class="fu">fromIntegral</span> (<span class="dt">ByteString</span><span class="op">.</span><span class="fu">length</span> x), x <span class="op">&lt;&gt;</span> y))</span>
-<span id="cb4-36"><a href="#cb4-36"></a>    (\(count, x) <span class="ot">-&gt;</span></span>
-<span id="cb4-37"><a href="#cb4-37"></a>        <span class="dt">ByteString</span><span class="op">.</span><span class="fu">splitAt</span> (<span class="fu">fromIntegral</span> count) x <span class="op">&lt;$</span></span>
-<span id="cb4-38"><a href="#cb4-38"></a>        guard (<span class="fu">fromIntegral</span> count <span class="op">&lt;=</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">length</span> x))</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ot">firstOnly ::</span> <span class="dt">Eq</span> e <span class="ot">=&gt;</span> e <span class="ot">-&gt;</span> <span class="dt">Prism&#39;</span> (e, a) a</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>firstOnly x <span class="ot">=</span> asideFirst (only x) <span class="op">.</span> iso <span class="fu">snd</span> ((,) ())</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="ot">secondOnly ::</span> <span class="dt">Eq</span> e <span class="ot">=&gt;</span> e <span class="ot">-&gt;</span> <span class="dt">Prism&#39;</span> (a, e) a</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>secondOnly x <span class="ot">=</span> swapped <span class="op">.</span> firstOnly x</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="ot">asideFirst ::</span> <span class="dt">APrism</span> s t a b <span class="ot">-&gt;</span> <span class="dt">Prism</span> (s, e) (t, e) (a, e) (b, e)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>asideFirst l <span class="ot">=</span> swapped <span class="op">.</span> aside l <span class="op">.</span> swapped</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="co">-- Tuple shuffling Iso</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="ot">retuple ::</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    <span class="dt">Iso</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>    (a0, (a1, a2)) (b0, (b1, b2))</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>    ((a0, a1), a2) ((b0, b1), b2)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>retuple <span class="ot">=</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a>    iso</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a>    (\(w0, (w1, r)) <span class="ot">-&gt;</span> ((w0, w1), r))</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a>    (\((w0, w1), r) <span class="ot">-&gt;</span> (w0, (w1, r)))</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true"></a><span class="ot">takeWord16 ::</span> <span class="dt">Prism&#39;</span> <span class="dt">ByteString</span> (<span class="dt">Word16</span>, <span class="dt">ByteString</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true"></a>takeWord16 <span class="ot">=</span> _Cons <span class="op">.</span> aside _Cons <span class="op">.</span> retuple <span class="op">.</span> asideFirst (from word16Bytes)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true"></a><span class="ot">word16Bytes ::</span> <span class="dt">Iso&#39;</span> <span class="dt">Word16</span> (<span class="dt">Word8</span>, <span class="dt">Word8</span>)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true"></a>word16Bytes <span class="ot">=</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true"></a>    iso</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true"></a>    ((both <span class="op">%~</span> <span class="fu">fromIntegral</span>) <span class="op">.</span> (<span class="ot">`divMod`</span> <span class="dv">256</span>))</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true"></a>    (\(w1, w0) <span class="ot">-&gt;</span> <span class="fu">fromIntegral</span> w1 <span class="op">*</span> <span class="dv">256</span> <span class="op">+</span> <span class="fu">fromIntegral</span> w0)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true"></a><span class="ot">takeBytes ::</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true"></a>    <span class="dt">Integral</span> a <span class="ot">=&gt;</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true"></a>    <span class="dt">Prism&#39;</span> (a, <span class="dt">ByteString</span>) (<span class="dt">ByteString</span>, <span class="dt">ByteString</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true"></a>takeBytes <span class="ot">=</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true"></a>    prism&#39;</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true"></a>    ( \(x, y) <span class="ot">-&gt;</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true"></a>        (<span class="fu">fromIntegral</span> (<span class="dt">ByteString</span><span class="op">.</span><span class="fu">length</span> x), x <span class="op">&lt;&gt;</span> y))</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true"></a>    (\(count, x) <span class="ot">-&gt;</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true"></a>        <span class="dt">ByteString</span><span class="op">.</span><span class="fu">splitAt</span> (<span class="fu">fromIntegral</span> count) x <span class="op">&lt;$</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true"></a>        guard (<span class="fu">fromIntegral</span> count <span class="op">&lt;=</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">length</span> x))</span></code></pre></div>
 <h2 id="conclusion">Conclusion</h2>
 <p>We've succesfully crafted prisms to parse and build our structure!</p>
 <p>Now let's review some drawbacks of the presented approach:</p>
@@ -798,83 +798,83 @@
 </tbody>
 </table>
 <p>We'll use Haskell to demonstrate them:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">data</span> <span class="dt">Shape</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>    <span class="ot">=</span> <span class="dt">Rect</span> {<span class="ot"> width ::</span> <span class="dt">Float</span>,<span class="ot"> height ::</span> <span class="dt">Float</span> }</span>
-<span id="cb1-3"><a href="#cb1-3"></a>    <span class="op">|</span> <span class="dt">Circle</span> {<span class="ot"> radius ::</span> <span class="dt">Float</span> }</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="ot">area ::</span> <span class="dt">Shape</span> <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>area (<span class="dt">Rect</span> w h) <span class="ot">=</span> w <span class="op">*</span> h</span>
-<span id="cb1-7"><a href="#cb1-7"></a>area (<span class="dt">Circle</span> r) <span class="ot">=</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="op">&gt;</span> area (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>)</span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="dv">15</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Shape</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="ot">=</span> <span class="dt">Rect</span> {<span class="ot"> width ::</span> <span class="dt">Float</span>,<span class="ot"> height ::</span> <span class="dt">Float</span> }</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="op">|</span> <span class="dt">Circle</span> {<span class="ot"> radius ::</span> <span class="dt">Float</span> }</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="ot">area ::</span> <span class="dt">Shape</span> <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>area (<span class="dt">Rect</span> w h) <span class="ot">=</span> w <span class="op">*</span> h</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>area (<span class="dt">Circle</span> r) <span class="ot">=</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="op">&gt;</span> area (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="dv">15</span></span></code></pre></div>
 <h2 id="church-encoding">Church encoding</h2>
 <p>How would we encode our type in legacy languages which don't support sum types?</p>
 <p>Famous minimalist <a href="https://en.wikipedia.org/wiki/Alonzo_Church">Alonzo Church</a> has devised a method:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="ot">{-# LANGUAGE RankNTypes #-}</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">data</span> <span class="dt">ShapeHandlers</span> r <span class="ot">=</span> <span class="dt">ShapeHandlers</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>    {<span class="ot"> handleRect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
-<span id="cb2-5"><a href="#cb2-5"></a>    ,<span class="ot"> handleCircle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
-<span id="cb2-6"><a href="#cb2-6"></a>    }</span>
-<span id="cb2-7"><a href="#cb2-7"></a></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="kw">type</span> <span class="dt">Shape</span> <span class="ot">=</span> (<span class="kw">forall</span> a<span class="op">.</span> <span class="dt">ShapeHandlers</span> a <span class="ot">-&gt;</span> a)</span>
-<span id="cb2-9"><a href="#cb2-9"></a></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="ot">rect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Shape</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a>rect w h handlers <span class="ot">=</span> handleRect handlers w h</span>
-<span id="cb2-12"><a href="#cb2-12"></a></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="ot">circle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Shape</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a>circle r handlers <span class="ot">=</span> handleCircle handlers r</span>
-<span id="cb2-15"><a href="#cb2-15"></a></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="ot">area ::</span> <span class="dt">Shape</span> <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a>area shape <span class="ot">=</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a>    shape</span>
-<span id="cb2-19"><a href="#cb2-19"></a>    <span class="dt">ShapeHandlers</span></span>
-<span id="cb2-20"><a href="#cb2-20"></a>    { handleRect <span class="ot">=</span> \w h <span class="ot">-&gt;</span> w <span class="op">*</span> h</span>
-<span id="cb2-21"><a href="#cb2-21"></a>    , handleCircle <span class="ot">=</span> \r <span class="ot">-&gt;</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
-<span id="cb2-22"><a href="#cb2-22"></a>    }</span>
-<span id="cb2-23"><a href="#cb2-23"></a></span>
-<span id="cb2-24"><a href="#cb2-24"></a><span class="op">&gt;</span> area (rect <span class="dv">3</span> <span class="dv">5</span>)</span>
-<span id="cb2-25"><a href="#cb2-25"></a><span class="dv">15</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ot">{-# LANGUAGE RankNTypes #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">ShapeHandlers</span> r <span class="ot">=</span> <span class="dt">ShapeHandlers</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    {<span class="ot"> handleRect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    ,<span class="ot"> handleCircle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    }</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Shape</span> <span class="ot">=</span> (<span class="kw">forall</span> a<span class="op">.</span> <span class="dt">ShapeHandlers</span> a <span class="ot">-&gt;</span> a)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="ot">rect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Shape</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>rect w h handlers <span class="ot">=</span> handleRect handlers w h</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="ot">circle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Shape</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>circle r handlers <span class="ot">=</span> handleCircle handlers r</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="ot">area ::</span> <span class="dt">Shape</span> <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>area shape <span class="ot">=</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>    shape</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>    <span class="dt">ShapeHandlers</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>    { handleRect <span class="ot">=</span> \w h <span class="ot">-&gt;</span> w <span class="op">*</span> h</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>    , handleCircle <span class="ot">=</span> \r <span class="ot">-&gt;</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a>    }</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a><span class="op">&gt;</span> area (rect <span class="dv">3</span> <span class="dv">5</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a><span class="dv">15</span></span></code></pre></div>
 <p>While originally intended for use in his minimal programming language "Lambda Calculus", this encoding is suitable for most popular languages. Java/C# supports it via abstract generic methods. In C++ or Go we'll have to resort to casts or side-effects to encode this (the <a href="https://en.wikipedia.org/wiki/Visitor_pattern">Visitor pattern</a>).</p>
 <h2 id="final-style-extending-church-encodings-using-type-classes">Final style: Extending church-encodings using type classes</h2>
 <p>We can encode the record from the church encoding using a type-class:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="ot">{-# LANGUAGE RankNTypes #-}</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">class</span> <span class="dt">ShapeHandlers</span> r <span class="kw">where</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="ot">    rect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="ot">    circle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
-<span id="cb3-6"><a href="#cb3-6"></a></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="kw">type</span> <span class="dt">Shape</span> <span class="ot">=</span> (<span class="kw">forall</span> a<span class="op">.</span> <span class="dt">ShapeHandlers</span> a <span class="ot">=&gt;</span> a)</span>
-<span id="cb3-8"><a href="#cb3-8"></a></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="kw">newtype</span> <span class="dt">Area</span> <span class="ot">=</span> <span class="dt">Area</span> {<span class="ot"> area ::</span> <span class="dt">Float</span> }</span>
-<span id="cb3-10"><a href="#cb3-10"></a></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="kw">instance</span> <span class="dt">ShapeHandlers</span> <span class="dt">Area</span> <span class="kw">where</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>    rect w h <span class="ot">=</span> <span class="dt">Area</span> (w <span class="op">*</span> h)</span>
-<span id="cb3-13"><a href="#cb3-13"></a>    circle r <span class="ot">=</span> <span class="dt">Area</span> (<span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r)</span>
-<span id="cb3-14"><a href="#cb3-14"></a></span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="op">&gt;</span> area (rect <span class="dv">3</span> <span class="dv">5</span>)</span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="dv">15</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ot">{-# LANGUAGE RankNTypes #-}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">ShapeHandlers</span> r <span class="kw">where</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="ot">    rect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="ot">    circle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Shape</span> <span class="ot">=</span> (<span class="kw">forall</span> a<span class="op">.</span> <span class="dt">ShapeHandlers</span> a <span class="ot">=&gt;</span> a)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="kw">newtype</span> <span class="dt">Area</span> <span class="ot">=</span> <span class="dt">Area</span> {<span class="ot"> area ::</span> <span class="dt">Float</span> }</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">ShapeHandlers</span> <span class="dt">Area</span> <span class="kw">where</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>    rect w h <span class="ot">=</span> <span class="dt">Area</span> (w <span class="op">*</span> h)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>    circle r <span class="ot">=</span> <span class="dt">Area</span> (<span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="op">&gt;</span> area (rect <span class="dv">3</span> <span class="dv">5</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a><span class="dv">15</span></span></code></pre></div>
 <p>The main benefit of using this encoding is that type class constraints are trivially composable, which translates to encoding extensible sum-types! For example: <code>(forall a. (ShapeHandlers a, MoreHandlers a) =&gt; a)</code></p>
 <p>With a small modification (avoiding universal quantification) this becomes Carette et al's <a href="http://okmij.org/ftp/tagless-final/index.html">"Final Style"</a>, which is also commonly known as "<code>mtl</code> style".</p>
 <p>A similar encoding in OO languages, using interfaces instead of type classes is Oliviera et al's <a href="https://www.cs.utexas.edu/~wcook/Drafts/2012/ecoop2012.pdf">"Object Algebras"</a>.</p>
 <h2 id="the-oo-pattern">The OO pattern</h2>
 <p>This is a common way to represent sum types in object oriented languages:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">data</span> <span class="dt">Rect</span> <span class="ot">=</span> <span class="dt">Rect</span> {<span class="ot"> width ::</span> <span class="dt">Float</span>,<span class="ot"> height ::</span> <span class="dt">Float</span> }</span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">data</span> <span class="dt">Circle</span> <span class="ot">=</span> <span class="dt">Circle</span> {<span class="ot"> radius ::</span> <span class="dt">Float</span> }</span>
-<span id="cb4-4"><a href="#cb4-4"></a></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">class</span> <span class="dt">Area</span> a <span class="kw">where</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="ot">    area ::</span> a <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="kw">instance</span> <span class="dt">Area</span> <span class="dt">Rect</span> <span class="kw">where</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>    area (<span class="dt">Rect</span> w h) <span class="ot">=</span> w <span class="op">*</span> h</span>
-<span id="cb4-10"><a href="#cb4-10"></a></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="kw">instance</span> <span class="dt">Area</span> <span class="dt">Circle</span> <span class="kw">where</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a>    area (<span class="dt">Circle</span> r) <span class="ot">=</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
-<span id="cb4-13"><a href="#cb4-13"></a></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="op">&gt;</span> area (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>)</span>
-<span id="cb4-15"><a href="#cb4-15"></a><span class="dv">15</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Rect</span> <span class="ot">=</span> <span class="dt">Rect</span> {<span class="ot"> width ::</span> <span class="dt">Float</span>,<span class="ot"> height ::</span> <span class="dt">Float</span> }</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Circle</span> <span class="ot">=</span> <span class="dt">Circle</span> {<span class="ot"> radius ::</span> <span class="dt">Float</span> }</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">Area</span> a <span class="kw">where</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="ot">    area ::</span> a <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Area</span> <span class="dt">Rect</span> <span class="kw">where</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>    area (<span class="dt">Rect</span> w h) <span class="ot">=</span> w <span class="op">*</span> h</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Area</span> <span class="dt">Circle</span> <span class="kw">where</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    area (<span class="dt">Circle</span> r) <span class="ot">=</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="op">&gt;</span> area (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="dv">15</span></span></code></pre></div>
 <p>This encoding is naturally open! We can add shapes as we please, and in posh languages which support type-classes or traits we can also add more operations on them without modifying existing code.</p>
 <h2 id="putting-these-approaches-to-the-test">Putting these approaches to the test</h2>
 <p>Let's explore how these approaches fare against some simple challenges.</p>
@@ -882,22 +882,22 @@
 <p>Suppose we wanted to write code that can support more types of shapes, without modifying our shape data definition (aka the <a href="https://en.wikipedia.org/wiki/Expression_problem">Expression problem</a>).</p>
 <p>The direct sum-type can't be extended, nor can its church encoding. But the final and OO styles can.</p>
 <p>Final style:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">class</span> <span class="dt">CompositeHandler</span> r <span class="kw">where</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="ot">    composite ::</span> r <span class="ot">-&gt;</span> r <span class="ot">-&gt;</span> r</span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">instance</span> <span class="dt">CompositeHandler</span> <span class="dt">Area</span> <span class="kw">where</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>    composite (<span class="dt">Area</span> x) (<span class="dt">Area</span> y) <span class="ot">=</span> <span class="dt">Area</span> (x <span class="op">+</span> y)</span>
-<span id="cb5-6"><a href="#cb5-6"></a></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="op">&gt;</span> area (composite (rect <span class="dv">3</span> <span class="dv">5</span>) (circle <span class="dv">1</span>))</span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="fl">18.141592</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">CompositeHandler</span> r <span class="kw">where</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="ot">    composite ::</span> r <span class="ot">-&gt;</span> r <span class="ot">-&gt;</span> r</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">CompositeHandler</span> <span class="dt">Area</span> <span class="kw">where</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    composite (<span class="dt">Area</span> x) (<span class="dt">Area</span> y) <span class="ot">=</span> <span class="dt">Area</span> (x <span class="op">+</span> y)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="op">&gt;</span> area (composite (rect <span class="dv">3</span> <span class="dv">5</span>) (circle <span class="dv">1</span>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="fl">18.141592</span></span></code></pre></div>
 <p>OO style:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">data</span> <span class="dt">Composite</span> a b <span class="ot">=</span> <span class="dt">Composite</span> {<span class="ot"> first ::</span> a,<span class="ot"> second ::</span> b }</span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="kw">instance</span> (<span class="dt">Area</span> a, <span class="dt">Area</span> b) <span class="ot">=&gt;</span> <span class="dt">Area</span> (<span class="dt">Composite</span> a b) <span class="kw">where</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>    area (<span class="dt">Composite</span> x y) <span class="ot">=</span> area x <span class="op">+</span> area y</span>
-<span id="cb6-5"><a href="#cb6-5"></a></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="op">&gt;</span> area (<span class="dt">Composite</span> (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>) (<span class="dt">Circle</span> <span class="dv">1</span>))</span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="fl">18.141592</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Composite</span> a b <span class="ot">=</span> <span class="dt">Composite</span> {<span class="ot"> first ::</span> a,<span class="ot"> second ::</span> b }</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="kw">instance</span> (<span class="dt">Area</span> a, <span class="dt">Area</span> b) <span class="ot">=&gt;</span> <span class="dt">Area</span> (<span class="dt">Composite</span> a b) <span class="kw">where</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>    area (<span class="dt">Composite</span> x y) <span class="ot">=</span> area x <span class="op">+</span> area y</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="op">&gt;</span> area (<span class="dt">Composite</span> (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>) (<span class="dt">Circle</span> <span class="dv">1</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="fl">18.141592</span></span></code></pre></div>
 <h3 id="collections">Collections</h3>
 <p>If we wanted to encode a list of shapes:</p>
 <ul>
@@ -910,12 +910,12 @@
 <h2 id="the-fifth-approach-composition-of-atoms">The fifth approach: Composition of atoms</h2>
 <p>All the approaches discussed above failed when put to the test. The following approach fares better -</p>
 <p>We build upon the OO approach's basic shapes and combine them into a concrete <code>Shape</code> sum type:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1"></a><span class="ot">{-# LANGUAGE DeriveGeneric, DeriveAnyClass #-}</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a></span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="kw">data</span> <span class="dt">Shape</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>    <span class="ot">=</span> <span class="dt">SRect</span> <span class="dt">Rect</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a>    <span class="op">|</span> <span class="dt">SCircle</span> <span class="dt">Circle</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a>    <span class="kw">deriving</span> (<span class="dt">Generic</span>, <span class="dt">Area</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="ot">{-# LANGUAGE DeriveGeneric, DeriveAnyClass #-}</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Shape</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>    <span class="ot">=</span> <span class="dt">SRect</span> <span class="dt">Rect</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="op">|</span> <span class="dt">SCircle</span> <span class="dt">Circle</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>    <span class="kw">deriving</span> (<span class="dt">Generic</span>, <span class="dt">Area</span>)</span></code></pre></div>
 <p>We use <code>Generic</code> and <code>DefaultSignatures</code> based derivations to derive our class instances (the derivation of <code>Area</code> is left as an exercise for the reader).</p>
 <p>This approach allows us to implement our basic types, operations, and instances in a modular way, while only closing the type at the top-level. It does allow us to implement operations on more than one value (such as diffs), and we can encode a list in either of the styles supported by Final or OO styles.</p>
 <p>Discussion:</p>
@@ -935,31 +935,31 @@
       <category term="default-sigs"/>
       <summary>On using DefaultSignatures to improve DTALC</summary>
       <content type="html"><![CDATA[<p>Back in 2008, Swierstra's Functional Pearl <a href="http://www.cs.ru.nl/~W.Swierstra/Publications/DataTypesALaCarte.pdf"><em>Data Types a la Carte</em></a> showed how to construct the following data structure:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">data</span> <span class="dt">Expr</span> <span class="ot">=</span> <span class="dt">Val</span> <span class="dt">Int</span> <span class="op">|</span> <span class="dt">Add</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> <span class="ot">=</span> <span class="dt">Val</span> <span class="dt">Int</span> <span class="op">|</span> <span class="dt">Add</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span></code></pre></div>
 <p>from simple and re-usable individual components:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">newtype</span> <span class="dt">Val</span> e <span class="ot">=</span> <span class="dt">Val</span> <span class="dt">Int</span> <span class="kw">deriving</span> <span class="dt">Functor</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">data</span>    <span class="dt">Add</span> e <span class="ot">=</span> <span class="dt">Add</span> e e <span class="kw">deriving</span> <span class="dt">Functor</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">type</span> <span class="dt">Expr</span> <span class="ot">=</span> <span class="dt">Fix</span> (<span class="dt">Val</span> <span class="op">:+:</span> <span class="dt">Add</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">newtype</span> <span class="dt">Val</span> e <span class="ot">=</span> <span class="dt">Val</span> <span class="dt">Int</span> <span class="kw">deriving</span> <span class="dt">Functor</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">data</span>    <span class="dt">Add</span> e <span class="ot">=</span> <span class="dt">Add</span> e e <span class="kw">deriving</span> <span class="dt">Functor</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Expr</span> <span class="ot">=</span> <span class="dt">Fix</span> (<span class="dt">Val</span> <span class="op">:+:</span> <span class="dt">Add</span>)</span></code></pre></div>
 <p>(<a href="http://hackage.haskell.org/package/recursion-schemes/docs/Data-Functor-Foldable.html#t:Fix"><code>Fix</code></a> is available in the <a href="http://hackage.haskell.org/package/recursion-schemes"><code>recursion-schemes</code></a> package and <a href="http://hackage.haskell.org/package/base-4.12.0.0/docs/GHC-Generics.html#t::-43-:"><code>:+:</code></a> is available from <code>GHC.Generics</code>)</p>
 <h2 id="the-good">The Good</h2>
 <p>This construction allows to write clean and re-usable modular code. For example we can implement evaluation of expressions like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">class</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> <span class="dt">Eval</span> f <span class="kw">where</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="ot">    evalAlgebra ::</span> f <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a>eval (<span class="dt">Fix</span> expr) <span class="ot">=</span> evalAlgebra (<span class="fu">fmap</span> eval expr)</span>
-<span id="cb3-5"><a href="#cb3-5"></a></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="kw">instance</span> (<span class="dt">Eval</span> f, <span class="dt">Eval</span> g) <span class="ot">=&gt;</span> <span class="dt">Eval</span> (f <span class="op">:+:</span> g) <span class="kw">where</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>    evalAlgebra (<span class="dt">L1</span> x) <span class="ot">=</span> evalAlgebra x</span>
-<span id="cb3-8"><a href="#cb3-8"></a>    evalAlgebra (<span class="dt">R1</span> y) <span class="ot">=</span> evalAlgebra y</span>
-<span id="cb3-9"><a href="#cb3-9"></a></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="kw">instance</span> <span class="dt">Eval</span> <span class="dt">Val</span> <span class="kw">where</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a>    evalAlgebra (<span class="dt">Val</span> x) <span class="ot">=</span> x</span>
-<span id="cb3-12"><a href="#cb3-12"></a></span>
-<span id="cb3-13"><a href="#cb3-13"></a><span class="kw">instance</span> <span class="dt">Eval</span> <span class="dt">Add</span> <span class="kw">where</span></span>
-<span id="cb3-14"><a href="#cb3-14"></a>    evalAlgebra (<span class="dt">Add</span> x y) <span class="ot">=</span> x <span class="op">+</span> y</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> <span class="dt">Eval</span> f <span class="kw">where</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="ot">    evalAlgebra ::</span> f <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>eval (<span class="dt">Fix</span> expr) <span class="ot">=</span> evalAlgebra (<span class="fu">fmap</span> eval expr)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">instance</span> (<span class="dt">Eval</span> f, <span class="dt">Eval</span> g) <span class="ot">=&gt;</span> <span class="dt">Eval</span> (f <span class="op">:+:</span> g) <span class="kw">where</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    evalAlgebra (<span class="dt">L1</span> x) <span class="ot">=</span> evalAlgebra x</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    evalAlgebra (<span class="dt">R1</span> y) <span class="ot">=</span> evalAlgebra y</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Eval</span> <span class="dt">Val</span> <span class="kw">where</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>    evalAlgebra (<span class="dt">Val</span> x) <span class="ot">=</span> x</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Eval</span> <span class="dt">Add</span> <span class="kw">where</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>    evalAlgebra (<span class="dt">Add</span> x y) <span class="ot">=</span> x <span class="op">+</span> y</span></code></pre></div>
 <p>The beautiful part, which makes this a functional pearl, is that the <code>Eval</code> instances of <code>Val</code> and <code>Add</code> are usable not just for the <code>Expr</code> type defined above, but also for any other expression language which re-uses them, such as:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">type</span> <span class="dt">Expr2</span> <span class="ot">=</span> <span class="dt">Fix</span> (<span class="dt">Val</span> <span class="op">:+:</span> <span class="dt">Add</span> <span class="op">:+:</span> <span class="dt">Mul</span> <span class="op">:+:</span> <span class="dt">Pow</span> <span class="op">:+:</span> <span class="dt">Etc</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Expr2</span> <span class="ot">=</span> <span class="dt">Fix</span> (<span class="dt">Val</span> <span class="op">:+:</span> <span class="dt">Add</span> <span class="op">:+:</span> <span class="dt">Mul</span> <span class="op">:+:</span> <span class="dt">Pow</span> <span class="op">:+:</span> <span class="dt">Etc</span>)</span></code></pre></div>
 <h2 id="the-ugly">The Ugly</h2>
 <p>How would we represent an expression, such as <code>1 + 2</code> in the type defined above?</p>
 <p>The simple way to do it is <code>Fix (R1 (Fix (L1 (Val 1)) `Add` Fix (L1 (Val 2))))</code>.</p>
@@ -970,16 +970,16 @@
 </ul>
 <h3 id="bringing-the-benefits-of-data-types-a-la-carte-to-simpler-representations">Bringing the benefits of Data Types a la Carte to simpler representations</h3>
 <p>A few years after the paper, in 2011, <code>DefaultSignatures</code> <a href="https://downloads.haskell.org/~ghc/7.2.1/docs/html/users_guide/release-7-2-1.html">were added in GHC 7.2</a>. These enable a more direct construction of <code>Expr</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">data</span> <span class="dt">Expr</span> a <span class="ot">=</span> <span class="dt">EVal</span> (<span class="dt">Val</span> a) <span class="op">|</span> <span class="dt">EAdd</span> (<span class="dt">Add</span> a)</span>
-<span id="cb5-2"><a href="#cb5-2"></a>    <span class="kw">deriving</span> (<span class="dt">Generic1</span>, <span class="dt">Functor</span>, <span class="dt">Eval</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a <span class="ot">=</span> <span class="dt">EVal</span> (<span class="dt">Val</span> a) <span class="op">|</span> <span class="dt">EAdd</span> (<span class="dt">Add</span> a)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>    <span class="kw">deriving</span> (<span class="dt">Generic1</span>, <span class="dt">Functor</span>, <span class="dt">Eval</span>)</span></code></pre></div>
 <p>Of note here is the derivation of <code>Eval</code> (using <code>DeriveAnyClass</code>). Making <code>Eval</code> derivable is a simple matter of adding default method implementations in the <code>Eval</code> class along with two trivial instances for types from <code>GHC.Generics</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">class</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> <span class="dt">Eval</span> f <span class="kw">where</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="ot">    evalAlgebra ::</span> f <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>    default<span class="ot"> evalAlgebra ::</span> (<span class="dt">Generic1</span> f, <span class="dt">Eval</span> (<span class="dt">Rep1</span> f)) <span class="ot">=&gt;</span> f <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>    evalAlgebra <span class="ot">=</span> evalAlgebra <span class="op">.</span> from1</span>
-<span id="cb6-5"><a href="#cb6-5"></a></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">deriving</span> <span class="kw">newtype</span> <span class="kw">instance</span> <span class="dt">Eval</span> f <span class="ot">=&gt;</span> <span class="dt">Eval</span> (<span class="dt">M1</span> i c f)</span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="kw">deriving</span> <span class="kw">newtype</span> <span class="kw">instance</span> <span class="dt">Eval</span> f <span class="ot">=&gt;</span> <span class="dt">Eval</span> (<span class="dt">Rec1</span> f)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">Functor</span> f <span class="ot">=&gt;</span> <span class="dt">Eval</span> f <span class="kw">where</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="ot">    evalAlgebra ::</span> f <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>    default<span class="ot"> evalAlgebra ::</span> (<span class="dt">Generic1</span> f, <span class="dt">Eval</span> (<span class="dt">Rep1</span> f)) <span class="ot">=&gt;</span> f <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>    evalAlgebra <span class="ot">=</span> evalAlgebra <span class="op">.</span> from1</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="kw">deriving</span> <span class="kw">newtype</span> <span class="kw">instance</span> <span class="dt">Eval</span> f <span class="ot">=&gt;</span> <span class="dt">Eval</span> (<span class="dt">M1</span> i c f)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="kw">deriving</span> <span class="kw">newtype</span> <span class="kw">instance</span> <span class="dt">Eval</span> f <span class="ot">=&gt;</span> <span class="dt">Eval</span> (<span class="dt">Rec1</span> f)</span></code></pre></div>
 <p>This gives us a few benefits:</p>
 <ul>
 <li>No performance penalty when we have many constructors</li>
