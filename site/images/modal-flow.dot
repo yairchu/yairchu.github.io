@@ -1,0 +1,36 @@
+digraph {
+    graph [bgcolor=invis compound=true]
+    subgraph cluster_all
+    {
+        graph [color=invis bgcolor="#dddddd" style=rounded label="The Modal Flow State Machine"]
+
+        node [style="rounded,filled" fontcolor="black" fontsize=11 shape=rect]
+        edge [fontsize=10]
+
+        dev [label="New Feature Development.\nBugs probably introduced too" fillcolor="#eecc33"]
+
+        node [fillcolor="#33cc33"]
+        subgraph cluster_freeze
+        {
+            graph [color=invis bgcolor="#bbddbb" style=rounded label="Feature Freeze"]
+
+            candidate [label="Create RC"]
+            fix [label="Fix Bugs"]
+
+            {
+                rank = same
+                test [label="Test"]
+                feature_branch [label="Keep feature development\nonly in the feature branches" fillcolor="#cc88dd" color=invis fontsize=10]
+            }
+        }
+
+        release [label="Release!"]
+
+        dev -> candidate  [lhead="cluster_freeze"]
+        candidate -> test
+        test -> fix [label="Bad"]
+        fix -> candidate
+        test -> release [label="Good"]
+        release -> dev [constraint=false]
+   }
+}
