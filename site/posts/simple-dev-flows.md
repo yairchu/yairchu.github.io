@@ -2,10 +2,9 @@
 title: "Simple development workflows"
 author: Yair Chuchem
 date: 2020.11.5
-tags: [code, git]
+tags: [code, git, teamwork]
 description: Two simple development models
 image: merging-neutron-stars.jpg
-draft: []
 ---
 
 In this post I'll present two simple software development workflows, each suitable for different needs:

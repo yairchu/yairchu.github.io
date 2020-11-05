@@ -2,7 +2,7 @@
 title: "How programmers should report bugs"
 author: Yair Chuchem
 date: 2020.09.21
-tags: [code, git]
+tags: [code, git, teamwork]
 description: How programmers should report bugs
 image: lego-ninja.webp
 ---
