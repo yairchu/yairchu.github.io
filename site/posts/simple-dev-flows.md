@@ -1,7 +1,7 @@
 ---
 title: "Simple development workflows"
 author: Yair Chuchem
-date: 2020.11.5
+date: 2020.11.05
 tags: [code, git, teamwork]
 description: Two simple development models
 image: merging-neutron-stars.jpg

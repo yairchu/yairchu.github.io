@@ -1,28 +1,41 @@
 digraph {
-    bgcolor="invis"
+    bgcolor=invis
+    graph [color=invis style=rounded]
+    subgraph cluster_all
+    {
+        bgcolor="#dddddd"
+        node [style="filled" fontcolor="white" color=invis]
 
-    node [style="filled" fontcolor="white", color="white"]
+        Base [fillcolor="#777777"]
 
-    Base [fillcolor="#777777"]
-    A1 [fillcolor="#BB7777" label="A^"]
-    A [fillcolor="#FF7777"]
-    B1 [fillcolor="#7777BB" label="B^"]
-    B [fillcolor="#7777FF"]
-    AB [fillcolor="#FF77FF" label="A + B"]
+        subgraph cluster_a
+        {
+            A1 [fillcolor="#BB7777" label="A^"]
+            A [fillcolor="#FF7777"]
+        }
+        subgraph cluster_b
+        {
+            B1 [fillcolor="#7777BB" label="B^"]
+            B [fillcolor="#7777FF"]
+        }
+        subgraph cluster_merges
+        {
+            AB [fillcolor="#FF77FF" label="A + B"]
+            A1B1 [fillcolor="#BB77BB" label="A^ + B^" shape=rect]
+            AB1 [fillcolor="#FF77BB" label="A + B^" shape=rect]
+        }
 
-    A1B1 [fillcolor="#BB77BB" label="A^ + B^" shape="octagon"]
-    AB1 [fillcolor="#FF77BB" label="A + B^" shape="octagon"]
+        Base -> A1
+        A1 -> A
+        Base -> B1
+        B1 -> B
 
-    Base -> A1
-    A1 -> A
-    Base -> B1
-    B1 -> B
+        A1 -> A1B1
+        B1 -> A1B1
+        A -> AB1
+        A1B1 -> AB1
 
-    A1 -> A1B1
-    B1 -> A1B1
-    A -> AB1
-    A1B1 -> AB1
-
-    AB1 -> AB
-    B -> AB
+        AB1 -> AB
+        B -> AB
+    }
 }
