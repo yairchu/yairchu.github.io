@@ -116,17 +116,19 @@
 <p>If the chosen point doesn't include all the fixes currently available in <code>main</code>, we'll <code>git cherry-pick</code> them into the release branch.</p>
 <h2 id="how-does-light-flow-compare-to-other-flows">How does Light Flow compare to other flows</h2>
 <h3 id="differences-from-the-github-flow">Differences from the GitHub Flow</h3>
-<p>The <a href="https://guides.github.com/introduction/flow/">GitHub Flow</a> is very simple. It has no release branches, and the <code>main</code> branch is deployed to production as is (after testing).</p>
-<p>I believe that to really make it work, one has to, either explicitly or implicitly, impose feature freezes, and this means that for projects where stability is a priority, the GitHub Flow tends to become the Modal Flow.</p>
+<p>The <a href="https://guides.github.com/introduction/flow/">GitHub Flow</a> has a <code>main</code> branch and feature branches, without release branches.</p>
+<p>Its tools to avoid bugs are code reviews for all changes and rolling back faulty versions. If are able to undeploy faulty versions, and can put in the time and effort to do good code review, it might work for you.</p>
+<p>If you prefer to avoid faulty releases, and prefer to not extensively code review every single change, other flows might be a better fit.</p>
 <h3 id="differences-from-gitflow">Differences from GitFlow</h3>
-<p><em>Note that Vincent Driessen, the creator of GitFlow, <a href="https://nvie.com/posts/a-successful-git-branching-model/">currently recommends</a> most projects to adopt the <a href="https://guides.github.com/introduction/flow/">"GitHub flow"</a> instead.</em></p>
-<p>GitFlow is more complicated:</p>
+<p><em>Note that Vincent Driessen, the creator of GitFlow, <a href="https://nvie.com/posts/a-successful-git-branching-model/">currently recommends</a> most projects to adopt the GitHub Flow instead.</em></p>
+<p>GitFlow is slightly more complicated than the Light Flow:</p>
 <ul>
 <li><code>main</code> is called <code>develop</code></li>
 <li>An additional <code>master</code> branch points to the latest release</li>
+<li>It suggests to use explicit merge commits when merging feature branches, while the Light Flow recommends rebases</li>
 <li>It explicitly describes a process for <em>hotfix branches</em>, which branch out of previous releases and add fixes to them. This makes sense for projects which maintain multiple versions. This may happen if new versions of the product are paid upgrades but old version still get bug fixes. For such projects GitFlow is probably a very good choice</li>
 </ul>
-<p>The Light Flow's omission of hotfix branches aims to put an emphasis on releasing new developments from <code>main</code> more often, to avoid accumulating a gap of unreleased and unstable features.</p>
+<p>The Light Flow's recommendation for rebasing feature branches and omission of hotfix branches puts an emphasis on integrating new developments faster and releasing them from <code>main</code> more often, to avoid accumulating a gap of unreleased and unstable features.</p>
 <h3 id="does-the-light-flow-work">Does the Light Flow work</h3>
 <p>I wrote this post in order to suggest this model for the development of <a href="https://pajam.live/">Pajam</a> (btw, if you happen to be a musician that wants to jam with their friends remotely, I highly recommend you to give Pajam a try!)</p>
 <p>If we indeed decide to adopt this model, then after a while I will update this section with our results.</p>
