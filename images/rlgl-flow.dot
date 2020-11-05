@@ -1,0 +1,36 @@
+digraph {
+    graph [bgcolor=invis compound=true]
+    subgraph cluster_all
+    {
+        graph [color=invis bgcolor="#dddddd" style=rounded label="The RLGL State Machine" fontsize=15]
+
+        node [style="rounded,filled" fontcolor="black" fontsize=13 shape=rect]
+        edge [fontsize=10]
+
+        node [fillcolor="#77dd66"]
+        dev [label="New Feature Development.\nBugs probably introduced too"]
+        release [label="Release!"]
+
+        subgraph cluster_freeze
+        {
+            graph [color=invis bgcolor="#ddbbbb" style=rounded label="Feature Freeze"]
+            node [fillcolor="#dd7766"]
+
+            candidate [label="Create RC"]
+            fix [label="Fix Bugs"]
+
+            {
+                rank = same
+                test [label="Test"]
+                feature_branch [fillcolor="#cc88dd" label="Feature development\ncontinues only in\nfeature branches\n(not merged to main)" color=invis fontsize=12]
+            }
+        }
+
+        dev -> candidate  [lhead="cluster_freeze"]
+        candidate -> test
+        test -> fix [label="Bad"]
+        fix -> candidate
+        test -> release [label="Good"]
+        release -> dev [constraint=false]
+   }
+}
