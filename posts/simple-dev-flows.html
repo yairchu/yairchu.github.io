@@ -8,13 +8,13 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@yairchu">
 <meta name="twitter:creator" content="@yairchu">
-<meta name="twitter:title" content="Simple development workflows">
+<meta name="twitter:title" content="Simple Dev/Release Workflows">
   <meta name="twitter:description" content="Two simple development models">
   <meta name="twitter:image" content="https://yairchu.github.io//images/merging-neutron-stars.jpg">
-  <title>Simple development workflows</title>
+  <title>Simple Dev/Release Workflows</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/syntax.css">
-  <meta property="og:title" content="Simple development workflows" />
+  <meta property="og:title" content="Simple Dev/Release Workflows" />
   <meta property="og:image" content="https://yairchu.github.io/images/merging-neutron-stars.jpg" />
 </head>
 <body>
@@ -41,7 +41,7 @@
   <div class="wrapper">
     <div class="masthead">
       <span class="title">
-        Simple development workflows
+        Simple Dev/Release Workflows
       </span>
 
       <img class="post-image" src="/images/merging-neutron-stars.jpg">
@@ -57,22 +57,23 @@
     </div>
   </div>
   <article class="post">
-    <p>In this post I'll present two simple software development workflows, each suitable for different needs:</p>
+    <p>In this post I'll introduce very simple software development workflows, each suitable for different needs:</p>
 <ul>
 <li>The "Red Light, Green Light Flow", suitable for occasional releases</li>
-<li>The "Light Flow", suitable for regular releases (weekly/monthly). It is a simplified variant of the well known <a href="https://nvie.com/posts/a-successful-git-branching-model/">"GitFlow"</a></li>
+<li>The "Light Flow", suitable for regular releases (weekly/monthly)</li>
+<li>I will also compare them to the <a href="https://guides.github.com/introduction/flow/">GitHub Flow</a> and to <a href="https://nvie.com/posts/a-successful-git-branching-model/">"GitFlow"</a>.</li>
 </ul>
-<h2 id="the-red-light-green-light-flow">The Red Light, Green Light Flow</h2>
+<h2 id="the-red-light-green-light--feature-freeze-flow">The Red Light, Green Light / Feature Freeze Flow</h2>
 <p><img src="/images/rlgl-flow.svg" alt="RLGL State Machine" /></p>
 <p>Like in the famous children's game of "Red Light, Green Light" (aka "Statues", and <a href="https://en.wikipedia.org/wiki/Statues_(game)">many other names</a>), development switches between two modes:</p>
 <ul>
 <li>Free dev. New features are developed freely and big changes may happen to the codebase, often introducing bugs.</li>
 <li>Preparing to ship, aka <a href="https://en.wikipedia.org/wiki/Freeze_(software_engineering)">"code freeze"</a>. At this stage bugs and problems are fixed.</li>
 </ul>
-<p>When not delibaretly choosing a workflow, it tends to naturally develop into the RLGL flow. When you need to cut a release and find that there are too many bugs, it may come naturally to decide: "let's focus on fixing bugs now and keep the new features for later".</p>
+<p>When preparing releases and not deliberately choosing a workflow, work tends to naturally develop into the RLGL flow. When you find that there are too many bugs, it may come naturally to decide: "let's focus on fixing bugs now and keep the new features for later".</p>
 <p><em>The mutex analogy: A freeze is mutually exclusive with adding features to <code>main</code>.</em></p>
 <h3 id="challenges-with-statefulness-and-concurrency">Challenges with statefulness and concurrency</h3>
-<p>If you ever hear an <em>"Oh, I wasn't aware that we're in a feature freeze"</em>, that's because communication is tricky. Someone may have missed a meeting, or announcements in the group chat may have been drowned by other messages. If you find coordinating the state to be tricky, it may make sense to use a flow that formalizes the modes of development in the structure of the git branches.</p>
+<p>If you ever heard an <em>"Oh! I wasn't aware that we're in a feature freeze"</em>, that's because communication is tricky. Someone may have missed a meeting, or announcements in the group chat may have been drowned by other messages. If you find coordinating the state to be tricky, it may make sense to use a flow that formalizes the modes of development in the structure of the git branches.</p>
 <h2 id="the-light-flow">The Light Flow</h2>
 <p><img src="/images/light-flow.svg" alt="Light Flow Commit Tree" /></p>
 <p>The different types of branches and commits in the diagram:</p>
@@ -117,16 +118,16 @@
 <h2 id="how-does-light-flow-compare-to-other-workflows">How does Light Flow compare to other workflows</h2>
 <h3 id="the-github-flow">The GitHub Flow</h3>
 <p>The <a href="https://guides.github.com/introduction/flow/">GitHub Flow</a> has a <code>main</code> branch and feature branches, without release branches.</p>
-<p>Its tools to avoid bugs are code reviews for all changes and rolling back faulty versions. If you can un-deploy faulty versions, and can put in the time and effort to do good code review, this flow might work for you.</p>
+<p>Its tools to avoid bugs are code reviews for all changes and rolling back faulty versions. If you can un-deploy faulty versions, which is often possible for web apps, and can put in the time and effort to do good code review, then this flow might work well for you.</p>
 <p>If you prefer to avoid faulty releases, and prefer to not extensively code review each and every change, then the Light Flow is probably a better fit.</p>
 <h3 id="comparison-to-gitflow">Comparison to GitFlow</h3>
 <p><em>Note that Vincent Driessen, the creator of GitFlow, <a href="https://nvie.com/posts/a-successful-git-branching-model/">currently recommends</a> most projects to adopt the GitHub Flow instead.</em></p>
-<p>GitFlow is slightly more complicated than the Light Flow:</p>
+<p>The Light flow is a simplified variant of GitFlow. The differences are:</p>
 <ul>
 <li><code>main</code> is called <code>develop</code></li>
 <li>An additional <code>master</code> branch points to the latest release</li>
-<li>It suggests to use explicit merge commits when merging feature branches, while the Light Flow recommends rebases</li>
-<li>It explicitly describes a process for <em>hotfix branches</em>, which branch out of previous releases and add fixes to them. This makes sense for projects which maintain multiple versions. This may happen if new versions of the product are paid upgrades but old version still get bug fixes. For such projects GitFlow is probably a very good choice.</li>
+<li>GitFlow suggests to use explicit merge commits when merging feature branches, while the Light Flow recommends rebases</li>
+<li>GitFlow explicitly describes a process for <em>hotfix branches</em>, which branch out of previous releases and add fixes to them. This makes sense for projects which maintain multiple versions. This may happen if new versions of the product are paid upgrades but old version still get bug fixes. For such projects GitFlow is probably a very good choice.</li>
 </ul>
 <p>The Light Flow's recommendation for rebasing feature branches and omission of hotfix branches puts an emphasis on integrating new developments faster and releasing them from <code>main</code> more often, to avoid accumulating a gap of unreleased and unstable features.</p>
 <h2 id="does-the-light-flow-work">Does the Light Flow work</h2>
@@ -143,7 +144,7 @@
 
     <!--Share buttons-->
     <div class="social-buttons">
-      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: Simple development workflows - " data-via="yairchu">Tweet</a>
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: Simple Dev/Release Workflows - " data-via="yairchu">Tweet</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
       <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
