@@ -1,5 +1,5 @@
 ---
-title: "Simple development workflows"
+title: "Simple Dev/Release Workflows"
 author: Yair Chuchem
 date: 2020.11.05
 tags: [code, git, teamwork]
@@ -7,12 +7,13 @@ description: Two simple development models
 image: merging-neutron-stars.jpg
 ---
 
-In this post I'll present two simple software development workflows, each suitable for different needs:
+In this post I'll introduce very simple software development workflows, each suitable for different needs:
 
 * The "Red Light, Green Light Flow", suitable for occasional releases
-* The "Light Flow", suitable for regular releases (weekly/monthly). It is a simplified variant of the well known ["GitFlow"](https://nvie.com/posts/a-successful-git-branching-model/)
+* The "Light Flow", suitable for regular releases (weekly/monthly)
+* I will also compare them to the [GitHub Flow](https://guides.github.com/introduction/flow/) and to ["GitFlow"](https://nvie.com/posts/a-successful-git-branching-model/).
 
-## The Red Light, Green Light Flow
+## The Red Light, Green Light / Feature Freeze Flow
 
 ![RLGL State Machine](/images/rlgl-flow.svg)
 
@@ -21,13 +22,13 @@ Like in the famous children's game of "Red Light, Green Light" (aka "Statues", a
 * Free dev. New features are developed freely and big changes may happen to the codebase, often introducing bugs.
 * Preparing to ship, aka ["code freeze"](https://en.wikipedia.org/wiki/Freeze_(software_engineering)). At this stage bugs and problems are fixed.
 
-When not delibaretly choosing a workflow, it tends to naturally develop into the RLGL flow. When you need to cut a release and find that there are too many bugs, it may come naturally to decide: "let's focus on fixing bugs now and keep the new features for later".
+When preparing releases and not deliberately choosing a workflow, work tends to naturally develop into the RLGL flow. When you find that there are too many bugs, it may come naturally to decide: "let's focus on fixing bugs now and keep the new features for later".
 
 *The mutex analogy: A freeze is mutually exclusive with adding features to `main`.*
 
 ### Challenges with statefulness and concurrency
 
-If you ever hear an *"Oh, I wasn't aware that we're in a feature freeze"*, that's because communication is tricky. Someone may have missed a meeting, or announcements in the group chat may have been drowned by other messages. If you find coordinating the state to be tricky, it may make sense to use a flow that formalizes the modes of development in the structure of the git branches.
+If you ever heard an *"Oh! I wasn't aware that we're in a feature freeze"*, that's because communication is tricky. Someone may have missed a meeting, or announcements in the group chat may have been drowned by other messages. If you find coordinating the state to be tricky, it may make sense to use a flow that formalizes the modes of development in the structure of the git branches.
 
 ## The Light Flow
 
@@ -78,7 +79,7 @@ If the chosen point doesn't include all the fixes currently available in `main`,
 
 The [GitHub Flow](https://guides.github.com/introduction/flow/) has a `main` branch and feature branches, without release branches.
 
-Its tools to avoid bugs are code reviews for all changes and rolling back faulty versions. If you can un-deploy faulty versions, and can put in the time and effort to do good code review, this flow might work for you.
+Its tools to avoid bugs are code reviews for all changes and rolling back faulty versions. If you can un-deploy faulty versions, which is often possible for web apps, and can put in the time and effort to do good code review, then this flow might work well for you.
 
 If you prefer to avoid faulty releases, and prefer to not extensively code review each and every change, then the Light Flow is probably a better fit.
 
@@ -86,12 +87,12 @@ If you prefer to avoid faulty releases, and prefer to not extensively code revie
 
 *Note that Vincent Driessen, the creator of GitFlow, [currently recommends](https://nvie.com/posts/a-successful-git-branching-model/) most projects to adopt the GitHub Flow instead.*
 
-GitFlow is slightly more complicated than the Light Flow:
+The Light flow is a simplified variant of GitFlow. The differences are:
 
 * `main` is called `develop`
 * An additional `master` branch points to the latest release
-* It suggests to use explicit merge commits when merging feature branches, while the Light Flow recommends rebases
-* It explicitly describes a process for *hotfix branches*, which branch out of previous releases and add fixes to them. This makes sense for projects which maintain multiple versions. This may happen if new versions of the product are paid upgrades but old version still get bug fixes. For such projects GitFlow is probably a very good choice.
+* GitFlow suggests to use explicit merge commits when merging feature branches, while the Light Flow recommends rebases
+* GitFlow explicitly describes a process for *hotfix branches*, which branch out of previous releases and add fixes to them. This makes sense for projects which maintain multiple versions. This may happen if new versions of the product are paid upgrades but old version still get bug fixes. For such projects GitFlow is probably a very good choice.
 
 The Light Flow's recommendation for rebasing feature branches and omission of hotfix branches puts an emphasis on integrating new developments faster and releasing them from `main` more often, to avoid accumulating a gap of unreleased and unstable features.
 
