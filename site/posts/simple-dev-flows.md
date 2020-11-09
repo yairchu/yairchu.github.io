@@ -85,6 +85,8 @@ If you prefer to avoid faulty releases, and prefer to not extensively code revie
 
 ### Comparison to GitFlow
 
+<image alt="GitFlow" src="/images/gitflow.png" width="350px" />
+
 *Note that Vincent Driessen, the creator of GitFlow, [currently recommends](https://nvie.com/posts/a-successful-git-branching-model/) most projects to adopt the GitHub Flow instead.*
 
 The Light flow is a simplified variant of GitFlow. The differences are:
@@ -106,5 +108,7 @@ In the future, I will update this section with our results.
 
 ## Notes
 
-* Image credit: [University of Warwick/Mark Garlick](https://en.m.wikipedia.org/wiki/File:Eso1733s_Artist%27s_impression_of_merging_neutron_stars.jpg)
-* The Light Flow Diagram's colors are inspired by the diagram for [GitFlow](https://nvie.com/posts/a-successful-git-branching-model/), and were specifically chosen to be consistent with it for easy comparison
+* Image credits:
+  * Title image (mergine neutron stars): [University of Warwick/Mark Garlick](https://en.m.wikipedia.org/wiki/File:Eso1733s_Artist%27s_impression_of_merging_neutron_stars.jpg)
+  * GitFlow: [Vincent Driessen](https://nvie.com/posts/a-successful-git-branching-model/)
+* The Light Flow Diagram's colors are inspired by the diagram for GitFlow, and were specifically chosen to be consistent with it for easy comparison
