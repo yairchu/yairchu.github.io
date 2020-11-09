@@ -109,6 +109,6 @@ In the future, I will update this section with our results.
 ## Notes
 
 * Image credits:
-  * Title image (mergine neutron stars): [University of Warwick/Mark Garlick](https://en.m.wikipedia.org/wiki/File:Eso1733s_Artist%27s_impression_of_merging_neutron_stars.jpg)
+  * Title image (merging neutron stars): [University of Warwick/Mark Garlick](https://en.m.wikipedia.org/wiki/File:Eso1733s_Artist%27s_impression_of_merging_neutron_stars.jpg)
   * GitFlow: [Vincent Driessen](https://nvie.com/posts/a-successful-git-branching-model/)
 * The Light Flow Diagram's colors are inspired by the diagram for GitFlow, and were specifically chosen to be consistent with it for easy comparison
