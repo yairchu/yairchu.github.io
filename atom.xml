@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-11-09T10:51:SZ</updated>
+  <updated>2020-11-09T10:57:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -81,6 +81,7 @@
 <p>Its tools to avoid bugs are code reviews for all changes and rolling back faulty versions. If you can un-deploy faulty versions, which is often possible for web apps, and can put in the time and effort to do good code review, then this flow might work well for you.</p>
 <p>If you prefer to avoid faulty releases, and prefer to not extensively code review each and every change, then the Light Flow is probably a better fit.</p>
 <h3 id="comparison-to-gitflow">Comparison to GitFlow</h3>
+<p><image alt="GitFlow" src="/images/gitflow.png" width="350px" /></p>
 <p><em>Note that Vincent Driessen, the creator of GitFlow, <a href="https://nvie.com/posts/a-successful-git-branching-model/">currently recommends</a> most projects to adopt the GitHub Flow instead.</em></p>
 <p>The Light flow is a simplified variant of GitFlow. The differences are:</p>
 <ul>
@@ -96,8 +97,12 @@
 <p>In the future, I will update this section with our results.</p>
 <h2 id="notes">Notes</h2>
 <ul>
-<li>Image credit: <a href="https://en.m.wikipedia.org/wiki/File:Eso1733s_Artist%27s_impression_of_merging_neutron_stars.jpg">University of Warwick/Mark Garlick</a></li>
-<li>The Light Flow Diagram's colors are inspired by the diagram for <a href="https://nvie.com/posts/a-successful-git-branching-model/">GitFlow</a>, and were specifically chosen to be consistent with it for easy comparison</li>
+<li>Image credits:
+<ul>
+<li>Title image (mergine neutron stars): <a href="https://en.m.wikipedia.org/wiki/File:Eso1733s_Artist%27s_impression_of_merging_neutron_stars.jpg">University of Warwick/Mark Garlick</a></li>
+<li>GitFlow: <a href="https://nvie.com/posts/a-successful-git-branching-model/">Vincent Driessen</a></li>
+</ul></li>
+<li>The Light Flow Diagram's colors are inspired by the diagram for GitFlow, and were specifically chosen to be consistent with it for easy comparison</li>
 </ul>]]></content>
   </entry>
   <entry>
