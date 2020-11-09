@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-11-07T11:30:SZ</updated>
+  <updated>2020-11-09T10:51:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -91,6 +91,7 @@
 </ul>
 <p>The Light Flow's recommendation for rebasing feature branches and omission of hotfix branches puts an emphasis on integrating new developments faster and releasing them from <code>main</code> more often, to avoid accumulating a gap of unreleased and unstable features.</p>
 <h2 id="does-the-light-flow-work">Does the Light Flow work</h2>
+<p><a href="https://pajam.live/"><image alt="pajam!" src="/images/pajam-icon.svg" width="75px" /></a></p>
 <p>I wrote this post in order to suggest this model for the development of <a href="https://pajam.live/">Pajam</a> (btw, if you happen to be a musician that wants to jam with their friends remotely, I highly recommend you to give Pajam a try!).</p>
 <p>In the future, I will update this section with our results.</p>
 <h2 id="notes">Notes</h2>
