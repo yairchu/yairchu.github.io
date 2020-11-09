@@ -98,6 +98,8 @@ The Light Flow's recommendation for rebasing feature branches and omission of ho
 
 ## Does the Light Flow work
 
+<a href="https://pajam.live/"><image alt="pajam!" src="/images/pajam-icon.svg" width="75px" /></a>
+
 I wrote this post in order to suggest this model for the development of [Pajam](https://pajam.live/) (btw, if you happen to be a musician that wants to jam with their friends remotely, I highly recommend you to give Pajam a try!).
 
 In the future, I will update this section with our results.

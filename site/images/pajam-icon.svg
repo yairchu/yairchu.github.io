@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512">
+    <defs>
+        <linearGradient id="New_Gradient_Swatch_2" x1="140.4" y1="368.16" x2="388.19" y2="120.37" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ff466e"/>
+            <stop offset="1" stop-color="#e145ad"/>
+        </linearGradient>
+        <linearGradient id="New_Gradient_Swatch_2-2" x1="118.21" y1="397.95" x2="329.78" y2="186.38" xlink:href="#New_Gradient_Swatch_2"/>
+        <linearGradient id="New_Gradient_Swatch_2-3" x1="105.06" y1="403.52" x2="356.11" y2="152.46" xlink:href="#New_Gradient_Swatch_2"/>
+    </defs>
+    <g id="Layer_2" data-name="Layer 2">
+        <g id="Layer_2-2" data-name="Layer 2">
+            <path d="M261.78,68A178.82,178.82,0,0,0,105,332.76V247.82c0-81.24,61.56-150,142.48-157.18,101.68-9,185.45,79.11,169,182-9.78,61.19-68.84,119.71-130.11,129A158.46,158.46,0,0,1,215,396.47v22.91a179.94,179.94,0,0,0,60.26,5.69c90.3-6.63,161.61-80.62,165.16-171.08A178.79,178.79,0,0,0,261.78,68Z" style="fill:url(#New_Gradient_Swatch_2);fill-rule:evenodd"/>
+            <path d="M193,458.93c-7.26-2.36-15.08-4.76-22-8.19V247.6c0-47.46,36.17-87.62,83.48-91.31A90.79,90.79,0,1,1,215,324.61V297.23a68.79,68.79,0,1,0,39.77-118.87C219.54,181.83,193,212.07,193,247.47V458.93Z" style="fill:url(#New_Gradient_Swatch_2-2);fill-rule:evenodd"/>
+            <path d="M149,439.84c-9.08-5.42-16.13-9.8-22-14.38l0-178.67c0-85.21,79-151.93,167.79-130.9,43.28,10.25,87.67,54.64,97.92,97.92,21,88.78-45.69,167.79-130.9,167.79A134.66,134.66,0,0,1,215,373.26V349.44a112.72,112.72,0,0,0,53.51,9.93c55.94-3.25,101.34-47.67,105.7-103.53A112.79,112.79,0,0,0,252.07,134.42C193.59,139.3,149,189,149,247.67Z" style="fill:url(#New_Gradient_Swatch_2-3);fill-rule:evenodd"/>
+        </g>
+    </g>
+</svg>
