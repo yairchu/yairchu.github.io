@@ -1,0 +1,39 @@
+digraph {
+    rankdir=LR
+    graph [bgcolor=invis compound=true]
+    subgraph cluster_all
+    {
+        graph [color=invis bgcolor="#dddddd" style=rounded]
+
+        node [style="filled" fontcolor="black" label="" fontsize="10"]
+
+        subgraph cluster_main
+        {
+            node [fillcolor="#eecc33"]
+            main0 -> main1 -> main2 -> main3 -> main4 -> main5 -> main6 -> main7 -> main
+            main [label="main"]
+        }
+
+        node [fillcolor="#33cc33"]
+        subgraph cluster_rela
+        {
+            rela0 -> rela -> rela1
+            rela0 [label="revert X"]
+            rela [label="release-2.4" shape=rect]
+            rela1 [label="pick X" fillcolor="#ff7777"]
+        }
+
+        subgraph cluster_relb
+        {
+            relb0 -> relb
+            relb [label="release-2.5" shape=rect]
+        }
+
+        main0 -> rela0
+        main5 -> relb0
+
+        edge [color="#cc5555"]
+        rela1 -> main4
+        relb -> main
+   }
+}
