@@ -11,7 +11,7 @@ In this post I'll introduce very simple software development workflows, each sui
 
 * The "Red Light, Green Light Flow", suitable for occasional releases
 * The "Light Flow", suitable for regular releases (weekly/monthly)
-* I will also compare them to the [GitHub Flow](https://guides.github.com/introduction/flow/) and to ["GitFlow"](https://nvie.com/posts/a-successful-git-branching-model/).
+* I will also compare them to [the GitHub Flow](https://guides.github.com/introduction/flow/), ["GitFlow"](https://nvie.com/posts/a-successful-git-branching-model/), and ["Trunk Based Development"](https://trunkbaseddevelopment.com/).
 
 ## The Red Light, Green Light / Feature Freeze Flow
 
@@ -62,7 +62,7 @@ When the `main` branch is not suitable for release as is, the person in charge o
 * If new issues are discovered in the RC, go back to the previous stage
 * When the RC is good: ship the release, tag it, and merge the branch back into `main`. Merge it - don't rebase, so that the actual release is in `main`'s history
 
-#### How to choose a branching point for the release branch
+### How to choose a branching point for the release branch
 
 The commit messages and the bug tracker help us "taint" the states in the `main` branch with existence of various bugs.
 
@@ -72,6 +72,13 @@ The commit messages and the bug tracker help us "taint" the states in the `main`
 A good point to start the release branch is one which is relatively clean, yet also includes valueable features which improve upon the previous release.
 
 If the chosen point doesn't include all the fixes currently available in `main`, we'll `git cherry-pick` them into the release branch.
+
+### Caution with reverts on the release branch
+
+Sometimes we may want to `git revert` a commit only for a release branch.
+In this case we should keep in mind that if we merge the release branch as is,
+the revert will propagate into `main`.
+If we wish to avoid that, we should remember to un-revert the commit!
 
 ## How does Light Flow compare to other workflows
 
@@ -98,6 +105,20 @@ The Light flow is a simplified variant of GitFlow. The differences are:
 
 The Light Flow's recommendation for rebasing feature branches and omission of hotfix branches puts an emphasis on integrating new developments faster and releasing them from `main` more often, to avoid accumulating a gap of unreleased and unstable features.
 
+### Comparison to Trunk Based Development
+
+The [Trunk Based Development](https://trunkbaseddevelopment.com/) may seem similar to the light flow, as the difference is small: It prescribes that release branches **should not** be merged back to `main`.
+
+Its site refers to the Light Flow by the name ["Mainline"](https://trunkbaseddevelopment.com/alternative-branching-models/#mainline) (note that their description predates this post), and it considers it as the "diametrically opposite to Trunk-Based Development", and furthermore, recommends not to use it! But personally I'm not convinced, and I'll demonstrate with a simple example how the small difference between workflow affects things:
+
+Imagine that we decided to revert a commit in a release branch.
+
+The following diagram represents the diff between Light Flow and Trunk based in this scenario, in the form of a bright pink cherry-pick commit and pink arrows denoting merges of release branches back to `main`:
+
+![Light Flow vs Trunk Based](/images/light-flow-vs-trunk-based.svg)
+
+Doing `git log release-2.4..release2.5` in this example would list the correct changes list of changes between these releases with the Light Flow, but using Trunk-Based it will be have a misleading result for this log that omits the re-introduction of the reverted change.
+
 ## Does the Light Flow work
 
 <a href="https://pajam.live/"><image alt="pajam!" src="/images/pajam-icon.svg" width="75px" /></a>
@@ -113,3 +134,5 @@ In the future, I will update this section with our results.
   * Title image (merging neutron stars): [University of Warwick/Mark Garlick](https://en.m.wikipedia.org/wiki/File:Eso1733s_Artist%27s_impression_of_merging_neutron_stars.jpg)
   * GitFlow: [Vincent Driessen](https://nvie.com/posts/a-successful-git-branching-model/)
 * The Light Flow Diagram's colors are inspired by the diagram for GitFlow, and were specifically chosen to be consistent with it for easy comparison
+* Updates:
+  * 2020.11.16: Comparison with "Trunk Based Development"
