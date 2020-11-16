@@ -108,6 +108,7 @@ In the future, I will update this section with our results.
 
 ## Notes
 
+* Discussion on <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/programming](https://www.reddit.com/r/programming/comments/juja4y/simple_devrelease_workflows/)
 * Image credits:
   * Title image (merging neutron stars): [University of Warwick/Mark Garlick](https://en.m.wikipedia.org/wiki/File:Eso1733s_Artist%27s_impression_of_merging_neutron_stars.jpg)
   * GitFlow: [Vincent Driessen](https://nvie.com/posts/a-successful-git-branching-model/)
