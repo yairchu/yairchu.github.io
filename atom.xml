@@ -2,12 +2,68 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-11-16T20:35:SZ</updated>
+  <updated>2020-11-19T19:03:SZ</updated>
   <author>
       <name></name>
   </author>
   <id>https://yairchu.github.io//</id>
 
+  <entry>
+      <title>Trying to create Syntax Optics</title>
+      <link href="https://yairchu.github.io/posts/attempting-syntax-optics"/>
+      <id>https://yairchu.github.io/posts/attempting-syntax-optics</id>
+      <updated>2020-11-19T00:00:SZ</updated>
+      <category term="code"/>
+      <category term="declarative"/>
+      <category term="haskell"/>
+      <category term="optics"/>
+      <category term="parsing"/>
+      <summary>Declarative parsing and pretty printing with error reporting</summary>
+      <content type="html"><![CDATA[<p>The journey to create combinators for parsing and pretty-pretting continues!</p>
+<p>This post (along with the new <a href="https://github.com/yairchu/syntax-optics/"><code>syntax-optics</code> repo</a>) combines two previous efforts:</p>
+<ul>
+<li><a href="/posts/codecs-as-prisms-asts">"Elegant AST Parsing and Building with Prisms"</a> declared <code>Prism</code>s to parse and print ASTs, but lacking descriptive errors when the parsing fails</li>
+<li><a href="/posts/optics-with-error-reporting">"Basic error reporting for optics"</a> declared new <code>lens</code>-compatible optics that add error reporting to parse errors</li>
+</ul>
+<p>The resulting combinators let us nicely declare syntax:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="ot">=</span> <span class="dt">Lit</span> <span class="dt">Int</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="op">|</span> <span class="dt">Add</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="op">|</span> <span class="dt">Mul</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>makePrisms &#39;<span class="dt">&#39;Expr</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="ot">expr ::</span> <span class="dt">VerbosePrism&#39;</span> <span class="dt">String</span> <span class="dt">String</span> <span class="dt">Expr</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>expr <span class="ot">=</span> tokens <span class="op">.</span> takeExpr <span class="op">.</span> endOfTokens</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="ot">takeExpr ::</span> <span class="dt">VerbosePrism&#39;</span> <span class="dt">String</span> [<span class="dt">String</span>] (<span class="dt">Expr</span>, [<span class="dt">String</span>])</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>takeExpr <span class="ot">=</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    infixOpLeftRecursion p <span class="st">&quot;+&quot;</span> _Add <span class="op">$</span>           <span class="co">-- Additions of</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>    infixOpLeftRecursion p <span class="st">&quot;*&quot;</span> _Mul <span class="op">$</span>           <span class="co">-- multiplications of</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>    tryMatchAtom p (prismFallback _Lit) _Show <span class="op">$</span> <span class="co">-- literals or</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>    parens takeExpr                             <span class="co">-- expressions in parens</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>    <span class="kw">where</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>        p <span class="ot">=</span> <span class="dt">Proxy</span> <span class="op">@</span><span class="dt">String</span></span></code></pre></div>
+<p><code>expr</code> can be used to both pretty-print and to parse:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="op">&gt;</span> expr <span class="op">#</span> (<span class="dt">Lit</span> <span class="dv">1</span> <span class="ot">`Mul`</span> (<span class="dt">Lit</span> <span class="dv">2</span> <span class="ot">`Add`</span> <span class="dt">Lit</span> <span class="dv">3</span>)) <span class="ot">`Add`</span> <span class="dt">Lit</span> <span class="dv">4</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="st">&quot;1 * (2 + 3) + 4&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;1 * (2 + 3) + 4&quot;</span> <span class="op">^?</span> expr</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="dt">Just</span> (<span class="dt">Add</span> (<span class="dt">Mul</span> (<span class="dt">Lit</span> <span class="dv">1</span>) (<span class="dt">Add</span> (<span class="dt">Lit</span> <span class="dv">2</span>) (<span class="dt">Lit</span> <span class="dv">3</span>))) (<span class="dt">Lit</span> <span class="dv">4</span>))</span></code></pre></div>
+<p>Now, to also get the syntax errors when parsing, we can use the new <code>^??</code> operator rather than <code>lens</code>'s <code>^?</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="op">&gt;</span> <span class="st">&quot;2 + 3 * * 5&quot;</span> <span class="op">^??</span> expr</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="dt">Left</span> <span class="st">&quot;Unexpected \&quot;*\&quot;&quot;</span></span></code></pre></div>
+<h2 id="still-lacking-in-the-library">Still lacking in the library</h2>
+<ul>
+<li>The errors from <code>syntax-optics</code> do not currently report source-code locations of syntax errors.</li>
+<li>An <code>AVerbosePrism</code> type synonym, similar in spirit to <code>ALens</code> and <code>APrism</code>, is currently missing. With it the library would not need <code>RankNTypes</code> nor <code>Proxy</code> parameters which it currently requires (<code>p</code> in the example in this post).</li>
+</ul>
+<p>I've tried to define <code>AVerbosePrism</code> but haven't succeeded so far. Help and advice from <code>lens</code> wizards would be very appreciated!</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Title image by <a href="https://commons.wikimedia.org/wiki/File:Reflex_camera_simple_labels.svg">Jean François WITZ</a>.</li>
+</ul>]]></content>
+  </entry>
   <entry>
       <title>Simple Dev/Release Workflows</title>
       <link href="https://yairchu.github.io/posts/simple-dev-flows"/>
