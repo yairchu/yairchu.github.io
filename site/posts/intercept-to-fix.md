@@ -23,7 +23,7 @@ We can trick GHC to believe that the file exist, and then everything would work!
 
 This can be done by hijacking its calls to the [`stat`](https://en.wikipedia.org/wiki/Stat_(system_call)) system call and returning fake results.
 
-MacOS lets us inject additional code into programs using the `DYLD_INSERT_LIBRARIES` environment variable, and it also supports special pragmas to tell it to replace (aka "interpose" or "hook").
+MacOS lets us inject additional code into programs using the `DYLD_INSERT_LIBRARIES` environment variable, and it also supports special pragmas to tell it to replace library functions (aka "interpose" or "hook").
 
 ```C
 int my_stat (const char* restrict path, struct stat* restrict buf)
