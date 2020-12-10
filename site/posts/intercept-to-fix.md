@@ -44,6 +44,6 @@ The above injected code tricks GHC to believe that any file inside `/System/Libr
 To work around the problem when executing `ghc` from a build system, it takes a bit more work to make sure that the injection propagates to it, but my complete solution isn't too long, see: [github.com/yairchu/macos11-haskell-workaround](https://github.com/yairchu/macos11-haskell-workaround/)
 
 * <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell discussion](https://www.reddit.com/r/haskell/comments/k9r2cy/workaround_for_haskell_woes_on_macos_11_big_sur/) on this work-around
-* I'm want to get this workaround into the Haskell build tool `stack`, if you want that too then please share your opinion on [the issue](https://github.com/commercialhaskell/stack/issues/5456)!
+* I want to get this workaround into the Haskell build tool `stack`, if you want that too then please share your opinion on [the issue](https://github.com/commercialhaskell/stack/issues/5456)!
 * FYI: The Linux equivalent of `DYLD_INSERT_LIBRARIES` is called [`LD_PRELOAD`](https://tbrindus.ca/correct-ld-preload-hooking-libc/), and it can do similar things on Linux.
 * Image by [LillyCantible](https://pixabay.com/illustrations/vaccine-syringe-antidote-cure-3314164/) from PixaBay.
