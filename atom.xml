@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-12-10T10:21:SZ</updated>
+  <updated>2020-12-10T10:26:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -26,7 +26,7 @@
 <h3 id="solution">Solution</h3>
 <p>We can trick GHC to believe that the file exist, and then everything would work!</p>
 <p>This can be done by hijacking its calls to the <a href="https://en.wikipedia.org/wiki/Stat_(system_call)"><code>stat</code></a> system call and returning fake results.</p>
-<p>MacOS lets us inject additional code into programs using the <code>DYLD_INSERT_LIBRARIES</code> environment variable, and it also supports special pragmas to tell it to replace (aka "interpose" or "hook").</p>
+<p>MacOS lets us inject additional code into programs using the <code>DYLD_INSERT_LIBRARIES</code> environment variable, and it also supports special pragmas to tell it to replace library functions (aka "interpose" or "hook").</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">int</span> my_stat (<span class="dt">const</span> <span class="dt">char</span>* <span class="dt">restrict</span> path, <span class="kw">struct</span> stat* <span class="dt">restrict</span> buf)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>{</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">if</span> (STARTS_WITH (<span class="st">&quot;/System/Library/Frameworks/&quot;</span>, path))</span>
