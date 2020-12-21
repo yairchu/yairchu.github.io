@@ -62,6 +62,7 @@ In C++, I enjoy letting `clang-format` auto-format my code. Unfortunately some p
 
 ## Notes
 
+* GHC's source code has a mixture of styles, with higher prevalence for silly style.
 * The short type signature of `sortByM` would typically not be split over several lines.
   I use it as a simple example and ask the reader to apply their imagination for more complicated functions.
 * [Image](https://pixabay.com/illustrations/pokemon-monster-creature-pink-ugly-4784546/) by [LillyCantabile](https://pixabay.com/users/lillycantabile-8561101/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4784546) from Pixabay
@@ -81,4 +82,4 @@ sortByM p =
         <&> \(post, pre) -> pre <> x : post
 ```
 
-The `\case` allows us to avoid repeating the name `sortByM`. Had we wanted to rename it, we'd touch less lines of code. I see this as a benefit!
+The `\case` lets us avoid a repeat of the name `sortByM`. Had we wanted to rename it, we'd touch less lines of code. I see this as a benefit!
