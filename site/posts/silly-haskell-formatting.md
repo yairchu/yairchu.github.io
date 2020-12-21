@@ -5,7 +5,6 @@ date: 2020.12.21
 tags: [code, haskell, formatting]
 description: The sore state of formatting in Haskell
 image: pokemon-4784546_640.png
-draft: []
 ---
 
 Haskell code in the wild could typically have type signatures formatted like this:
@@ -40,11 +39,11 @@ sortByM predicate (x:xs) = partitionM (predicate x) xs >>=
                            \(post, pre) -> sortByM predicate pre <> ((x :) <$> sortByM predicate post)
 ```
 
-Note that to read this snippet you may have needed to apply the dreaded horizontal scroll - silly, isn't it?
+Note that to read this snippet you may have needed scroll horizontally - silly, isn't it?
 
-Let's imagine we wanted to rename `predicate` to `pred` or to `p`. With silly formatting we would also need to modify all of the lines in the function body! That's more work and more unnecessary merge conflicts!
+Let's imagine that we wanted to rename `predicate` to `pred` or to `p`. With silly formatting we would also need to modify all of the lines in the function body! That's more work and yet again more work due to unnecessary merge conflicts!
 
-But there's more, silly formatting is difficult to read! Subjectively it's much easier to get used to scanning the text aligned to the left, rather than different silly alignment for each function, typically far to the right side of the screen or beyond!
+But there's more: silly formatting is difficult to read! Subjectively it's much easier to get used to scanning the text aligned to the left, rather than different silly alignment every time, often far to the right side of the screen or beyond!
 
 If we sacrifice the fancy custom alignments and just indent blocks with simple and consistent 4 spaces,
 it may cost us an extra line of code but the benefit in easy maintainability and readabilty is worth it in my opinion:
@@ -56,15 +55,19 @@ sortByM predicate (x:xs) =
     \(post, pre) -> sortByM predicate pre <> ((x :) <$> sortByM predicate post)
 ```
 
-## Silly toolling
+## What drove me to write this post
 
-In C++, I enjoy letting `clang-format` auto-format my code. Unfortunately some popular auto-formatters for Haskell enforce silly formatting! [`ormolu`](https://github.com/tweag/ormolu) (and `fourmolu`) are notable exceptions that apply more sensible formatting, yet I'm still not completely satisfied with the way they format function bodies and export lists.
+The Haskell experience has recently gotten much better with [haskell-language-server](https://github.com/haskell/haskell-language-server) and its VS Code integration.
+
+The remaining aspect where my Haskell experience was lacking in comparison to C++ was auto-formatting, where I enjoy letting `clang-format` auto-format my code. I was looking to see what formatting tools exist for Haskell, and discovered that while several tools exist, none fit my taste, and some of these tools were disqualified on the grounds of applying silly formatting.
+
+Among the differenct formatting tools, I'd like to praise [`ormolu`](https://github.com/tweag/ormolu) (and `fourmolu`) for applying more sensible formatting than others.
 
 ## Notes
 
 * GHC's source code has a mixture of styles, with higher prevalence for silly style.
-* The short type signature of `sortByM` would typically not be split over several lines.
-  I use it as a simple example and ask the reader to apply their imagination for more complicated functions.
+* The short type signature of `sortByM` may typically not be split over several lines.
+  I used it as a simple example to keep the post short.
 * [Image](https://pixabay.com/illustrations/pokemon-monster-creature-pink-ugly-4784546/) by [LillyCantabile](https://pixabay.com/users/lillycantabile-8561101/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4784546) from Pixabay
 
 ## Appendix
@@ -82,4 +85,4 @@ sortByM p =
         <&> \(post, pre) -> pre <> x : post
 ```
 
-The `\case` lets us avoid a repeat of the name `sortByM`. Had we wanted to rename it, we'd touch less lines of code. I see this as a benefit!
+`\case` lets us avoid a repetition of the name `sortByM`. Had we wanted to rename it, we'd touch less lines of code. Personally I see this as a benefit!
