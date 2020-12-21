@@ -14,7 +14,7 @@ sortByM
     :: Monad m
     => (a -> a -> m Bool)
     -> [a]
-    -> m a
+    -> m [a]
 ```
 
 From now on I will call this "silly formatting", to contrast with the proper way to split the same type signature to multiple lines:
@@ -24,7 +24,7 @@ sortByM ::
     Monad m =>
     (a -> a -> m Bool) ->
     [a] ->
-    m a
+    m [a]
 ```
 
 With proper formatting the context and parameters take whole lines. We could easily tell which part is the context, which are parameters, and which is the function output.
@@ -68,6 +68,7 @@ Among the differenct formatting tools, I'd like to praise [`ormolu`](https://git
 * GHC's source code has a mixture of styles, with higher prevalence for silly style.
 * The short type signature of `sortByM` may typically not be split over several lines.
   I used it as a simple example to keep the post short.
+* Discussion on <img src="/images/twitter-logo.png" alt="reddit" style="width: 20px; display: inline;"/> [Twitter](https://twitter.com/yairchu/status/1341078315155730432)
 * [Image](https://pixabay.com/illustrations/pokemon-monster-creature-pink-ugly-4784546/) by [LillyCantabile](https://pixabay.com/users/lillycantabile-8561101/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4784546) from Pixabay
 
 ## Appendix
@@ -75,7 +76,7 @@ Among the differenct formatting tools, I'd like to praise [`ormolu`](https://git
 ### An alternative implementation of sortByM
 
 ```Haskell
-sortByM :: Monad m => (a -> a -> m Bool) -> [a] -> m a
+sortByM :: Monad m => (a -> a -> m Bool) -> [a] -> m [a]
 sortByM p =
     \case
     [] -> pure []
