@@ -87,6 +87,7 @@
 <p>In C++, I enjoy letting <code>clang-format</code> auto-format my code. Unfortunately some popular auto-formatters for Haskell enforce silly formatting! <a href="https://github.com/tweag/ormolu"><code>ormolu</code></a> (and <code>fourmolu</code>) are notable exceptions that apply more sensible formatting, yet I'm still not completely satisfied with the way they format function bodies and export lists.</p>
 <h2 id="notes">Notes</h2>
 <ul>
+<li>GHC's source code has a mixture of styles, with higher prevalence for silly style.</li>
 <li>The short type signature of <code>sortByM</code> would typically not be split over several lines. I use it as a simple example and ask the reader to apply their imagination for more complicated functions.</li>
 <li><a href="https://pixabay.com/illustrations/pokemon-monster-creature-pink-ugly-4784546/">Image</a> by <a href="https://pixabay.com/users/lillycantabile-8561101/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=4784546">LillyCantabile</a> from Pixabay</li>
 </ul>
@@ -100,7 +101,7 @@
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>        partitionM (p x) xs</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>        <span class="op">&gt;&gt;=</span> both (sortByM p)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>        <span class="op">&lt;&amp;&gt;</span> \(post, pre) <span class="ot">-&gt;</span> pre <span class="op">&lt;&gt;</span> x <span class="op">:</span> post</span></code></pre></div>
-<p>The <code>\case</code> allows us to avoid repeating the name <code>sortByM</code>. Had we wanted to rename it, we'd touch less lines of code. I see this as a benefit!</p>
+<p>The <code>\case</code> lets us avoid a repeat of the name <code>sortByM</code>. Had we wanted to rename it, we'd touch less lines of code. I see this as a benefit!</p>
 
     <br>
     <br>
