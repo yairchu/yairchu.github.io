@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="UTF-8">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="Silly Haskell code formatting is prevalent">
+  <meta name="twitter:description" content="The sore state of formatting in Haskell">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/pokemon-4784546_640.png">
+  <title>Silly Haskell code formatting is prevalent</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="Silly Haskell code formatting is prevalent" />
+  <meta property="og:image" content="https://yairchu.github.io/images/pokemon-4784546_640.png" />
+</head>
+<body>
+  <header>
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        Silly Haskell code formatting is prevalent
+      </span>
+
+      <img class="post-image" src="/images/pokemon-4784546_640.png">
+      <span class="byline">by Yair Chuchem</span>
+      <span class="date">2020.12.21</span>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/haskell" class="tag">haskell</a>
+        <a href="/tag/formatting" class="tag">formatting</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p>Haskell code in the wild could typically have type signatures formatted like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>sortByM</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ot">    ::</span> <span class="dt">Monad</span> m</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> m <span class="dt">Bool</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="ot">-&gt;</span> [a]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="ot">-&gt;</span> m a</span></code></pre></div>
+<p>From now on I will call this "silly formatting", to contrast with the proper way to split the same type signature to multiple lines:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ot">sortByM ::</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="dt">Monad</span> m <span class="ot">=&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> m <span class="dt">Bool</span>) <span class="ot">-&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    [a] <span class="ot">-&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    m a</span></code></pre></div>
+<p>With proper formatting the context and parameters take whole lines. We could easily tell which part is the context, which are parameters, and which is the function output.</p>
+<p>Had we wanted to add or remove parameters or the context, with silly formatting we would need to make edits from the middle of one line to the middle of another. If you are interested in collaboration, silly formatting will hit you with spurious merge conflicts!</p>
+<p>What would be the silly way to format function bodies? Here:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>sortByM _         []     <span class="ot">=</span> <span class="fu">pure</span> []</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>sortByM predicate (x<span class="op">:</span>xs) <span class="ot">=</span> partitionM (predicate x) xs <span class="op">&gt;&gt;=</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>                           \(post, pre) <span class="ot">-&gt;</span> sortByM predicate pre <span class="op">&lt;&gt;</span> ((x <span class="op">:</span>) <span class="op">&lt;$&gt;</span> sortByM predicate post)</span></code></pre></div>
+<p>Note that to read this snippet you may have needed to apply the dreaded horizontal scroll - silly, isn't it?</p>
+<p>Let's imagine we wanted to rename <code>predicate</code> to <code>pred</code> or to <code>p</code>. With silly formatting we would also need to modify all of the lines in the function body! That's more work and more unnecessary merge conflicts!</p>
+<p>But there's more, silly formatting is difficult to read! Subjectively it's much easier to get used to scanning the text aligned to the left, rather than different silly alignment for each function, typically far to the right side of the screen or beyond!</p>
+<p>If we sacrifice the fancy custom alignments and just indent blocks with simple and consistent 4 spaces, it may cost us an extra line of code but the benefit in easy maintainability and readabilty is worth it in my opinion:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>sortByM _ [] <span class="ot">=</span> <span class="fu">pure</span> []</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>sortByM predicate (x<span class="op">:</span>xs) <span class="ot">=</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    partitionM (predicate x) xs <span class="op">&gt;&gt;=</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    \(post, pre) <span class="ot">-&gt;</span> sortByM predicate pre <span class="op">&lt;&gt;</span> ((x <span class="op">:</span>) <span class="op">&lt;$&gt;</span> sortByM predicate post)</span></code></pre></div>
+<h2 id="silly-toolling">Silly toolling</h2>
+<p>In C++, I enjoy letting <code>clang-format</code> auto-format my code. Unfortunately some popular auto-formatters for Haskell enforce silly formatting! <a href="https://github.com/tweag/ormolu"><code>ormolu</code></a> (and <code>fourmolu</code>) are notable exceptions that apply more sensible formatting, yet I'm still not completely satisfied with the way they format function bodies and export lists.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>The short type signature of <code>sortByM</code> would typically not be split over several lines. I use it as a simple example and ask the reader to apply their imagination for more complicated functions.</li>
+<li><a href="https://pixabay.com/illustrations/pokemon-monster-creature-pink-ugly-4784546/">Image</a> by <a href="https://pixabay.com/users/lillycantabile-8561101/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=4784546">LillyCantabile</a> from Pixabay</li>
+</ul>
+<h2 id="appendix">Appendix</h2>
+<h3 id="an-alternative-implementation-of-sortbym">An alternative implementation of sortByM</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ot">sortByM ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> m <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> m a</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>sortByM p <span class="ot">=</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    \<span class="kw">case</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>    [] <span class="ot">-&gt;</span> <span class="fu">pure</span> []</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    (x<span class="op">:</span>xs) <span class="ot">-&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>        partitionM (p x) xs</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>        <span class="op">&gt;&gt;=</span> both (sortByM p)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>        <span class="op">&lt;&amp;&gt;</span> \(post, pre) <span class="ot">-&gt;</span> pre <span class="op">&lt;&gt;</span> x <span class="op">:</span> post</span></code></pre></div>
+<p>The <code>\case</code> allows us to avoid repeating the name <code>sortByM</code>. Had we wanted to rename it, we'd touch less lines of code. I see this as a benefit!</p>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: Silly Haskell code formatting is prevalent - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
