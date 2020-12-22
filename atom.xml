@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2020-12-21T21:31:SZ</updated>
+  <updated>2020-12-22T11:23:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -51,7 +51,7 @@
 <ul>
 <li>GHC's source code has a mixture of styles, with higher prevalence for silly style.</li>
 <li>The short type signature of <code>sortByM</code> may typically not be split over several lines. I used it as a simple example to keep the post short.</li>
-<li>Discussion on <img src="/images/twitter-logo.png" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://twitter.com/yairchu/status/1341078315155730432">Twitter</a></li>
+<li>Discussions: <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://www.reddit.com/r/haskell/comments/khqs1f/silly_haskell_code_formatting_is_prevalent/">r/haskell</a> mostly thought that this post is the one being silly, and in <img src="/images/twitter-logo.png" alt="twitter" style="width: 20px; display: inline;"/> <a href="https://twitter.com/yairchu/status/1341078315155730432">Twitter</a> the sentiment was more positive :)</li>
 <li><a href="https://pixabay.com/illustrations/pokemon-monster-creature-pink-ugly-4784546/">Image</a> by <a href="https://pixabay.com/users/lillycantabile-8561101/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=4784546">LillyCantabile</a> from Pixabay</li>
 </ul>
 <h2 id="appendix">Appendix</h2>
@@ -952,7 +952,7 @@
 </ul>
 <p>Discussion:</p>
 <ul>
-<li><img src="/images/twitter-logo.png" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://twitter.com/yairchu/status/1207947943552192512">Twitter</a></li>
+<li><img src="/images/twitter-logo.png" alt="twitter" style="width: 20px; display: inline;"/> <a href="https://twitter.com/yairchu/status/1207947943552192512">Twitter</a></li>
 <li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://www.reddit.com/r/haskell/comments/ed7k24/parsers_and_builders_as_prisms/">r/haskell</a></li>
 </ul>]]></content>
   </entry>
