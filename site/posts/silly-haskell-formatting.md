@@ -68,7 +68,7 @@ Among the differenct formatting tools, I'd like to praise [`ormolu`](https://git
 * GHC's source code has a mixture of styles, with higher prevalence for silly style.
 * The short type signature of `sortByM` may typically not be split over several lines.
   I used it as a simple example to keep the post short.
-* Discussion on <img src="/images/twitter-logo.png" alt="reddit" style="width: 20px; display: inline;"/> [Twitter](https://twitter.com/yairchu/status/1341078315155730432)
+* Discussions: <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell](https://www.reddit.com/r/haskell/comments/khqs1f/silly_haskell_code_formatting_is_prevalent/) mostly thought that this post is the one being silly, and in <img src="/images/twitter-logo.png" alt="twitter" style="width: 20px; display: inline;"/> [Twitter](https://twitter.com/yairchu/status/1341078315155730432) the sentiment was more positive :)
 * [Image](https://pixabay.com/illustrations/pokemon-monster-creature-pink-ugly-4784546/) by [LillyCantabile](https://pixabay.com/users/lillycantabile-8561101/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=4784546) from Pixabay
 
 ## Appendix

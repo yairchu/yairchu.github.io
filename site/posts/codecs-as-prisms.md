@@ -169,5 +169,5 @@ Notes:
 
 Discussion:
 
-* <img src="/images/twitter-logo.png" alt="reddit" style="width: 20px; display: inline;"/> [Twitter](https://twitter.com/yairchu/status/1207947943552192512)
+* <img src="/images/twitter-logo.png" alt="twitter" style="width: 20px; display: inline;"/> [Twitter](https://twitter.com/yairchu/status/1207947943552192512)
 * <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell](https://www.reddit.com/r/haskell/comments/ed7k24/parsers_and_builders_as_prisms/)
