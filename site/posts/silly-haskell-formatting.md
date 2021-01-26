@@ -83,7 +83,7 @@ sortByM p =
     (x:xs) ->
         partitionM (p x) xs
         >>= both (sortByM p)
-        <&> \(post, pre) -> pre <> x : post
+        <&> \(post, pre) -> pre <> (x : post)
 ```
 
 `\case` lets us avoid a repetition of the name `sortByM`. Had we wanted to rename it, we'd touch less lines of code. Personally I see this as a benefit!

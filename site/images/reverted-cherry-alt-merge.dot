@@ -1,0 +1,46 @@
+digraph {
+    graph [bgcolor=invis compound=true]
+    subgraph cluster_all
+    {
+        graph [color=invis bgcolor="#dddddd" style=rounded]
+        label="An alternate merge\nwhere the revert wins"
+
+        node [fillcolor="#eecc33" style="rounded,filled" shape=rect label=""]
+
+        subgraph cluster_main
+        {
+            label=""
+            main2 -> main3 -> main4 -> main5 -> main6
+            main4 [label="cherry-pick\nwa. bug #1"]
+            main5 [label="proper fix\nfor bug #1"]
+            main6 [label="revert\nwa. bug #1"]
+        }
+
+        subgraph cluster_rela
+        {
+            label=""
+            node [fillcolor="#33cc33"]
+            rela0 -> rela
+
+            rela0 [label="work-around\nfor bug #1"]
+            rela [label="fix bug #2"]
+        }
+
+        merge0 -> merge1
+
+        merge0 [label="merge" style="dashed,filled,rounded"]
+        merge1 [label="merge" style="dashed,filled,rounded"]
+
+        main2 -> rela0
+        rela -> merge0
+        main5 -> merge0
+        main6 -> merge1
+ 
+        rel_root [style=invis]
+        rel_root -> rela0 [style=invis]
+
+        edge [style=dashed arrowhead=none]
+        rela0 -> main4 [color="#22aa22"]
+        main4 -> main6 [color="#ff6666"]
+    }
+}
