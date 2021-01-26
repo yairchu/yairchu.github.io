@@ -60,6 +60,8 @@ It rebases up to the first parent of the base branch which has any merge conflic
 
 Apply it to advance towards your complete merge in smaller, testable pieces.
 
+*Update:* I learned about the [`git-imerge` tool](https://github.com/mhagger/git-imerge) which aims to do exactly what I suggest here. I will give it a try and will update this post subsequently!
+
 Notes:
 
 * This process works well when we commit often in small commits.
