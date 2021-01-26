@@ -1,8 +1,8 @@
 ---
-title: "The dangers of the reverted cherry-pick"
+title: "The dangers of the reverted cherry"
 author: Yair Chuchem
 date: 2021.01.26
-tags: [code, git]
+tags: [code, git, merge]
 description: Pay attention when merging reverted cherry-picks
 image: Back-to-the-future-Fading-family-photo.webp
 draft: []
@@ -10,13 +10,15 @@ draft: []
 
 Timelines can interact in unexpected ways. Sometimes innocent merges can yield bad results, and different merges which you'd expect to be equivalent can vary dramatically!
 
-This isn't an esoteric problem which only arises in strange edge-cases, it can easily arise in real-world situations! This post will provide a simple example of how this can happen.
+This problem can easily arise in real-world situations! It is by no means limited to esoteric edge-cases. If you use `git`, you better be aware of it.
+
+This post will demonstrate the problem with a simple real-world example.
 
 ![Reverted cherry pick](/images/reverted-cherry.svg)
 
-Suppose that you've worked around a bug in a release branch, and cherry-picked the fix in `main`. Later, after implementing a proper fix for the bug in `main`, you've reverted the work-around.
+Suppose that you've worked around a bug in a release branch, and cherry-picked the work-around in `main`. And later, after implementing a proper fix for the bug in `main`, you've reverted the work-around.
 
-What would happen if you then merge the release branch into `main`, would the work-around still be reverted?
+What would happen if you would then merge the release branch into `main`, would the work-around still be reverted?
 
 **No!** The reverted work-around will resurface if you are on `main` and `git merge` the release branch!
 
@@ -30,4 +32,5 @@ In such tricky scenarios, you should verify that the results of the merge or reb
 
 ## Notes
 
+* [Darcs](http://darcs.net) and [Pijul](https://pijul.org) are version-control systems with a radically different branching model which alledgely solves [this problem](https://tahoe-lafs.org/~zooko/badmerge/simple.html) nicely
 * The header image is from the film [Back to the Future](https://en.wikipedia.org/wiki/Back_to_the_Future). It depicts how things may disappear when merging timelines carelessly.
