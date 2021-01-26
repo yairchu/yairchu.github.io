@@ -125,7 +125,7 @@ Doing `git log release-2.4..release2.5` in this example would list the correct c
 
 I wrote this post in order to suggest this model for the development of [Pajam](https://pajam.live/) (btw, if you happen to be a musician that wants to jam with their friends remotely, I highly recommend you to give Pajam a try!).
 
-In the future, I will update this section with our results.
+Update from 2021.01.26: So far this flow is working very well for us!
 
 ## Notes
 
