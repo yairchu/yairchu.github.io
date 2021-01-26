@@ -10,7 +10,7 @@ draft: []
 
 Timelines can interact in unexpected ways. When seemingly innocent merges yield unexpected results, we call these situations *"mergencies"* (merge-emergency).
 
-Mergencies can easily arise in real-world situations! They are by no means limited to esoteric edge-cases. If you use `git`, you better be aware of this issue.
+Mergencies can easily arise in real-world situations! They are by no means limited to esoteric edge-cases. If you use git, you better be aware of this issue.
 
 This post will demonstrate the problem with a simple real-world example.
 
