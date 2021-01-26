@@ -63,7 +63,7 @@
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    (x<span class="op">:</span>xs) <span class="ot">-&gt;</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>        partitionM (p x) xs</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>        <span class="op">&gt;&gt;=</span> both (sortByM p)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>        <span class="op">&lt;&amp;&gt;</span> \(post, pre) <span class="ot">-&gt;</span> pre <span class="op">&lt;&gt;</span> x <span class="op">:</span> post</span></code></pre></div>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>        <span class="op">&lt;&amp;&gt;</span> \(post, pre) <span class="ot">-&gt;</span> pre <span class="op">&lt;&gt;</span> (x <span class="op">:</span> post)</span></code></pre></div>
 <p><code>\case</code> lets us avoid a repetition of the name <code>sortByM</code>. Had we wanted to rename it, we'd touch less lines of code. Personally I see this as a benefit!</p>]]></content>
   </entry>
   <entry>

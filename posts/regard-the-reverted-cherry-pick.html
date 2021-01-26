@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta charset="UTF-8">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="The dangers of the reverted cherry">
+  <meta name="twitter:description" content="Pay attention when merging reverted cherry-picks">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/Back-to-the-future-Fading-family-photo.webp">
+  <title>The dangers of the reverted cherry</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="The dangers of the reverted cherry" />
+  <meta property="og:image" content="https://yairchu.github.io/images/Back-to-the-future-Fading-family-photo.webp" />
+</head>
+<body>
+  <header>
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        The dangers of the reverted cherry
+      </span>
+
+      <img class="post-image" src="/images/Back-to-the-future-Fading-family-photo.webp">
+      <span class="byline">by Yair Chuchem</span>
+      <span class="date">2021.01.26</span>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/git" class="tag">git</a>
+        <a href="/tag/merge" class="tag">merge</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p>Timelines can interact in unexpected ways. Sometimes innocent merges can yield bad results, and different merges which you'd expect to be equivalent can vary dramatically!</p>
+<p>This problem can easily arise in real-world situations! It is by no means limited to esoteric edge-cases. If you use <code>git</code>, you better be aware of it.</p>
+<p>This post will demonstrate the problem with a simple real-world example.</p>
+<p><img src="/images/reverted-cherry.svg" alt="Reverted cherry pick" /></p>
+<p>Suppose that you've worked around a bug in a release branch, and cherry-picked the work-around in <code>main</code>. And later, after implementing a proper fix for the bug in <code>main</code>, you've reverted the work-around.</p>
+<p>What would happen if you would then merge the release branch into <code>main</code>, would the work-around still be reverted?</p>
+<p><strong>No!</strong> The reverted work-around will resurface if you are on <code>main</code> and <code>git merge</code> the release branch!</p>
+<p>(if you are skeptical about this claim, see <a href="https://github.com/yairchu/git-situations/tree/reverted-cherry-merge">example repo</a> for proof)</p>
+<p><img src="/images/reverted-cherry-alt-merge.svg" alt="Merge in several steps" /></p>
+<p>On the other hand, if you split your merge to several steps, which is often useful <a href="/posts/split-merge-to-smaller-pieces">for conflict resolution ergonomics</a>, some merge sequences will result with the revert winning (demonstrated <a href="https://github.com/yairchu/git-situations/tree/reverted-cherry-alt-merge">in example repo</a>).</p>
+<p>In such tricky scenarios, you should verify that the results of the merge or rebase look right. In a future post I may announce a tool that will point out which merges are tricky.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><a href="http://darcs.net">Darcs</a> and <a href="https://pijul.org">Pijul</a> are version-control systems with a radically different branching model which alledgely solves <a href="https://tahoe-lafs.org/~zooko/badmerge/simple.html">this problem</a> nicely</li>
+<li>The header image is from the film <a href="https://en.wikipedia.org/wiki/Back_to_the_Future">Back to the Future</a>. It depicts how things may disappear when merging timelines carelessly.</li>
+</ul>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: The dangers of the reverted cherry - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
