@@ -95,6 +95,7 @@
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a><span class="kw">done</span></span></code></pre></div>
 <p>It rebases up to the first parent of the base branch which has any merge conflicts to address (so it doesn't accumulate conflicts from multiple commits).</p>
 <p>Apply it to advance towards your complete merge in smaller, testable pieces.</p>
+<p><em>Update:</em> I learned about the <a href="https://github.com/mhagger/git-imerge"><code>git-imerge</code> tool</a> which aims to do exactly what I suggest here. I will give it a try and will update this post subsequently!</p>
 <p>Notes:</p>
 <ul>
 <li>This process works well when we commit often in small commits.</li>

@@ -8,13 +8,13 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@yairchu">
 <meta name="twitter:creator" content="@yairchu">
-<meta name="twitter:title" content="The reverted cherry mergency">
+<meta name="twitter:title" content="The reverted-cherry mergency">
   <meta name="twitter:description" content="Pay attention when merging reverted cherry-picks">
   <meta name="twitter:image" content="https://yairchu.github.io//images/Back-to-the-future-Fading-family-photo.webp">
-  <title>The reverted cherry mergency</title>
+  <title>The reverted-cherry mergency</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/syntax.css">
-  <meta property="og:title" content="The reverted cherry mergency" />
+  <meta property="og:title" content="The reverted-cherry mergency" />
   <meta property="og:image" content="https://yairchu.github.io/images/Back-to-the-future-Fading-family-photo.webp" />
 </head>
 <body>
@@ -41,7 +41,7 @@
   <div class="wrapper">
     <div class="masthead">
       <span class="title">
-        The reverted cherry mergency
+        The reverted-cherry mergency
       </span>
 
       <img class="post-image" src="/images/Back-to-the-future-Fading-family-photo.webp">
@@ -62,19 +62,25 @@
 <p>This post will demonstrate the problem with a simple real-world example.</p>
 <p><img src="/images/reverted-cherry.svg" alt="Reverted cherry pick" /></p>
 <p>Suppose that you've worked around a bug in a release branch, and cherry-picked the work-around in <code>main</code>. Later, after implementing a proper fix for the bug in <code>main</code>, you've reverted the work-around, which you no longer want.</p>
-<p>Assuming that the work-around and fix do not conflict (changes in different places in the code), what would happen if you would merge the release branch into <code>main</code>? Would the work-around still be reverted?</p>
+<p>Assuming that the work-around and fix do not conflict, what would happen if you would merge the release branch into <code>main</code>? Would the work-around still be reverted?</p>
 <p><strong>No!</strong> The reverted work-around will resurface if you are on <code>main</code> and <code>git merge</code> the release branch! (if you are skeptical about this claim, see <a href="https://github.com/yairchu/git-situations/tree/reverted-cherry-merge">example repo</a> for proof)</p>
 <p><img src="/images/reverted-cherry-alt-merge.svg" alt="Merge in several steps" /></p>
 <p>On the other hand, if you split your merge to several steps, which is often useful <a href="/posts/split-merge-to-smaller-pieces">for conflict resolution ergonomics</a>, some merge sequences will result with the revert succeeding (demonstrated <a href="https://github.com/yairchu/git-situations/tree/reverted-cherry-alt-merge">in example repo</a>).</p>
-<p>In such tricky scenarios, you should verify that the results of the merge or rebase look right.</p>
-<p>In a future post I may announce a tool that will point out which merges are tricky.</p>
+<p>In such tricky scenarios, at least anything involving reverts, you should verify that the results of the merge or rebase look right.</p>
 <h2 id="this-situation-is-real">This situation is real</h2>
 <p><a href="https://pajam.live/"><image alt="pajam!" src="/images/pajam-icon.svg" width="75px" /></a></p>
-<p>This post was inspired by a real situation during the development of <a href="https://pajam.live/">Pajam</a> (btw, if you want to jam musically with your remote friends, give Pajam a try, <a href="https://youtu.be/F9hMTuaH17o?t=2873">it's fun!</a>)</p>
+<p>This post was inspired by a real situation encountered during the development of <a href="https://pajam.live/">Pajam</a> (btw, if you want to jam musically with your remote friends, give Pajam a try, <a href="https://youtu.be/F9hMTuaH17o?t=2873">it's fun!</a>)</p>
+<h2 id="can-tooling-solve-the-problem">Can tooling solve the problem?</h2>
+<h3 id="a-completely-different-model-darcspijul">A completely different model: Darcs/Pijul</h3>
+<p>Theoretically, using <a href="http://darcs.net">Darcs</a> or <a href="https://pijul.org">Pijul</a>, alternative version-control systems with radically different branching models would alledgely <a href="https://tahoe-lafs.org/~zooko/badmerge/simple.html">solve this problem correctly</a>. But contenders don't have the wide adoption nor probably the maturity of git, so I hadn't had the chance to try them out, so I cannot speak about them from experience.</p>
+<h3 id="git-imerge">git-imerge</h3>
+<p><a href="https://github.com/mhagger/git-imerge"><code>git-imerge</code></a> does successfully yield the correct merge result in our example. But unfortunately <a href="https://github.com/yairchu/git-situations/commit/d35f7dc0872ee47b3a16dbe6d09a9fab84c71db3">in other cases</a> it yields incorrect merge results!</p>
+<h3 id="a-new-tool">A new tool?</h3>
+<p>I'm considering creating a tool for safer merging. My general idea is that when an intermediate merge would change the merge result, it means that there's a manual decision/resolution required. A large obstacle for creating this tool is picking a name.</p>
+<p>If such a tool already exists, please let me know!</p>
 <h2 id="notes">Notes</h2>
 <ul>
 <li>I learned the term "mergency" from <a href="https://twitter.com/EyalL">Eyal Lotem</a></li>
-<li><a href="http://darcs.net">Darcs</a> and <a href="https://pijul.org">Pijul</a> are version-control systems with a radically different branching model which alledgely solves <a href="https://tahoe-lafs.org/~zooko/badmerge/simple.html">this problem</a> nicely</li>
 <li>The header image is from the film <a href="https://en.wikipedia.org/wiki/Back_to_the_Future">Back to the Future</a>. It depicts how things may disappear when merging timelines carelessly.</li>
 </ul>
 
@@ -83,7 +89,7 @@
 
     <!--Share buttons-->
     <div class="social-buttons">
-      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: The reverted cherry mergency - " data-via="yairchu">Tweet</a>
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: The reverted-cherry mergency - " data-via="yairchu">Tweet</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
       <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
