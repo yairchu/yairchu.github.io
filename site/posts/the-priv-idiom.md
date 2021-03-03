@@ -10,15 +10,15 @@ draft: []
 
 C++ is infamous for long compilation times.
 
-Part of the problem is that editing `private` declarations of a class, all of its users get recompiled.
+Part of the problem is that editing `private` declarations of a class causes recompilation for all of its users.
 
-There are several ways to work around this problem to reduce compile times:
+There are several ways to work around this problem and reduce incremental compile times:
 
 * Use interfaces. A lot of code using a concrete class could use an interface instead. This comes with a run-time price of using virtual functions.
-* [The Pimpl](https://stackoverflow.com/questions/8972588/is-the-pimpl-idiom-really-used-in-practice) idiom (private pointer to implementation), achieves the same compile-time benefit as interfaces without virtual calls, but comes at a run-time price of allocating and using additional heap objects.
+* [The Pimpl](https://stackoverflow.com/questions/8972588/is-the-pimpl-idiom-really-used-in-practice) idiom (private pointer to implementation), achieves the same compile-time benefit as interfaces without the virtual calls, but comes at a run-time price of allocating and using additional heap objects.
 * The Priv idiom, introduced below, does not sacrifice runtime performance at all, but it also only brings part of the compilation time benefits of the other approaches.
 
-Below is a short introduction to `Pimpl` and `Priv`, and then some benchmark results, and closing commentary.
+Below is a short introduction to `Pimpl` and `Priv`, some benchmark results, and closing commentary.
 
 ## Illustrating Pimpl with a simple example
 
@@ -41,7 +41,7 @@ private:
 Using the Pimpl idiom, our class doesn't have any `private` declarations
 apart from the internal `Impl` class and `impl` member.
 
-The actual `SpamFilter::Impl` class is defined in the `.cpp` file and does all the work.
+The actual `SpamFilter::Impl` class is defined in the `.cpp` file and does all of the work.
 
 The benefit of this approach is that when we change implementation details, no recompilation of other modules will trigger.
 
@@ -52,7 +52,7 @@ The down-sides are:
 
 ## Priv
 
-`Priv` is an alternative idiom without the down-sides of Pimpl, but which only partially achieves its compilation time benefit, as we do declare the private members normally:
+`Priv` is an alternative idiom without the down-sides of Pimpl, but also with only a part of its benefit, as we do declare the private members normally:
 
 ```C++
 class SpamFilter
@@ -68,7 +68,7 @@ private:
 };
 ```
 
-No private methods are declared in the `.h` file. In this idiom they belong to the `Priv` subclass, declared in the `.cpp` file:
+No private methods are declared in the `.h` file. According to this idiom they all belong to the `Priv` subclass, declared in the `.cpp` file:
 
 ```C++
 class SpamFilter::Priv : public SpamFilter
@@ -131,12 +131,12 @@ bool SpamFilter::isSpam (const std::vector<std::string>& words) const
 
 The comparison numbers are based on a [simple benchmark](https://github.com/yairchu/cpp-idiom-bench) (run-time was measured using `time` on a 2020 M1 Macbook Pro)
 
-Should one use any of these idioms just to reduce compile times? As C++ already has plenty of boiler-plate with header files, I'd be relunctant from adding more. And why are we even using C++ if not for to achieve the best run-time performance? So I would prefer not to use the Pimpl idiom, and consider Priv over it, but also after exausting any other approaches to reduce compilation times (like using forward declarations and [include-what-you-use](https://include-what-you-use.org)).
+Should one use any of these idioms just to reduce compilation times? As C++ already has plenty of boiler-plate with header files, I'd be relunctant to add more. And why are we even using C++ in the first place if not to achieve the best run-time performance? Therfore I would prefer not to use the Pimpl idiom, and consider Priv over it, but also after exausting any other approaches to reduce compilation times without any weird workaround (like using forward declarations and [include-what-you-use](https://include-what-you-use.org)).
 
 ## Notes
 
 <a href="https://pajam.live/"><image alt="pajam!" src="/images/pajam-icon.svg" width="75px" /></a>
 
-* This post was written in response of internal usage of Pimpl in the code-base of [Pajam](https://pajam.live/), and I intend to present it to my colleagues to discuss the trade-offs of this idiom.
-* Regardless of whether it uses the best internal implementation idioms, [Pajam is really cool!](https://youtu.be/ahTbPlTtuuw) If you want to jam musically with your remote friends, be sure to try it out!
+* This post was written in response of Pimpl being used in the code-base of [Pajam](https://pajam.live/), and I intend to present it to my colleagues to discuss the trade-offs of this idiom. Will update on the results!
+* Regardless of whether it uses the optimal internal implementation idioms, [Pajam is really cool!](https://youtu.be/ahTbPlTtuuw) If you want to jam musically with your remote friends, be sure to try it out!
 * Title image credit: [CoolClips.com](http://search.coolclips.com/m/vector/vc062452/sweeping-it-under-the-rug/)
