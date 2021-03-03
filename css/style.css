@@ -580,4 +580,13 @@ a.tag, a.category {
   margin-left: 12px;
 }
 
+.green-bg { background-color: #88d444; }
+.dark .green-bg { background-color: #291; }
+
+.yellow-bg { background-color: #E6DB74 }
+.dark .yellow-bg { background-color: #980 }
+
+.red-bg { background-color: #e78; }
+.dark .red-bg { background-color: #d03; }
+
 /*# sourceMappingURL=style.css.map */
