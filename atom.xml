@@ -2,12 +2,121 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2021-03-03T16:22:SZ</updated>
+  <updated>2021-03-09T08:17:SZ</updated>
   <author>
       <name></name>
   </author>
   <id>https://yairchu.github.io//</id>
 
+  <entry>
+      <title>The C++ Priv idiom: an alternative to Pimpl</title>
+      <link href="https://yairchu.github.io/posts/the-priv-idiom"/>
+      <id>https://yairchu.github.io/posts/the-priv-idiom</id>
+      <updated>2021-03-09T00:00:SZ</updated>
+      <category term="code"/>
+      <category term="c++"/>
+      <summary>Priv - an alternative to the C++ Pimpl idiom</summary>
+      <content type="html"><![CDATA[<p>C++ is infamous for long compilation times.</p>
+<p>Part of the problem is that editing <code>private</code> declarations of a class causes recompilation for all of its users.</p>
+<p>There are several ways to work around this problem and reduce incremental compile times:</p>
+<ul>
+<li>Use interfaces. A lot of code using a concrete class could use an interface instead. This comes with a run-time price of using virtual functions.</li>
+<li><a href="https://stackoverflow.com/questions/8972588/is-the-pimpl-idiom-really-used-in-practice">The Pimpl</a> idiom (private pointer to implementation), achieves the same compile-time benefit as interfaces without the virtual calls, but comes at a run-time price of allocating and using additional heap objects.</li>
+<li>The Priv idiom, introduced below, does not sacrifice runtime performance at all, but it also only brings part of the compilation time benefits of the other approaches.</li>
+</ul>
+<p>Below is a short introduction to <code>Pimpl</code> and <code>Priv</code>, some benchmark results, and closing commentary.</p>
+<h2 id="illustrating-pimpl-with-a-simple-example">Illustrating Pimpl with a simple example</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SpamFilter</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span>:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    SpamFilter (<span class="at">const</span> <span class="bu">std::</span>set&lt;<span class="bu">std::</span>string&gt;&amp; forbiddenWords);</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    ~SpamFilter();</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> isSpam (<span class="at">const</span> <span class="bu">std::</span>vector&lt;<span class="bu">std::</span>string&gt;&amp; words) <span class="at">const</span>;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span>:</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span> Impl;</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>unique_ptr&lt;Impl&gt; impl;</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
+<p>Using the Pimpl idiom, our class doesn't have any <code>private</code> declarations apart from the internal <code>Impl</code> class and <code>impl</code> member.</p>
+<p>The actual <code>SpamFilter::Impl</code> class is defined in the <code>.cpp</code> file and does all of the work.</p>
+<p>The benefit of this approach is that when we change implementation details, no recompilation of other modules will trigger.</p>
+<p>The down-sides are:</p>
+<ul>
+<li>Performance is sacrificed due to forcing additional heap allocations (for the <code>Impl</code> object) and additional indirections.</li>
+<li>Boiler-plate, public methods of the class just call the same method of the <code>Impl</code> class.</li>
+</ul>
+<h2 id="priv">Priv</h2>
+<p><code>Priv</code> is an alternative idiom without the down-sides of Pimpl, but also with only a part of its benefit, as we do declare the private members normally:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SpamFilter</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span>:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    SpamFilter (<span class="at">const</span> <span class="bu">std::</span>set&lt;<span class="bu">std::</span>string&gt;&amp; forbiddenWords);</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> isSpam (<span class="at">const</span> <span class="bu">std::</span>vector&lt;<span class="bu">std::</span>string&gt;&amp; words) <span class="at">const</span>;</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span>:</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span> Priv;</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>set&lt;<span class="bu">std::</span>string&gt; <span class="va">m_forbiddenWords</span>;</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
+<p>No private methods are declared in the <code>.h</code> file. According to this idiom they all belong to the <code>Priv</code> subclass, declared in the <code>.cpp</code> file:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SpamFilter::Priv : <span class="kw">public</span> SpamFilter</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span>:</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> isSpam (<span class="at">const</span> <span class="bu">std::</span>string&amp; word) <span class="at">const</span>;</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
+<p>Whenever we want to call a private method, we use <code>priv.</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> SpamFilter::isSpam (<span class="at">const</span> <span class="bu">std::</span>vector&lt;<span class="bu">std::</span>string&gt;&amp; words) <span class="at">const</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="at">const</span> <span class="kw">auto</span>&amp; x : words)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (priv.isSpam (x))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">true</span>;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">false</span>;</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>priv</code> is defined in <code>priv.h</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define priv </span>(*(Priv*)<span class="pp"> </span><span class="kw">this</span>)</span></code></pre></div>
+<h2 id="comparison-of-idioms">Comparison of idioms</h2>
+<table style="text-align: center">
+<tr>
+    <td></td>
+    <th>Boilerplate</th>
+    <th>Slowdown</th>
+    <th>Extra Recompilations</th>
+</tr>
+<tr>
+    <th style="text-align: right">Plain</th>
+    <td class=green-bg colspan=2>None (baseline)</td>
+    <td class=red-bg>On any change</td>
+</tr>
+<tr>
+    <th style="text-align: right">Interface</th>
+    <td class=red-bg>+37%</td>
+    <td class=yellow-bg>less than 1%</td>
+    <td class=green-bg rowspan=2>When the interface changes</td>
+</tr>
+<tr>
+    <th style="text-align: right">Pimpl</th>
+    <td class=red-bg>+53%</td>
+    <td class=red-bg>10%</td>
+</tr>
+<tr>
+    <th style="text-align: right">Priv</th>
+    <td class=yellow-bg>+20%</td>
+    <td class=green-bg>None</td>
+    <td class=yellow-bg>Also when private members change</td>
+</tr>
+</table>
+<p>The comparison numbers are based on a <a href="https://github.com/yairchu/cpp-idiom-bench">simple benchmark</a> (run-time was measured using <code>time</code> on a 2020 M1 Macbook Pro)</p>
+<p>Should one use any of these idioms just to reduce compilation times? As C++ already has plenty of boiler-plate with header files, I'd be relunctant to add more. And why are we even using C++ in the first place if not to achieve the best run-time performance? Therfore I would prefer not to use the Pimpl idiom, and consider Priv over it, but also after exausting any other approaches to reduce compilation times without any weird workaround (like using forward declarations and <a href="https://include-what-you-use.org">include-what-you-use</a>).</p>
+<h2 id="notes">Notes</h2>
+<p><a href="https://pajam.live/"><image alt="pajam!" src="/images/pajam-icon.svg" width="75px" /></a></p>
+<ul>
+<li>This post was written in response of Pimpl being used in the code-base of <a href="https://pajam.live/">Pajam</a>, and I intend to present it to my colleagues to discuss the trade-offs of this idiom. Will update on the results!</li>
+<li>Regardless of whether it uses the optimal internal implementation idioms, <a href="https://youtu.be/ahTbPlTtuuw">Pajam is really cool!</a> If you want to jam musically with your remote friends, be sure to try it out!</li>
+<li>Title image credit: <a href="http://search.coolclips.com/m/vector/vc062452/sweeping-it-under-the-rug/">CoolClips.com</a></li>
+</ul>]]></content>
+  </entry>
   <entry>
       <title>The reverted-cherry mergency</title>
       <link href="https://yairchu.github.io/posts/regard-the-reverted-cherry-pick"/>
