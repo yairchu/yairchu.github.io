@@ -1,11 +1,10 @@
 ---
 title: "The C++ Priv idiom: an alternative to Pimpl"
 author: Yair Chuchem
-date: 2021.03.03
+date: 2021.03.09
 tags: [code, c++]
 description: Priv - an alternative to the C++ Pimpl idiom
 image: CoolCLIPS_vc062452.jpg
-draft: []
 ---
 
 C++ is infamous for long compilation times.
