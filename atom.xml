@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2021-03-09T09:03:SZ</updated>
+  <updated>2021-03-09T14:48:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -56,26 +56,23 @@
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> isSpam (<span class="at">const</span> <span class="bu">std::</span>vector&lt;<span class="bu">std::</span>string&gt;&amp; words) <span class="at">const</span>;</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span>:</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span> Priv;</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    Struct Priv;</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">std::</span>set&lt;<span class="bu">std::</span>string&gt; <span class="va">m_forbiddenWords</span>;</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
 <p>No private methods are declared in the <code>.h</code> file. According to this idiom they all belong to the <code>Priv</code> subclass, declared in the <code>.cpp</code> file:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SpamFilter::Priv : <span class="kw">public</span> SpamFilter</span>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> SpamFilter::Priv</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span>:</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> isSpam (<span class="at">const</span> <span class="bu">std::</span>string&amp; word) <span class="at">const</span>;</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
-<p>Whenever we want to call a private method, we use <code>priv.</code>:</p>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">static</span> <span class="dt">bool</span> isSpam (<span class="at">const</span> SpamFilter&amp;, <span class="at">const</span> <span class="bu">std::</span>string&amp; word);</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
+<p>The private methods turned into static methods of the <code>Priv</code> nested class, so we use them like so:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> SpamFilter::isSpam (<span class="at">const</span> <span class="bu">std::</span>vector&lt;<span class="bu">std::</span>string&gt;&amp; words) <span class="at">const</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>{</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="at">const</span> <span class="kw">auto</span>&amp; x : words)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (priv.isSpam (x))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (Priv::isSpam (*<span class="kw">this</span>, x))</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="kw">true</span>;</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">false</span>;</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p><code>priv</code> is defined in <code>priv.h</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode c++"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define priv </span>(*(Priv*)<span class="pp"> </span><span class="kw">this</span>)</span></code></pre></div>
 <h2 id="comparison-of-idioms">Comparison of idioms</h2>
 <table style="text-align: center">
 <tr>
@@ -102,19 +99,21 @@
 </tr>
 <tr>
     <th style="text-align: right">Priv</th>
-    <td class=yellow-bg>+20%</td>
+    <td class=yellow-bg>+13%</td>
     <td class=green-bg>None</td>
     <td class=yellow-bg>Also when private members change</td>
 </tr>
 </table>
 <p>The comparison numbers are based on a <a href="https://github.com/yairchu/cpp-idiom-bench">simple benchmark</a> (run-time was measured using <code>time</code> on a 2020 M1 Macbook Pro)</p>
-<p>Should one use any of these idioms just to reduce compilation times? As C++ already has plenty of boiler-plate with header files, I'd be relunctant to add more. And why are we even using C++ in the first place if not to achieve the best run-time performance? Therfore I would prefer not to use the Pimpl idiom, and consider Priv over it, but also after exausting any other approaches to reduce compilation times without any weird workaround (like using forward declarations and <a href="https://include-what-you-use.org">include-what-you-use</a>).</p>
+<p>Should one use any of these idioms just to reduce compilation times? As C++ already has plenty of boiler-plate with header files, I'd be relunctant to add more. And why are we even using C++ in the first place if not to achieve the best run-time performance? Therefore I would prefer not to use the Pimpl idiom, and consider Priv over it, but also after exausting any other approaches to reduce compilation times without any weird workaround (like using forward declarations and <a href="https://include-what-you-use.org">include-what-you-use</a>).</p>
 <h2 id="notes">Notes</h2>
 <p><a href="https://pajam.live/"><image alt="pajam!" src="/images/pajam-icon.svg" width="75px" /></a></p>
 <ul>
+<li>The Priv idiom as presented here is an improvement over my original formulation, and was suggested by <a href="https://www.reddit.com/r/cpp/comments/m15i86/the_priv_idiom_an_alternative_to_pimpl/gqbpzx7/">9cantthinkofgoodname on reddit</a></li>
 <li>This post was written in response of Pimpl being used in the code-base of <a href="https://pajam.live/">Pajam</a>, and I intend to present it to my colleagues to discuss the trade-offs of this idiom. Will update on the results!</li>
 <li>Regardless of whether it uses the optimal internal implementation idioms, <a href="https://youtu.be/ahTbPlTtuuw">Pajam is really cool!</a> If you want to jam musically with your remote friends, be sure to try it out!</li>
 <li>Title image credit: <a href="http://search.coolclips.com/m/vector/vc062452/sweeping-it-under-the-rug/">CoolClips.com</a></li>
+<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://www.reddit.com/r/cpp/comments/m15i86/the_priv_idiom_an_alternative_to_pimpl/">r/cpp</a></li>
 </ul>]]></content>
   </entry>
   <entry>
