@@ -132,4 +132,4 @@ Should one use any of these idioms just to reduce compilation times? As C++ alre
 * This post was written in response of Pimpl being used in the code-base of [Pajam](https://pajam.live/), and I intend to present it to my colleagues to discuss the trade-offs of this idiom. Will update on the results!
 * Regardless of whether it uses the optimal internal implementation idioms, [Pajam is really cool!](https://youtu.be/ahTbPlTtuuw) If you want to jam musically with your remote friends, be sure to try it out!
 * Title image credit: [CoolClips.com](http://search.coolclips.com/m/vector/vc062452/sweeping-it-under-the-rug/)
-* <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/cpp](https://www.reddit.com/r/cpp/comments/m15i86/the_priv_idiom_an_alternative_to_pimpl/)
+* <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/cpp discussion](https://www.reddit.com/r/cpp/comments/m15i86/the_priv_idiom_an_alternative_to_pimpl/)
