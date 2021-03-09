@@ -61,7 +61,7 @@ public:
     bool isSpam (const std::vector<std::string>& words) const;
 
 private:
-    class Priv;
+    Struct Priv;
 
     std::set<std::string> m_forbiddenWords;
 };
@@ -70,31 +70,23 @@ private:
 No private methods are declared in the `.h` file. According to this idiom they all belong to the `Priv` subclass, declared in the `.cpp` file:
 
 ```C++
-class SpamFilter::Priv : public SpamFilter
+struct SpamFilter::Priv
 {
-public:
-    bool isSpam (const std::string& word) const;
+    static bool isSpam (const SpamFilter&, const std::string& word);
 };
 ```
 
-Whenever we want to call a private method, we use `priv.`:
+The private methods turned into static methods of the `Priv` nested class, so we use them like so:
 
 ```C++
 bool SpamFilter::isSpam (const std::vector<std::string>& words) const
 {
     for (const auto& x : words)
-        if (priv.isSpam (x))
+        if (Priv::isSpam (*this, x))
             return true;
     return false;
 }
 ```
-
-`priv` is defined in `priv.h`:
-
-```C++
-#define priv (*(Priv*) this)
-```
-
 ## Comparison of idioms
 
 <table style="text-align: center">
@@ -122,7 +114,7 @@ bool SpamFilter::isSpam (const std::vector<std::string>& words) const
 </tr>
 <tr>
     <th style="text-align: right">Priv</th>
-    <td class=yellow-bg>+20%</td>
+    <td class=yellow-bg>+13%</td>
     <td class=green-bg>None</td>
     <td class=yellow-bg>Also when private members change</td>
 </tr>
@@ -130,12 +122,14 @@ bool SpamFilter::isSpam (const std::vector<std::string>& words) const
 
 The comparison numbers are based on a [simple benchmark](https://github.com/yairchu/cpp-idiom-bench) (run-time was measured using `time` on a 2020 M1 Macbook Pro)
 
-Should one use any of these idioms just to reduce compilation times? As C++ already has plenty of boiler-plate with header files, I'd be relunctant to add more. And why are we even using C++ in the first place if not to achieve the best run-time performance? Therfore I would prefer not to use the Pimpl idiom, and consider Priv over it, but also after exausting any other approaches to reduce compilation times without any weird workaround (like using forward declarations and [include-what-you-use](https://include-what-you-use.org)).
+Should one use any of these idioms just to reduce compilation times? As C++ already has plenty of boiler-plate with header files, I'd be relunctant to add more. And why are we even using C++ in the first place if not to achieve the best run-time performance? Therefore I would prefer not to use the Pimpl idiom, and consider Priv over it, but also after exausting any other approaches to reduce compilation times without any weird workaround (like using forward declarations and [include-what-you-use](https://include-what-you-use.org)).
 
 ## Notes
 
 <a href="https://pajam.live/"><image alt="pajam!" src="/images/pajam-icon.svg" width="75px" /></a>
 
+* The Priv idiom as presented here is an improvement over my original formulation, and was suggested by [9cantthinkofgoodname on reddit](https://www.reddit.com/r/cpp/comments/m15i86/the_priv_idiom_an_alternative_to_pimpl/gqbpzx7/)
 * This post was written in response of Pimpl being used in the code-base of [Pajam](https://pajam.live/), and I intend to present it to my colleagues to discuss the trade-offs of this idiom. Will update on the results!
 * Regardless of whether it uses the optimal internal implementation idioms, [Pajam is really cool!](https://youtu.be/ahTbPlTtuuw) If you want to jam musically with your remote friends, be sure to try it out!
 * Title image credit: [CoolClips.com](http://search.coolclips.com/m/vector/vc062452/sweeping-it-under-the-rug/)
+* <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/cpp](https://www.reddit.com/r/cpp/comments/m15i86/the_priv_idiom_an_alternative_to_pimpl/)
