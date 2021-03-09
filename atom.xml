@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2021-03-09T14:48:SZ</updated>
+  <updated>2021-03-09T14:51:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -113,7 +113,7 @@
 <li>This post was written in response of Pimpl being used in the code-base of <a href="https://pajam.live/">Pajam</a>, and I intend to present it to my colleagues to discuss the trade-offs of this idiom. Will update on the results!</li>
 <li>Regardless of whether it uses the optimal internal implementation idioms, <a href="https://youtu.be/ahTbPlTtuuw">Pajam is really cool!</a> If you want to jam musically with your remote friends, be sure to try it out!</li>
 <li>Title image credit: <a href="http://search.coolclips.com/m/vector/vc062452/sweeping-it-under-the-rug/">CoolClips.com</a></li>
-<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://www.reddit.com/r/cpp/comments/m15i86/the_priv_idiom_an_alternative_to_pimpl/">r/cpp</a></li>
+<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://www.reddit.com/r/cpp/comments/m15i86/the_priv_idiom_an_alternative_to_pimpl/">r/cpp discussion</a></li>
 </ul>]]></content>
   </entry>
   <entry>
