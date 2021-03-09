@@ -1,6 +1,5 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
@@ -13,6 +12,7 @@ import Data.Foldable (traverse_)
 import Data.Function (on)
 import qualified Data.HashMap.Lazy as HML
 import Data.List (groupBy, sortOn)
+import qualified Data.Ord as Ord
 import qualified Data.Text as T
 import Data.Time
 import Development.Shake
@@ -96,7 +96,7 @@ buildIndex posts' projects' allTags = do
   let indexInfo =
         IndexInfo
           { posts = posts',
-            projects = reverse (sortOn title projects'),
+            projects = sortOn (Ord.Down . title) projects',
             tagsList = allTags,
             tagName = ""
           }
@@ -149,14 +149,14 @@ toIsoDate :: UTCTime -> String
 toIsoDate = formatTime defaultTimeLocale (iso8601DateFormat rfc3339)
 
 buildFeed :: [Post] -> Action ()
-buildFeed posts = do
+buildFeed ps = do
   now <- liftIO getCurrentTime
   let atomData =
         AtomData
           { atomTitle = siteTitle siteMeta,
             domain = baseUrl siteMeta,
             atomAuthor = siteAuthor siteMeta,
-            atomPosts = mkAtomPost <$> posts,
+            atomPosts = ps <&> mkAtomPost,
             currentTime = toIsoDate now,
             atomUrl = "/atom.xml"
           }
@@ -188,13 +188,13 @@ makeTags pages =
     [(t, page)]
     & sortOn fst
     & groupBy ((==) `on` fst)
-    <&> ((,) <$> fst . head <*> reverse . sortOn date . map snd)
+    <&> (,) <$> fst . head <*> sortOn (Ord.Down . date) . fmap snd
 
 -- | Specific build rules for the Shake system
 --   defines workflow to build the website
 buildRules :: Action ()
 buildRules = do
-  (allPosts, postsInner) <- buildPosts "posts" <&> _1 %~ reverse . sortOn date
+  (allPosts, postsInner) <- buildPosts "posts" <&> _1 %~ sortOn (Ord.Down . date)
   (allProjects, projInner) <- buildPosts "projects"
   allPosts <> postsInner <> allProjects <> projInner
     & filter (has _Nothing . draft)
@@ -209,7 +209,7 @@ buildRules = do
   buildFeed published
   copyStaticFiles
   where
-    tagOrder (t, posts) = (negate (length posts), length t)
+    tagOrder (t, p) = (negate (length p), length t)
 
 main :: IO ()
 main =
