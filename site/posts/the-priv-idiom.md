@@ -61,7 +61,7 @@ public:
     bool isSpam (const std::vector<std::string>& words) const;
 
 private:
-    Struct Priv;
+    struct Priv;
 
     std::set<std::string> m_forbiddenWords;
 };
