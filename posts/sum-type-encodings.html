@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
-  <meta charset="UTF-8">
   <meta name="description" content="Yair&#39;s website">
   <meta name="author" content="Yair Chuchem">
-  <meta name=viewport content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@yairchu">
 <meta name="twitter:creator" content="@yairchu">
 <meta name="twitter:title" content="The four simple ways to encode sum-types">
   <meta name="twitter:description" content="How and why to encode sum types?">
-  <meta name="twitter:image" content="https://yairchu.github.io//images/Loc_Bloc_example_1_of_Disney.jpg">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/Loc&lt;em&gt;Bloc&lt;/em&gt;example&lt;em&gt;1&lt;/em&gt;of_Disney.jpg">
   <title>The four simple ways to encode sum-types</title>
-  <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/syntax.css">
   <meta property="og:title" content="The four simple ways to encode sum-types" />
-  <meta property="og:image" content="https://yairchu.github.io/images/Loc_Bloc_example_1_of_Disney.jpg" />
+  <meta property="og:image" content="https://yairchu.github.io/images/Loc&lt;em&gt;Bloc&lt;/em&gt;example&lt;em&gt;1&lt;/em&gt;of_Disney.jpg" />
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3ZVL4J64MW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3ZVL4J64MW');
+  </script>
 </head>
 <body>
   <header>
@@ -44,7 +51,7 @@
         The four simple ways to encode sum-types
       </span>
 
-      <img class="post-image" src="/images/Loc_Bloc_example_1_of_Disney.jpg">
+      <img class="post-image" src="/images/Loc&lt;em&gt;Bloc&lt;/em&gt;example&lt;em&gt;1&lt;/em&gt;of_Disney.jpg">
       <span class="byline">by Yair Chuchem</span>
       <span class="date">2019.11.06</span>
       <div class="metadata">
@@ -104,83 +111,83 @@
 </tbody>
 </table>
 <p>We'll use Haskell to demonstrate them:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Shape</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    <span class="ot">=</span> <span class="dt">Rect</span> {<span class="ot"> width ::</span> <span class="dt">Float</span>,<span class="ot"> height ::</span> <span class="dt">Float</span> }</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="op">|</span> <span class="dt">Circle</span> {<span class="ot"> radius ::</span> <span class="dt">Float</span> }</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="ot">area ::</span> <span class="dt">Shape</span> <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>area (<span class="dt">Rect</span> w h) <span class="ot">=</span> w <span class="op">*</span> h</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>area (<span class="dt">Circle</span> r) <span class="ot">=</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="op">&gt;</span> area (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="dv">15</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Shape</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">=</span> <span class="dt">Rect</span> {<span class="ot"> width ::</span> <span class="dt">Float</span>,<span class="ot"> height ::</span> <span class="dt">Float</span> }</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="dt">Circle</span> {<span class="ot"> radius ::</span> <span class="dt">Float</span> }</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ot">area ::</span> <span class="dt">Shape</span> <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>area (<span class="dt">Rect</span> w h) <span class="ot">=</span> w <span class="op">*</span> h</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>area (<span class="dt">Circle</span> r) <span class="ot">=</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> area (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="dv">15</span></span></code></pre></div>
 <h2 id="church-encoding">Church encoding</h2>
 <p>How would we encode our type in legacy languages which don't support sum types?</p>
 <p>Famous minimalist <a href="https://en.wikipedia.org/wiki/Alonzo_Church">Alonzo Church</a> has devised a method:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ot">{-# LANGUAGE RankNTypes #-}</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">ShapeHandlers</span> r <span class="ot">=</span> <span class="dt">ShapeHandlers</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    {<span class="ot"> handleRect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    ,<span class="ot"> handleCircle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    }</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Shape</span> <span class="ot">=</span> (<span class="kw">forall</span> a<span class="op">.</span> <span class="dt">ShapeHandlers</span> a <span class="ot">-&gt;</span> a)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="ot">rect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Shape</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>rect w h handlers <span class="ot">=</span> handleRect handlers w h</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="ot">circle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Shape</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>circle r handlers <span class="ot">=</span> handleCircle handlers r</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="ot">area ::</span> <span class="dt">Shape</span> <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>area shape <span class="ot">=</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>    shape</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>    <span class="dt">ShapeHandlers</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>    { handleRect <span class="ot">=</span> \w h <span class="ot">-&gt;</span> w <span class="op">*</span> h</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>    , handleCircle <span class="ot">=</span> \r <span class="ot">-&gt;</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a>    }</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a><span class="op">&gt;</span> area (rect <span class="dv">3</span> <span class="dv">5</span>)</span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a><span class="dv">15</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE RankNTypes #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">ShapeHandlers</span> r <span class="ot">=</span> <span class="dt">ShapeHandlers</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    {<span class="ot"> handleRect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    ,<span class="ot"> handleCircle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Shape</span> <span class="ot">=</span> (<span class="kw">forall</span> a<span class="op">.</span> <span class="dt">ShapeHandlers</span> a <span class="ot">-&gt;</span> a)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ot">rect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Shape</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>rect w h handlers <span class="ot">=</span> handleRect handlers w h</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="ot">circle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Shape</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>circle r handlers <span class="ot">=</span> handleCircle handlers r</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="ot">area ::</span> <span class="dt">Shape</span> <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>area shape <span class="ot">=</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    shape</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ShapeHandlers</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    { handleRect <span class="ot">=</span> \w h <span class="ot">-&gt;</span> w <span class="op">*</span> h</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    , handleCircle <span class="ot">=</span> \r <span class="ot">-&gt;</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> area (rect <span class="dv">3</span> <span class="dv">5</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="dv">15</span></span></code></pre></div>
 <p>While originally intended for use in his minimal programming language "Lambda Calculus", this encoding is suitable for most popular languages. Java/C# supports it via abstract generic methods. In C++ or Go we'll have to resort to casts or side-effects to encode this (the <a href="https://en.wikipedia.org/wiki/Visitor_pattern">Visitor pattern</a>).</p>
 <h2 id="final-style-extending-church-encodings-using-type-classes">Final style: Extending church-encodings using type classes</h2>
 <p>We can encode the record from the church encoding using a type-class:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ot">{-# LANGUAGE RankNTypes #-}</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">ShapeHandlers</span> r <span class="kw">where</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="ot">    rect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="ot">    circle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Shape</span> <span class="ot">=</span> (<span class="kw">forall</span> a<span class="op">.</span> <span class="dt">ShapeHandlers</span> a <span class="ot">=&gt;</span> a)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="kw">newtype</span> <span class="dt">Area</span> <span class="ot">=</span> <span class="dt">Area</span> {<span class="ot"> area ::</span> <span class="dt">Float</span> }</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">ShapeHandlers</span> <span class="dt">Area</span> <span class="kw">where</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>    rect w h <span class="ot">=</span> <span class="dt">Area</span> (w <span class="op">*</span> h)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>    circle r <span class="ot">=</span> <span class="dt">Area</span> (<span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="op">&gt;</span> area (rect <span class="dv">3</span> <span class="dv">5</span>)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a><span class="dv">15</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE RankNTypes #-}</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">ShapeHandlers</span> r <span class="kw">where</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ot">    rect ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="ot">    circle ::</span> <span class="dt">Float</span> <span class="ot">-&gt;</span> r</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Shape</span> <span class="ot">=</span> (<span class="kw">forall</span> a<span class="op">.</span> <span class="dt">ShapeHandlers</span> a <span class="ot">=&gt;</span> a)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">Area</span> <span class="ot">=</span> <span class="dt">Area</span> {<span class="ot"> area ::</span> <span class="dt">Float</span> }</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">ShapeHandlers</span> <span class="dt">Area</span> <span class="kw">where</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    rect w h <span class="ot">=</span> <span class="dt">Area</span> (w <span class="op">*</span> h)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    circle r <span class="ot">=</span> <span class="dt">Area</span> (<span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> area (rect <span class="dv">3</span> <span class="dv">5</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="dv">15</span></span></code></pre></div>
 <p>The main benefit of using this encoding is that type class constraints are trivially composable, which translates to encoding extensible sum-types! For example: <code>(forall a. (ShapeHandlers a, MoreHandlers a) =&gt; a)</code></p>
 <p>With a small modification (avoiding universal quantification) this becomes Carette et al's <a href="http://okmij.org/ftp/tagless-final/index.html">"Final Style"</a>, which is also commonly known as "<code>mtl</code> style".</p>
 <p>A similar encoding in OO languages, using interfaces instead of type classes is Oliviera et al's <a href="https://www.cs.utexas.edu/~wcook/Drafts/2012/ecoop2012.pdf">"Object Algebras"</a>.</p>
 <h2 id="the-oo-pattern">The OO pattern</h2>
 <p>This is a common way to represent sum types in object oriented languages:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Rect</span> <span class="ot">=</span> <span class="dt">Rect</span> {<span class="ot"> width ::</span> <span class="dt">Float</span>,<span class="ot"> height ::</span> <span class="dt">Float</span> }</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Circle</span> <span class="ot">=</span> <span class="dt">Circle</span> {<span class="ot"> radius ::</span> <span class="dt">Float</span> }</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">Area</span> a <span class="kw">where</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="ot">    area ::</span> a <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Area</span> <span class="dt">Rect</span> <span class="kw">where</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>    area (<span class="dt">Rect</span> w h) <span class="ot">=</span> w <span class="op">*</span> h</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Area</span> <span class="dt">Circle</span> <span class="kw">where</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    area (<span class="dt">Circle</span> r) <span class="ot">=</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="op">&gt;</span> area (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="dv">15</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Rect</span> <span class="ot">=</span> <span class="dt">Rect</span> {<span class="ot"> width ::</span> <span class="dt">Float</span>,<span class="ot"> height ::</span> <span class="dt">Float</span> }</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Circle</span> <span class="ot">=</span> <span class="dt">Circle</span> {<span class="ot"> radius ::</span> <span class="dt">Float</span> }</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Area</span> a <span class="kw">where</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ot">    area ::</span> a <span class="ot">-&gt;</span> <span class="dt">Float</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Area</span> <span class="dt">Rect</span> <span class="kw">where</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    area (<span class="dt">Rect</span> w h) <span class="ot">=</span> w <span class="op">*</span> h</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Area</span> <span class="dt">Circle</span> <span class="kw">where</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    area (<span class="dt">Circle</span> r) <span class="ot">=</span> <span class="fu">pi</span> <span class="op">*</span> r <span class="op">*</span> r</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> area (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="dv">15</span></span></code></pre></div>
 <p>This encoding is naturally open! We can add shapes as we please, and in posh languages which support type-classes or traits we can also add more operations on them without modifying existing code.</p>
 <h2 id="putting-these-approaches-to-the-test">Putting these approaches to the test</h2>
 <p>Let's explore how these approaches fare against some simple challenges.</p>
@@ -188,22 +195,22 @@
 <p>Suppose we wanted to write code that can support more types of shapes, without modifying our shape data definition (aka the <a href="https://en.wikipedia.org/wiki/Expression_problem">Expression problem</a>).</p>
 <p>The direct sum-type can't be extended, nor can its church encoding. But the final and OO styles can.</p>
 <p>Final style:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">CompositeHandler</span> r <span class="kw">where</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="ot">    composite ::</span> r <span class="ot">-&gt;</span> r <span class="ot">-&gt;</span> r</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">CompositeHandler</span> <span class="dt">Area</span> <span class="kw">where</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    composite (<span class="dt">Area</span> x) (<span class="dt">Area</span> y) <span class="ot">=</span> <span class="dt">Area</span> (x <span class="op">+</span> y)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="op">&gt;</span> area (composite (rect <span class="dv">3</span> <span class="dv">5</span>) (circle <span class="dv">1</span>))</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="fl">18.141592</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">CompositeHandler</span> r <span class="kw">where</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    composite ::</span> r <span class="ot">-&gt;</span> r <span class="ot">-&gt;</span> r</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">CompositeHandler</span> <span class="dt">Area</span> <span class="kw">where</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    composite (<span class="dt">Area</span> x) (<span class="dt">Area</span> y) <span class="ot">=</span> <span class="dt">Area</span> (x <span class="op">+</span> y)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> area (composite (rect <span class="dv">3</span> <span class="dv">5</span>) (circle <span class="dv">1</span>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fl">18.141592</span></span></code></pre></div>
 <p>OO style:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Composite</span> a b <span class="ot">=</span> <span class="dt">Composite</span> {<span class="ot"> first ::</span> a,<span class="ot"> second ::</span> b }</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="kw">instance</span> (<span class="dt">Area</span> a, <span class="dt">Area</span> b) <span class="ot">=&gt;</span> <span class="dt">Area</span> (<span class="dt">Composite</span> a b) <span class="kw">where</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>    area (<span class="dt">Composite</span> x y) <span class="ot">=</span> area x <span class="op">+</span> area y</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="op">&gt;</span> area (<span class="dt">Composite</span> (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>) (<span class="dt">Circle</span> <span class="dv">1</span>))</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="fl">18.141592</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Composite</span> a b <span class="ot">=</span> <span class="dt">Composite</span> {<span class="ot"> first ::</span> a,<span class="ot"> second ::</span> b }</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> (<span class="dt">Area</span> a, <span class="dt">Area</span> b) <span class="ot">=&gt;</span> <span class="dt">Area</span> (<span class="dt">Composite</span> a b) <span class="kw">where</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    area (<span class="dt">Composite</span> x y) <span class="ot">=</span> area x <span class="op">+</span> area y</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> area (<span class="dt">Composite</span> (<span class="dt">Rect</span> <span class="dv">3</span> <span class="dv">5</span>) (<span class="dt">Circle</span> <span class="dv">1</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fl">18.141592</span></span></code></pre></div>
 <h3 id="collections">Collections</h3>
 <p>If we wanted to encode a list of shapes:</p>
 <ul>
@@ -216,12 +223,12 @@
 <h2 id="the-fifth-approach-composition-of-atoms">The fifth approach: Composition of atoms</h2>
 <p>All the approaches discussed above failed when put to the test. The following approach fares better -</p>
 <p>We build upon the OO approach's basic shapes and combine them into a concrete <code>Shape</code> sum type:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="ot">{-# LANGUAGE DeriveGeneric, DeriveAnyClass #-}</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Shape</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>    <span class="ot">=</span> <span class="dt">SRect</span> <span class="dt">Rect</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="op">|</span> <span class="dt">SCircle</span> <span class="dt">Circle</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>    <span class="kw">deriving</span> (<span class="dt">Generic</span>, <span class="dt">Area</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE DeriveGeneric, DeriveAnyClass #-}</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Shape</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">=</span> <span class="dt">SRect</span> <span class="dt">Rect</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="dt">SCircle</span> <span class="dt">Circle</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">deriving</span> (<span class="dt">Generic</span>, <span class="dt">Area</span>)</span></code></pre></div>
 <p>We use <code>Generic</code> and <code>DefaultSignatures</code> based derivations to derive our class instances (the derivation of <code>Area</code> is left as an exercise for the reader).</p>
 <p>This approach allows us to implement our basic types, operations, and instances in a modular way, while only closing the type at the top-level. It does allow us to implement operations on more than one value (such as diffs), and we can encode a list in either of the styles supported by Final or OO styles.</p>
 <p>Discussion:</p>

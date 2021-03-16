@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
-  <meta charset="UTF-8">
   <meta name="description" content="Yair&#39;s website">
   <meta name="author" content="Yair Chuchem">
-  <meta name=viewport content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@yairchu">
 <meta name="twitter:creator" content="@yairchu">
 <meta name="twitter:title" content="Intercepting system calls to fix broken software">
-  <meta name="twitter:description" content="Using DYLD_INSERT_LIBRARIES to intercept system calls in macOS">
+  <meta name="twitter:description" content="Using DYLD&lt;em&gt;INSERT&lt;/em&gt;LIBRARIES to intercept system calls in macOS">
   <meta name="twitter:image" content="https://yairchu.github.io//images/vaccine-3314164_640.png">
   <title>Intercepting system calls to fix broken software</title>
-  <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/syntax.css">
   <meta property="og:title" content="Intercepting system calls to fix broken software" />
   <meta property="og:image" content="https://yairchu.github.io/images/vaccine-3314164_640.png" />
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3ZVL4J64MW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3ZVL4J64MW');
+  </script>
 </head>
 <body>
   <header>
@@ -67,17 +74,17 @@
 <p>We can trick GHC to believe that the file exist, and then everything would work!</p>
 <p>This can be done by hijacking its calls to the <a href="https://en.wikipedia.org/wiki/Stat_(system_call)"><code>stat</code></a> system call and returning fake results.</p>
 <p>MacOS lets us inject additional code into programs using the <code>DYLD_INSERT_LIBRARIES</code> environment variable, and it also supports special pragmas to tell it to replace library functions (aka "interpose" or "hook").</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">int</span> my_stat (<span class="dt">const</span> <span class="dt">char</span>* <span class="dt">restrict</span> path, <span class="kw">struct</span> stat* <span class="dt">restrict</span> buf)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>{</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="cf">if</span> (STARTS_WITH (<span class="st">&quot;/System/Library/Frameworks/&quot;</span>, path))</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    {</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>        <span class="co">// Pretend that the file exists</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>        <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    }</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="cf">return</span> stat (path, buf);</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>}</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>DYLD_INTERPOSE (my_stat, stat)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> my_stat (<span class="dt">const</span> <span class="dt">char</span>* <span class="dt">restrict</span> path, <span class="kw">struct</span> stat* <span class="dt">restrict</span> buf)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (STARTS_WITH (<span class="st">&quot;/System/Library/Frameworks/&quot;</span>, path))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Pretend that the file exists</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> stat (path, buf);</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>DYLD_INTERPOSE (my_stat, stat)</span></code></pre></div>
 <p>The above injected code tricks GHC to believe that any file inside <code>/System/Library/Frameworks/</code> exists, and that makes it work!</p>
 <p>To work around the problem when executing <code>ghc</code> from a build system, it takes a bit more work to make sure that the injection propagates to it, but my complete solution isn't too long, see: <a href="https://github.com/yairchu/macos11-haskell-workaround/">github.com/yairchu/macos11-haskell-workaround</a></p>
 <ul>

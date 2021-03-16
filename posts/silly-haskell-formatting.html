@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head profile="http://www.w3.org/2005/10/profile">
-  <meta charset="UTF-8">
   <meta name="description" content="Yair&#39;s website">
   <meta name="author" content="Yair Chuchem">
-  <meta name=viewport content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@yairchu">
 <meta name="twitter:creator" content="@yairchu">
@@ -12,10 +10,19 @@
   <meta name="twitter:description" content="The sore state of formatting in Haskell">
   <meta name="twitter:image" content="https://yairchu.github.io//images/pokemon-4784546_640.png">
   <title>Silly Haskell code formatting is prevalent</title>
-  <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/syntax.css">
   <meta property="og:title" content="Silly Haskell code formatting is prevalent" />
   <meta property="og:image" content="https://yairchu.github.io/images/pokemon-4784546_640.png" />
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3ZVL4J64MW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3ZVL4J64MW');
+  </script>
 </head>
 <body>
   <header>
@@ -58,31 +65,31 @@
   </div>
   <article class="post">
     <p>Haskell code in the wild could typically have type signatures formatted like this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>sortByM</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ot">    ::</span> <span class="dt">Monad</span> m</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> m <span class="dt">Bool</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>    <span class="ot">-&gt;</span> [a]</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="ot">-&gt;</span> m [a]</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sortByM</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    ::</span> <span class="dt">Monad</span> m</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> m <span class="dt">Bool</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> [a]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">-&gt;</span> m [a]</span></code></pre></div>
 <p>From now on I will call this "silly formatting", to contrast with the proper way to split the same type signature to multiple lines:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="ot">sortByM ::</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>    <span class="dt">Monad</span> m <span class="ot">=&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>    (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> m <span class="dt">Bool</span>) <span class="ot">-&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    [a] <span class="ot">-&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    m [a]</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">sortByM ::</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Monad</span> m <span class="ot">=&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> m <span class="dt">Bool</span>) <span class="ot">-&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    [a] <span class="ot">-&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    m [a]</span></code></pre></div>
 <p>With proper formatting the context and parameters take whole lines. We could easily tell which part is the context, which are parameters, and which is the function output.</p>
 <p>Had we wanted to add or remove parameters or the context, with silly formatting we would need to make edits from the middle of one line to the middle of another. If you are interested in collaboration, silly formatting will hit you with spurious merge conflicts!</p>
 <p>What would be the silly way to format function bodies? Here:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>sortByM _         []     <span class="ot">=</span> <span class="fu">pure</span> []</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>sortByM predicate (x<span class="op">:</span>xs) <span class="ot">=</span> partitionM (predicate x) xs <span class="op">&gt;&gt;=</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>                           \(post, pre) <span class="ot">-&gt;</span> sortByM predicate pre <span class="op">&lt;&gt;</span> ((x <span class="op">:</span>) <span class="op">&lt;$&gt;</span> sortByM predicate post)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sortByM _         []     <span class="ot">=</span> <span class="fu">pure</span> []</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sortByM predicate (x<span class="op">:</span>xs) <span class="ot">=</span> partitionM (predicate x) xs <span class="op">&gt;&gt;=</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                           \(post, pre) <span class="ot">-&gt;</span> sortByM predicate pre <span class="op">&lt;&gt;</span> ((x <span class="op">:</span>) <span class="op">&lt;$&gt;</span> sortByM predicate post)</span></code></pre></div>
 <p>Note that to read this snippet you may have needed scroll horizontally - silly, isn't it?</p>
 <p>Let's imagine that we wanted to rename <code>predicate</code> to <code>pred</code> or to <code>p</code>. With silly formatting we would also need to modify all of the lines in the function body! That's more work and yet again more work due to unnecessary merge conflicts!</p>
 <p>But there's more: silly formatting is difficult to read! Subjectively it's much easier to get used to scanning the text aligned to the left, rather than different silly alignment every time, often far to the right side of the screen or beyond!</p>
 <p>If we sacrifice the fancy custom alignments and just indent blocks with simple and consistent 4 spaces, it may cost us an extra line of code but the benefit in easy maintainability and readabilty is worth it in my opinion:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>sortByM _ [] <span class="ot">=</span> <span class="fu">pure</span> []</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>sortByM predicate (x<span class="op">:</span>xs) <span class="ot">=</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    partitionM (predicate x) xs <span class="op">&gt;&gt;=</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    \(post, pre) <span class="ot">-&gt;</span> sortByM predicate pre <span class="op">&lt;&gt;</span> ((x <span class="op">:</span>) <span class="op">&lt;$&gt;</span> sortByM predicate post)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sortByM _ [] <span class="ot">=</span> <span class="fu">pure</span> []</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sortByM predicate (x<span class="op">:</span>xs) <span class="ot">=</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    partitionM (predicate x) xs <span class="op">&gt;&gt;=</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    \(post, pre) <span class="ot">-&gt;</span> sortByM predicate pre <span class="op">&lt;&gt;</span> ((x <span class="op">:</span>) <span class="op">&lt;$&gt;</span> sortByM predicate post)</span></code></pre></div>
 <h2 id="what-drove-me-to-write-this-post">What drove me to write this post</h2>
 <p>The Haskell experience has recently gotten much better with <a href="https://github.com/haskell/haskell-language-server">haskell-language-server</a> and its VS Code integration.</p>
 <p>The remaining aspect where my Haskell experience was lacking in comparison to C++ was auto-formatting, where I enjoy letting <code>clang-format</code> auto-format my code. I was looking to see what formatting tools exist for Haskell, and discovered that while several tools exist, none fit my taste, and some of these tools were disqualified on the grounds of applying silly formatting.</p>
@@ -96,14 +103,14 @@
 </ul>
 <h2 id="appendix">Appendix</h2>
 <h3 id="an-alternative-implementation-of-sortbym">An alternative implementation of sortByM</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ot">sortByM ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> m <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> m [a]</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>sortByM p <span class="ot">=</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>    \<span class="kw">case</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>    [] <span class="ot">-&gt;</span> <span class="fu">pure</span> []</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    (x<span class="op">:</span>xs) <span class="ot">-&gt;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>        partitionM (p x) xs</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>        <span class="op">&gt;&gt;=</span> both (sortByM p)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>        <span class="op">&lt;&amp;&gt;</span> \(post, pre) <span class="ot">-&gt;</span> pre <span class="op">&lt;&gt;</span> (x <span class="op">:</span> post)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ot">sortByM ::</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> m <span class="dt">Bool</span>) <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> m [a]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sortByM p <span class="ot">=</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    \<span class="kw">case</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    [] <span class="ot">-&gt;</span> <span class="fu">pure</span> []</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    (x<span class="op">:</span>xs) <span class="ot">-&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        partitionM (p x) xs</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="op">&gt;&gt;=</span> both (sortByM p)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">&lt;&amp;&gt;</span> \(post, pre) <span class="ot">-&gt;</span> pre <span class="op">&lt;&gt;</span> (x <span class="op">:</span> post)</span></code></pre></div>
 <p><code>\case</code> lets us avoid a repetition of the name <code>sortByM</code>. Had we wanted to rename it, we'd touch less lines of code. Personally I see this as a benefit!</p>
 
     <br>
