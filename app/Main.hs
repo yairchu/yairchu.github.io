@@ -43,50 +43,46 @@ withSiteMeta (Object obj) = Object $ HML.union obj siteMetaObj
     Object siteMetaObj = toJSON siteMeta
 withSiteMeta _ = error "only add site meta to objects"
 
-data SiteMeta
-  = SiteMeta
-      { siteAuthor :: String,
-        baseUrl :: String, -- e.g. https://example.ca
-        siteTitle :: String,
-        twitterHandle :: Maybe String, -- Without @
-        githubUser :: Maybe String
-      }
+data SiteMeta = SiteMeta
+  { siteAuthor :: String,
+    baseUrl :: String, -- e.g. https://example.ca
+    siteTitle :: String,
+    twitterHandle :: Maybe String, -- Without @
+    githubUser :: Maybe String
+  }
   deriving (Generic, Eq, Ord, Show, ToJSON)
 
 -- | Data for the index page
-data IndexInfo
-  = IndexInfo
-      { posts :: [Post],
-        projects :: [Post],
-        tagsList :: [String],
-        tagName :: String
-      }
+data IndexInfo = IndexInfo
+  { posts :: [Post],
+    projects :: [Post],
+    tagsList :: [String],
+    tagName :: String
+  }
   deriving (Generic, Show, FromJSON, ToJSON)
 
 -- | Data for a blog post
-data Post
-  = Post
-      { title :: String,
-        author :: String,
-        description :: String,
-        content :: String,
-        url :: String,
-        date :: String,
-        image :: Maybe String,
-        draft :: Maybe (),
-        tags :: [String]
-      }
+data Post = Post
+  { title :: String,
+    author :: String,
+    description :: String,
+    content :: String,
+    url :: String,
+    date :: String,
+    image :: Maybe String,
+    draft :: Maybe (),
+    tags :: [String]
+  }
   deriving (Generic, Eq, Ord, Show, FromJSON, ToJSON, Binary)
 
-data AtomData
-  = AtomData
-      { atomTitle :: String,
-        domain :: String,
-        atomAuthor :: String,
-        atomPosts :: [Post],
-        currentTime :: String,
-        atomUrl :: String
-      }
+data AtomData = AtomData
+  { atomTitle :: String,
+    domain :: String,
+    atomAuthor :: String,
+    atomPosts :: [Post],
+    currentTime :: String,
+    atomUrl :: String
+  }
   deriving (Generic, ToJSON, Eq, Ord, Show)
 
 -- | given a list of posts this will build a table of contents
@@ -118,23 +114,29 @@ buildPost srcPath =
     liftIO . putStrLn $ "Rebuilding post: " <> srcPath
     postContent <- readFile' srcPath
     -- load post content and metadata as JSON blob
-    postData <- markdownToHTML . T.pack $ postContent
     let postUrl = T.pack . dropDirectory1 $ dropExtension srcPath
-        withPostUrl = _Object . at "url" ?~ String postUrl
+    postData <-
+      T.pack postContent
+        & markdownToHTML
+        <&> _Object . at "url" ?~ String postUrl
+        <&> _Object . at "lang" . filteredBy _Nothing ?~ "en"
+        <&> _Object . filteredBy (at "lang") <. at "dir"
+          .@~ Just . String . maybe "ltr" (const "rtl") . (^? _Just . only "he")
+        <&> withSiteMeta
     -- Add additional metadata we've been able to compute
-    let fullPostData = withSiteMeta . withPostUrl $ postData
     template <- compileTemplate' "site/templates/post.html"
     let postFilename = T.unpack postUrl -<.> "html"
     writeFile' (outputFolder </> postFilename) . T.unpack $
-      substitute template fullPostData
-    convert fullPostData
+      substitute template postData
+    convert postData
 
 -- | Copy all static files from the listed folders to their destination
 copyStaticFiles :: Action ()
 copyStaticFiles = do
   filepaths <- getDirectoryFiles "./site/" ["images//*", "css//*", "js//*"]
-  void $ forP filepaths $ \filepath ->
-    copyFileChanged ("site" </> filepath) (outputFolder </> filepath)
+  void $
+    forP filepaths $ \filepath ->
+      copyFileChanged ("site" </> filepath) (outputFolder </> filepath)
 
 formatDate :: String -> String
 formatDate humanDate = toIsoDate parsedTime
