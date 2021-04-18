@@ -5,7 +5,7 @@ date: 2021.03.17
 tags: [politics, israel]
 description: על קמפיין הליכוד ״חוזרים לחיים״
 image: vaccine-3314164_640.png
-draft: []
+notMain: []
 lang: he
 ---
 

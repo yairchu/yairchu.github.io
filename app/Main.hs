@@ -71,6 +71,7 @@ data Post = Post
     date :: String,
     image :: Maybe String,
     draft :: Maybe (),
+    notMain :: Maybe (),
     tags :: [String]
   }
   deriving (Generic, Eq, Ord, Show, FromJSON, ToJSON, Binary)
@@ -207,7 +208,7 @@ buildRules = do
     & filter (not . null . drop 1 . snd)
     & sortOn tagOrder
     <&> fst
-    & buildIndex published allProjects
+    & buildIndex published (filter (has _Nothing . notMain) allProjects)
   buildFeed published
   copyStaticFiles
   where
