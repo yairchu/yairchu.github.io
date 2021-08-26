@@ -14,25 +14,29 @@ In this post I'd like to describe what sets apart the modern libraries from trad
 
 ## Traditional GUI paradigm
 
-* A constructor function creates UI widgets (aka views/components) corresponding to your program's model/document, and populates them with data.
-* Callbacks/listeners are set up to respond to actions and inputs coming from the UI widgets. These callbacks should propagate the changes made by the user to the document.
-* Either the previous callbacks also maintain the UI (create widgets for new items, etc), or additional listeners on the model updates are set up to update the UI accordingly.
+The traditional paradigm requires the programmer to write three pieces of code:
 
-In this approach there are two structures (the document and the widgets) that we need to keep in sync. Experience has proved this task to be very challenging and bug-prone.
+* A constructor function which creates UI widgets (aka views/components) corresponding to the program's model/document, and populates them with data.
+* Callbacks/listeners which are set up to respond to user actions and inputs coming via the UI widgets. These callbacks propagate the changes made by the user to the document.
+* Either the previous callbacks also maintain the UI (create widgets for new items, etc), or additional listeners on model updates are set up to update the UI when the document changes.
+
+The library can then draw the GUI and invoke the appropriate actions in response to user actions.
+
+In this approach there are two structures (the document and the corresponding widgets) that we need to keep in sync. Experience has proved this synchronisation problem to be challenging and bug-prone.
 
 ## Zero Memory Widgets / Imgui
 
-In 2003 Thierry Excoffier published his ["Zero Memory Widgets"](http://perso.univ-lyon1.fr/thierry.excoffier/ZMW/) research and GUI library, and in 2005 Casey Muratori published [a video lecture](https://caseymuratori.com/blog_0001) on this approach which he called "Immediate Mode GUI".
+In 2003 Thierry Excoffier published the ["Zero Memory Widgets"](http://perso.univ-lyon1.fr/thierry.excoffier/ZMW/) research and GUI library, and in 2005 Casey Muratori published a video lecture on an equivalent approach which he called ["Immediate Mode GUI"](https://caseymuratori.com/blog_0001).
 
-As the "zero-memory" term suggests, in this approach we do not maintain any in-memory structure of widgets which is parallel to the document. The document is the single source of truth. Instead of the library traversing its own structure of widgets, it traverses the document itself using a function provided by the programmer to map the document to a GUI at this moment. The GUI consists of two parts: how it looks, and what code to invoke in response to user events.
+As the "zero-memory" term suggests, in this approach we do not maintain any in-memory structure of widgets. The document is the single source of truth. Instead of the library traversing its own structure of widgets, it traverses the document itself using a function provided by the programmer to map the document to a GUI at this moment. The GUI consists of two parts: how it looks, and what code to invoke in response to user events.
 
-How can widgets consume "zero memory", or in other words, have no state? As in a UI there is no more than one "active widget" where the user's cursor currently is, we only need to keep the cursor and editing state for a single widget at a time, so only the active widget has state. Likewise, as one probably wants their application to open a document with the same scrollbar positions and window size as when the user saved it, even these values should be part of the document itself rather than being widgets-only state.
+How can widgets consume "zero memory", or in other words, have no state? As in a UI there is no more than one "active widget" at a time (a widget where the user's cursor currently is), we only need to maintain the cursor and the editing state for a single widget at a time, so only the active widget does have state. Likewise, as one probably wants their application to open a document with the same scrollbar positions and window size as when the user saved it, even these values should be part of the document itself rather than being widgets-only state.
 
-With this approach there is no duplication of structures, making it much simpler and less error-prone. However, it may consume more CPU.
+With this approach there is no duplication of structures, making it much simpler and less error-prone than the traditional approach. However, it may consume more CPU.
 
-## The rationale for the traditional approach
+## The rationale behind the traditional approach
 
-If Imgui is so simple, why did UI libraries from major companies like Apple, Microsoft, and many others create a significanly more complicated solution?
+If Imgui is so simple, why did libraries from major companies like Apple, Microsoft, and many others create a significanly more complicated solution?
 
 The answer is that decades ago, computers were orders of magnitude slower than today. Programmers needed to program GUIs in the most efficient way possible rather than the simplest one.
 
@@ -48,7 +52,7 @@ The developers of SwiftUI were in a similar situation: How to re-use the existin
 
 ## Disclaimer
 
-I don't have experience with all the UI libraries mentioned above, there just isn't enough time to try them all. I did work with JUCE for about 10 years, FLTK and Qt about 2 years each, a little bit of GTK, AppKit, Kivy, and a also little bit of web-dev. In addition I've been using and developing [Momentu](https://github.com/lamdu/momentu) along with Eyal Lotem in the development of [Lamdu](http://www.lamdu.org).
+I don't have experience with all the UI libraries mentioned above, there just isn't enough time to try them all. I did work with JUCE for about 10 years, FLTK and Qt about 2 years each, a little bit of GTK, AppKit, Kivy, and a also little bit of web-dev. In addition I've been using and developing [Momentu](https://github.com/lamdu/momentu) along with Eyal Lotem for the development of [Lamdu](http://www.lamdu.org).
 
 Due to my partial knowledge, you may very well find innaccuracies or missing key details in this post. Please feel free to send me feedback and corrections and I'll do my best to update it. Despite my knowledge gaps I felt compelled to write this post because I couldn't find any similar overview elsewhere.
 
