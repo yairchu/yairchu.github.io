@@ -42,11 +42,29 @@ The answer is that decades ago, computers were orders of magnitude slower than t
 
 The key benefit of the traditional approach was that it could minimize redrawing. When updating a UI element the widgets' state would maintain which parts would need to be redrawn and only their pixels on the screen were recomputed.
 
-## React's challenge
+## UI paradigms in the web
 
-Suppose you would want to use the simple Imgui approach in a web-based UI. This would mean that you would need to reconstruct the visual appearance of the page on every change or cursor movement, and would not be able to reuse HTML's built-in UI elements which are stateful and work in the traditional way. Also, when doing all this in a relatively slow language like Javascript, your web app wouldn't be the fastest.
+Web app implementations have parallels to all approaches.
+There are several Javascript libraries implementing the traditional approach, but there also other solutions.
 
-React solved this challenge by bridging between the two approaches: The user still creates a simple function producing a UI description (aka "virtual DOM") for a given model, but React then creates the standard widgets (aka DOM) from it. When the UI updates, Reacts compares the UI description to the previous one, and changes the widgets accordingly.
+### Imgui on web
+
+Before WebAssembly, the simple Imgui approach wasn't suitable to web-based UIs. It requires reconstructing the visual appearance of the page on every change or cursor movement, which when done in a relatively slow language like Javascript, means that your web app wouldn't be the fastest.
+
+With WebAssembly however this is now possible [as evident by egui](https://emilk.github.io/egui/index.html#demo), implemented in Rust.
+
+### Server-side web apps are a hybrid paradigm
+
+In the early days of the web, before using Javascript was common, web apps generated pages based on the model and the state, which consisted of the URL and cookies. Thus far this sounds like an Imgui approach. However these pages were not a simple image but contained interactive widgets like `<textarea>` and `<input>` elements, so from the moment the page loaded until the user submitted a form the browser implemented the traditional approach.
+
+### React's challenge
+
+Is it possible to provide the simplicity of Imgui in a slow language like JavaScript? This would require a hybrid approach where similar to server-side web apps, the generated UI is high-level and results with traditional UI elements.
+But if we regenerate the elements, how would we retain their state?
+
+React solution: The user's code produces a UI description (aka "virtual DOM") for a given model, but React then creates the standard widgets (aka DOM) from it. When the UI updates, Reacts compares the UI description to the previous one, and changes the widgets accordingly.
+
+#### SwiftUI
 
 The developers of SwiftUI were in a similar situation: How to re-use the existing AppKit while providing a good experience similar to React. In their case, having more control on designing the programming language and compiler, they had the option to make something a little bit more efficient: The library can tell which widgets depend on which model data and only recompute those.
 
@@ -58,4 +76,4 @@ Due to my partial knowledge, you may very well find innaccuracies or missing key
 
 ### Momentu
 
-Momentu is a declarative/modern GUI library for Haskell with an emphasis of keyboard based editing, animations, and responsive layout features. It will be properly announced in a future post. Note that Eyal rediscovered the modern approach underlying its design independently in 2011, before React was released, as well as before we have heard about Imgui.
+Momentu is a declarative/modern GUI library for Haskell with an emphasis of keyboard based editing, animations, and responsive layout features. It will be properly discussed in a future post. Note that Eyal rediscovered the modern approach underlying its design independently in 2011, before React was released, as well as before we have heard about Imgui.
