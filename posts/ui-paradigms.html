@@ -85,15 +85,23 @@
 <p>If Imgui is so simple, why did libraries from major companies like Apple, Microsoft, and many others create a significanly more complicated solution?</p>
 <p>The answer is that decades ago, computers were orders of magnitude slower than today. Programmers needed to program GUIs in the most efficient way possible rather than the simplest one.</p>
 <p>The key benefit of the traditional approach was that it could minimize redrawing. When updating a UI element the widgets' state would maintain which parts would need to be redrawn and only their pixels on the screen were recomputed.</p>
-<h2 id="reacts-challenge">React's challenge</h2>
-<p>Suppose you would want to use the simple Imgui approach in a web-based UI. This would mean that you would need to reconstruct the visual appearance of the page on every change or cursor movement, and would not be able to reuse HTML's built-in UI elements which are stateful and work in the traditional way. Also, when doing all this in a relatively slow language like Javascript, your web app wouldn't be the fastest.</p>
-<p>React solved this challenge by bridging between the two approaches: The user still creates a simple function producing a UI description (aka "virtual DOM") for a given model, but React then creates the standard widgets (aka DOM) from it. When the UI updates, Reacts compares the UI description to the previous one, and changes the widgets accordingly.</p>
+<h2 id="ui-paradigms-in-the-web">UI paradigms in the web</h2>
+<p>Web app implementations have parallels to all approaches. There are several Javascript libraries implementing the traditional approach, but there also other solutions.</p>
+<h3 id="imgui-on-web">Imgui on web</h3>
+<p>Before WebAssembly, the simple Imgui approach wasn't suitable to web-based UIs. It requires reconstructing the visual appearance of the page on every change or cursor movement, which when done in a relatively slow language like Javascript, means that your web app wouldn't be the fastest.</p>
+<p>With WebAssembly however this is now possible <a href="https://emilk.github.io/egui/index.html#demo">as evident by egui</a>, implemented in Rust.</p>
+<h3 id="server-side-web-apps-are-a-hybrid-paradigm">Server-side web apps are a hybrid paradigm</h3>
+<p>In the early days of the web, before using Javascript was common, web apps generated pages based on the model and the state, which consisted of the URL and cookies. Thus far this sounds like an Imgui approach. However these pages were not a simple image but contained interactive widgets like <code>&lt;textarea&gt;</code> and <code>&lt;input&gt;</code> elements, so from the moment the page loaded until the user submitted a form the browser implemented the traditional approach.</p>
+<h3 id="reacts-challenge">React's challenge</h3>
+<p>Is it possible to provide the simplicity of Imgui in a slow language like JavaScript? This would require a hybrid approach where similar to server-side web apps, the generated UI is high-level and results with traditional UI elements. But if we regenerate the elements, how would we retain their state?</p>
+<p>React solution: The user's code produces a UI description (aka "virtual DOM") for a given model, but React then creates the standard widgets (aka DOM) from it. When the UI updates, Reacts compares the UI description to the previous one, and changes the widgets accordingly.</p>
+<h4 id="swiftui">SwiftUI</h4>
 <p>The developers of SwiftUI were in a similar situation: How to re-use the existing AppKit while providing a good experience similar to React. In their case, having more control on designing the programming language and compiler, they had the option to make something a little bit more efficient: The library can tell which widgets depend on which model data and only recompute those.</p>
 <h2 id="disclaimer">Disclaimer</h2>
 <p>I don't have experience with all the UI libraries mentioned above, there just isn't enough time to try them all. I did work with JUCE for about 10 years, FLTK and Qt about 2 years each, a little bit of GTK, AppKit, Kivy, and a also little bit of web-dev. In addition I've been using and developing <a href="https://github.com/lamdu/momentu">Momentu</a> along with Eyal Lotem for the development of <a href="http://www.lamdu.org">Lamdu</a>.</p>
 <p>Due to my partial knowledge, you may very well find innaccuracies or missing key details in this post. Please feel free to send me feedback and corrections and I'll do my best to update it. Despite my knowledge gaps I felt compelled to write this post because I couldn't find any similar overview elsewhere.</p>
 <h3 id="momentu">Momentu</h3>
-<p>Momentu is a declarative/modern GUI library for Haskell with an emphasis of keyboard based editing, animations, and responsive layout features. It will be properly announced in a future post. Note that Eyal rediscovered the modern approach underlying its design independently in 2011, before React was released, as well as before we have heard about Imgui.</p>
+<p>Momentu is a declarative/modern GUI library for Haskell with an emphasis of keyboard based editing, animations, and responsive layout features. It will be properly discussed in a future post. Note that Eyal rediscovered the modern approach underlying its design independently in 2011, before React was released, as well as before we have heard about Imgui.</p>
 
     <br>
     <br>
