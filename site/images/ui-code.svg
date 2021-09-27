@@ -113,7 +113,7 @@
 <g id="node6" class="node">
 <title>Events</title>
 <path fill="#449944" stroke="transparent" d="M310.5,-220C310.5,-220 269.5,-220 269.5,-220 263.5,-220 257.5,-214 257.5,-208 257.5,-208 257.5,-194 257.5,-194 257.5,-188 263.5,-182 269.5,-182 269.5,-182 310.5,-182 310.5,-182 316.5,-182 322.5,-188 322.5,-194 322.5,-194 322.5,-208 322.5,-208 322.5,-214 316.5,-220 310.5,-220"/>
-<text text-anchor="middle" x="290" y="-204.8" font-family="Times,serif" font-size="14.00" fill="white">Events</text>
+<text text-anchor="middle" x="290" y="-204.8" font-family="Times,serif" font-size="14.00" fill="white">Event</text>
 <text text-anchor="middle" x="290" y="-189.8" font-family="Times,serif" font-size="14.00" fill="white">Handlers</text>
 </g>
 <!-- Events&#45;&gt;Data -->

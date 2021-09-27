@@ -8,7 +8,7 @@ image: double-bike-336x500.jpg
 draft: []
 ---
 
-For decades we've been developing GUIs using libraries which all worked in a similar ways, until in 2013 Facebook unveiled [React](https://reactjs.org), which has changed the way we write UIs. Its ideas have propagated to others platforms and libraries like Apple's SwiftUI.
+For decades we've been developing GUIs using libraries which all worked in a similar ways, until in 2013 Facebook unveiled [React](https://reactjs.org), which has changed the way we write UIs. Its ideas have propagated to other platforms and libraries like Apple's SwiftUI.
 
 ![Model and UI code](/images/ui-code.svg)
 
@@ -27,7 +27,7 @@ The user code of a GUI app traditionally consisted of the following parts:
   * Code to construct the UI elements for the initial document, which would also register event handlers to handle user interactions, and would register listeners to update the UI when the model changes
   * Event handlers reacting to user actions. These would invoke the model's setters to update the document
   * Listener handlers updating the UI when the document changes
-  * The UI objects destructors would unregister the model listeners
+  * UI objects destructor which unregister the model listeners
 
 This structure is tricky to get right. The Model and UI stay in sync using listeners that which we may forget to register, and the update handlers need to update the UI in a way that is consistent with how the same state would have been contructed initially, often leaving a scent of code duplication.
 
@@ -38,13 +38,13 @@ React reuses the UI initialization code for UI updates. It does this by comparin
 With this approach our model could be a simple data structure, and it no longer needs listener mechanisms or setter methods. The event handlers can just update the data directly. We also don't have to manually write the UI updates code.
 
 While this is a simpler approach with less boiler-plate and repetition,
-its down-side is that a complete UI description is computed even when only a small part of the document changes, and this may have a performance cost. Note that SwiftUI and [Svelte](https://svelte.dev) solve this draw-back using language features that track data dependencies in user code, to only update the UI hierarchies whose data sources changed.
+its down-side is that a complete UI description is computed even when only a small part of the document changes, and this may have a performance cost. Note that SwiftUI and [Svelte](https://svelte.dev) reduce this draw-back using language features that track data dependencies in user code, to only update UI hierarchies whose data sources changed.
 
 ## The rationale behind the traditional approach
 
-If React is so simple, why did major companies like Apple, Microsoft, and others make UI libraries that are more difficult to use? Did they just not find the right idea, or did they have good reasons?
+If React's approach is so simple, why did major companies like Apple, Microsoft, and others make UI libraries that are more difficult to use? Did they just not find the right idea, or did they have good reasons?
 
-The answer is that decades ago, computers were orders of magnitude slower than today, and we needed to program GUIs in the most efficient way possible rather than the way that is easier for programmers to use.
+The answer is that decades ago, computers were orders of magnitude slower than today, and we needed to program GUIs in the most efficient way possible rather than in ways that are easier for programmers to use.
 
 ## Zero Memory Widgets / Imgui
 

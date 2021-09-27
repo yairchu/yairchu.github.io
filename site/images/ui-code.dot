@@ -26,7 +26,7 @@ digraph {
             Updates [fillcolor="#aa5555" label="UI Updates"]
             node [fillcolor="#449944"]
             Initialization [label="UI Initialization"]
-            Events [label="Events\nHandlers"]
+            Events [label="Event\nHandlers"]
         }
         
         subgraph cluster_caption
