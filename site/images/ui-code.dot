@@ -1,0 +1,59 @@
+digraph {
+    bgcolor=invis
+    rankdir=LR
+    graph [color=invis style=rounded]
+    node [shape=rect style="rounded,filled" fontcolor="white" color=invis]
+    subgraph cluster_all
+    {
+        label="Components of Model and UI code"
+        bgcolor="#eeeeee"
+
+        subgraph cluster_model
+        {
+            bgcolor="#dddddd"
+            color="#999999"
+            label="Model Code"
+            Data [fillcolor="#449944"]
+            node [fillcolor="#aa5555"]
+            Listeners
+            Setters [label="Setter\nMethods"]
+        }
+        subgraph cluster_ui_code
+        {
+            bgcolor="#dddddd"
+            color="#999999"
+            label="User Interface Code"
+            Updates [fillcolor="#aa5555" label="UI Updates"]
+            node [fillcolor="#449944"]
+            Initialization [label="UI Initialization"]
+            Events [label="Events\nHandlers"]
+        }
+        
+        subgraph cluster_caption
+        {
+            label="(code that we no longer need to write is colored in pink)"
+            fontcolor="#cc5555"
+            fontsize=13
+            node [shape=point]
+            edge [style=invis]
+            cap0 -> cap1 -> cap2
+        }
+
+        UI [fillcolor="#449944" label="User\nInterface\nLibrary"]
+
+        edge [color="#006600"]
+        Data -> Initialization
+        Events -> Data
+        Initialization -> UI
+        UI -> Events
+
+        edge [color="#882222"]
+        Data -> Updates
+        Listeners -> Updates
+        Events -> Setters
+        Setters -> Data, Listeners
+        Updates -> UI
+
+        cap2 -> UI [style=invis]
+    }
+}

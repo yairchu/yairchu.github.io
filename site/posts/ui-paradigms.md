@@ -1,79 +1,73 @@
 ---
 title: The revolution in UI paradigms (draft)
 author: Yair Chuchem
-date: 2021.08.26
+date: 2021.09.28
 tags: [code, ui, declarative, history]
 description: The rise of declarative UI libraries
-image: imgui.jpg
+image: double-bike-336x500.jpg
 draft: []
 ---
 
-For decades we've been developing GUIs using libraries which all worked in a similar way, until in 2013 Facebook unveiled [React](https://reactjs.org), which has started a revolution in the field. Apple and Google have followed suite and released their own modern UI libraries: SwiftUI and Flutter, which are clearly inspired by React.
+For decades we've been developing GUIs using libraries which all worked in a similar ways, until in 2013 Facebook unveiled [React](https://reactjs.org), which has changed the way we write UIs. Its ideas have propagated to others platforms and libraries like Apple's SwiftUI.
 
-In this post I'd like to describe what sets apart the modern libraries from traditional ones (like Qt, GTK, AppKit, Angular, FLTK, Kivy, JUCE, etc), and also trace back the origins of the modern approaches back to 2003 with the "Immediate Mode UI" paradigm ([ZMW](http://perso.univ-lyon1.fr/thierry.excoffier/ZMW/), [Dear Imgui](https://github.com/ocornut/imgui)).
+![Model and UI code](/images/ui-code.svg)
 
-## Traditional GUI paradigm
+In this post I'd like to describe what sets apart the modern libraries from traditional ones like Qt, GTK, AppKit, etc, and also trace back earlier origins of the new approach back to 2003 with the "Immediate Mode UI" paradigm ([ZMW](http://perso.univ-lyon1.fr/thierry.excoffier/ZMW/), [Dear Imgui](https://github.com/ocornut/imgui)).
 
-The traditional paradigm requires the programmer to write three pieces of code:
+## Elements of a traditional GUI application
 
-* A constructor function which creates UI widgets (aka views/components) corresponding to the program's model/document, and populates them with data.
-* Callbacks/listeners which are set up to respond to user actions and inputs coming via the UI widgets. These callbacks propagate the changes made by the user to the document.
-* Either the previous callbacks also maintain the UI (create widgets for new items, etc), or additional listeners on model updates are set up to update the UI when the document changes.
+The user code of a GUI app traditionally consisted of the following parts:
 
-The library can then draw the GUI and invoke the appropriate actions in response to user actions.
+* Model code (the model is the document that the app is viewing and editing)
+  * Data structure definitions of the model
+  * Code to save/load the data from files (or from the cloud)
+  * Setter methods which modify the document and notify its listeners
+  * Listener mechanisms to get notified when parts of the model change
+* View/UI code
+  * Code to construct the UI elements for the initial document, which would also register event handlers to handle user interactions, and would register listeners to update the UI when the model changes
+  * Event handlers reacting to user actions. These would invoke the model's setters to update the document
+  * Listener handlers updating the UI when the document changes
+  * The UI objects destructors would unregister the model listeners
 
-In this approach there are two structures (the document and the corresponding widgets) that we need to keep in sync. Experience has proved this synchronisation problem to be challenging and bug-prone.
+This structure is tricky to get right. The Model and UI stay in sync using listeners that which we may forget to register, and the update handlers need to update the UI in a way that is consistent with how the same state would have been contructed initially, often leaving a scent of code duplication.
 
-## Zero Memory Widgets / Imgui
+## React's approach
 
-In 2003 Thierry Excoffier published the ["Zero Memory Widgets"](http://perso.univ-lyon1.fr/thierry.excoffier/ZMW/) research and GUI library, and in 2005 Casey Muratori published a video lecture on an equivalent approach which he called ["Immediate Mode GUI"](https://caseymuratori.com/blog_0001).
+React reuses the UI initialization code for UI updates. It does this by comparing the new UI description (aka "virtual DOM") to the previous one, and then adds, removes or updates elements according to the computed diff.
 
-As the "zero-memory" term suggests, in this approach we do not maintain any in-memory structure of widgets. The document is the single source of truth. Instead of the library traversing its own structure of widgets, it traverses the document itself using a function provided by the programmer to map the document to a GUI at this moment. The GUI consists of two parts: how it looks, and what code to invoke in response to user events.
+With this approach our model could be a simple data structure, and it no longer needs listener mechanisms or setter methods. The event handlers can just update the data directly. We also don't have to manually write the UI updates code.
 
-How can widgets consume "zero memory", or in other words, have no state? As in a UI there is no more than one "active widget" at a time (a widget where the user's cursor currently is), we only need to maintain the cursor and the editing state for a single widget at a time, so only the active widget does have state. Likewise, as one probably wants their application to open a document with the same scrollbar positions and window size as when the user saved it, even these values should be part of the document itself rather than being widgets-only state.
-
-With this approach there is no duplication of structures, making it much simpler and less error-prone than the traditional approach. However, it may consume more CPU.
+While this is a simpler approach with less boiler-plate and repetition,
+its down-side is that a complete UI description is computed even when only a small part of the document changes, and this may have a performance cost. Note that SwiftUI and [Svelte](https://svelte.dev) solve this draw-back using language features that track data dependencies in user code, to only update the UI hierarchies whose data sources changed.
 
 ## The rationale behind the traditional approach
 
-If Imgui is so simple, why did libraries from major companies like Apple, Microsoft, and many others create a significanly more complicated solution?
+If React is so simple, why did major companies like Apple, Microsoft, and others make UI libraries that are more difficult to use? Did they just not find the right idea, or did they have good reasons?
 
-The answer is that decades ago, computers were orders of magnitude slower than today. Programmers needed to program GUIs in the most efficient way possible rather than the simplest one.
+The answer is that decades ago, computers were orders of magnitude slower than today, and we needed to program GUIs in the most efficient way possible rather than the way that is easier for programmers to use.
 
-The key benefit of the traditional approach was that it could minimize redrawing. When updating a UI element the widgets' state would maintain which parts would need to be redrawn and only their pixels on the screen were recomputed.
+## Zero Memory Widgets / Imgui
 
-## UI paradigms in the web
+Much earlier than React, in 2003 Thierry Excoffier published the ["Zero Memory Widgets"](http://perso.univ-lyon1.fr/thierry.excoffier/ZMW/) research and GUI library, and in 2005 Casey Muratori published a video lecture on an equivalent approach which he called ["Immediate Mode GUI"](https://caseymuratori.com/blog_0001).
 
-Web app implementations have parallels to all approaches.
-There are several Javascript libraries implementing the traditional approach, but there also other solutions.
+Their approach can be described as "lower level" React. Where in React the UI construction results in a DOM which consists of high-level components like text-boxes and radio buttons, which are still implemented in the browser using the traditional UI approach, Imgui libraries build this approach from the ground up.
 
-### Imgui on web
+As the "zero-memory" term suggests, they do not maintain any in-memory structure of the widgets: The document is the single source of truth! Instead of the library traversing its own structure of widgets, it traverses the document itself using a function provided by the programmer to map the document to the GUI at that moment. The GUI consists of two parts: how it looks, and what code to invoke in response to user events.
 
-Before WebAssembly, the simple Imgui approach wasn't suitable to web-based UIs. It requires reconstructing the visual appearance of the page on every change or cursor movement, which when done in a relatively slow language like Javascript, means that your web app wouldn't be the fastest.
+How can widgets consume "zero memory", or in other words, have no state? As in a UI there is no more than one "active widget" at a time (a widget where the user's cursor currently is), we only need to maintain the cursor and the editing state for a single widget at a time, so only the active widget does actually have state. Likewise, as one probably wants their application to open a document with the same scrollbar positions and window size as when the user saved it, even these values should be part of the document itself rather than being widgets-only state.
 
-With WebAssembly however this is now possible [as evident by egui](https://emilk.github.io/egui/index.html#demo), implemented in Rust.
-
-### Server-side web apps are a hybrid paradigm
-
-In the early days of the web, before using Javascript was common, web apps generated pages based on the model and the state, which consisted of the URL and cookies. Thus far this sounds like an Imgui approach. However these pages were not a simple image but contained interactive widgets like `<textarea>` and `<input>` elements, so from the moment the page loaded until the user submitted a form the browser implemented the traditional approach.
-
-### React's challenge
-
-Is it possible to provide the simplicity of Imgui in a slow language like JavaScript? This would require a hybrid approach where similar to server-side web apps, the generated UI is high-level and results with traditional UI elements.
-But if we regenerate the elements, how would we retain their state?
-
-React solution: The user's code produces a UI description (aka "virtual DOM") for a given model, but React then creates the standard widgets (aka DOM) from it. When the UI updates, Reacts compares the UI description to the previous one, and changes the widgets accordingly.
-
-#### SwiftUI
-
-The developers of SwiftUI were in a similar situation: How to re-use the existing AppKit while providing a good experience similar to React. In their case, having more control on designing the programming language and compiler, they had the option to make something a little bit more efficient: The library can tell which widgets depend on which model data and only recompute those.
+With this approach there is no duplication of structures, making it much simpler and less error-prone than the traditional approach. However, it may consume more CPU due to redrawing the whole window at each frame.
 
 ## Disclaimer
 
-I don't have experience with all the UI libraries mentioned above, there just isn't enough time to try them all. I did work with JUCE for about 10 years, FLTK and Qt about 2 years each, a little bit of GTK, AppKit, Kivy, and a also little bit of web-dev. In addition I've been using and developing [Momentu](https://github.com/lamdu/momentu) along with Eyal Lotem for the development of [Lamdu](http://www.lamdu.org).
+I don't have experience with all the UI libraries mentioned above. There just isn't enough time to try them all! I did work with JUCE for about 10 years, FLTK and Qt about 2 years each, a little bit of GTK, AppKit, Kivy, and a also little bit of web-dev. In addition I've been using and developing [Momentu](https://github.com/lamdu/momentu) along with Eyal Lotem for the development of [Lamdu](http://www.lamdu.org).
 
 Due to my partial knowledge, you may very well find innaccuracies or missing key details in this post. Please feel free to send me feedback and corrections and I'll do my best to update it. Despite my knowledge gaps I felt compelled to write this post because I couldn't find any similar overview elsewhere.
 
 ### Momentu
 
 Momentu is a declarative/modern GUI library for Haskell with an emphasis of keyboard based editing, animations, and responsive layout features. It will be properly discussed in a future post. Note that Eyal rediscovered the modern approach underlying its design independently in 2011, before React was released, as well as before we have heard about Imgui.
+
+## Notes
+
+* Header image credit: Maybe [monkeyman767](https://www.myconfinedspace.com/2008/11/09/double-bike/)?
