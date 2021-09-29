@@ -6,12 +6,12 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@yairchu">
 <meta name="twitter:creator" content="@yairchu">
-<meta name="twitter:title" content="The revolution in UI paradigms (draft)">
+<meta name="twitter:title" content="The revolution in UI paradigms">
   <meta name="twitter:description" content="The rise of declarative UI libraries">
   <meta name="twitter:image" content="https://yairchu.github.io//images/double-bike-336x500.jpg">
-  <title>The revolution in UI paradigms (draft)</title>
+  <title>The revolution in UI paradigms</title>
   <link rel="stylesheet" href="/css/syntax.css">
-  <meta property="og:title" content="The revolution in UI paradigms (draft)" />
+  <meta property="og:title" content="The revolution in UI paradigms" />
   <meta property="og:image" content="https://yairchu.github.io/images/double-bike-336x500.jpg" />
   <meta charset="UTF-8">
   <meta name=viewport content="width=device-width, initial-scale=1">
@@ -48,12 +48,12 @@
   <div class="wrapper">
     <div class="masthead">
       <span class="title">
-        The revolution in UI paradigms (draft)
+        The revolution in UI paradigms
       </span>
 
       <img class="post-image" src="/images/double-bike-336x500.jpg">
       <span class="byline">by Yair Chuchem</span>
-      <span class="date">2021.09.28</span>
+      <span class="date">2021.09.29</span>
       <div class="metadata">
       </div>
       <div class="tags">
@@ -65,9 +65,9 @@
     </div>
   </div>
   <article class="post">
-    <p>For decades we've been developing GUIs using libraries which all worked in a similar ways, until in 2013 Facebook unveiled <a href="https://reactjs.org">React</a>, which has changed the way we write UIs. Its ideas have propagated to other platforms and libraries like Apple's SwiftUI.</p>
+    <p>For decades, developing GUIs was cumbersome, until in 2013 Facebook unveiled <a href="https://reactjs.org">React</a>, which has profoundly changed the way we write them, and this change propagated to other platforms and libraries like Apple's SwiftUI.</p>
 <p><img src="/images/ui-code.svg" alt="Model and UI code" /></p>
-<p>In this post I'd like to describe what sets apart the modern libraries from traditional ones like Qt, GTK, AppKit, etc, and also trace back earlier origins of the new approach back to 2003 with the "Immediate Mode UI" paradigm (<a href="http://perso.univ-lyon1.fr/thierry.excoffier/ZMW/">ZMW</a>, <a href="https://github.com/ocornut/imgui">Dear Imgui</a>).</p>
+<p>In this post I'd like to describe what sets apart the modern libraries from the traditional ones like Qt, GTK, AppKit, etc, and also trace back early origins of the new approach back to 2003 with the "Immediate Mode UI" paradigm (<a href="http://perso.univ-lyon1.fr/thierry.excoffier/ZMW/">ZMW</a>, <a href="https://github.com/ocornut/imgui">Dear Imgui</a>).</p>
 <h2 id="elements-of-a-traditional-gui-application">Elements of a traditional GUI application</h2>
 <p>The user code of a GUI app traditionally consisted of the following parts:</p>
 <ul>
@@ -86,11 +86,11 @@
 <li>UI objects destructor which unregister the model listeners</li>
 </ul></li>
 </ul>
-<p>This structure is tricky to get right. The Model and UI stay in sync using listeners that which we may forget to register, and the update handlers need to update the UI in a way that is consistent with how the same state would have been contructed initially, often leaving a scent of code duplication.</p>
+<p>This structure is tricky to get right. We need to keep the model and UI in sync using listeners which we may forget to register, and the update handlers need to update the UI in a way that is consistent with how the same state would have been contructed initially, often leaving a scent of code duplication.</p>
 <h2 id="reacts-approach">React's approach</h2>
 <p>React reuses the UI initialization code for UI updates. It does this by comparing the new UI description (aka "virtual DOM") to the previous one, and then adds, removes or updates elements according to the computed diff.</p>
 <p>With this approach our model could be a simple data structure, and it no longer needs listener mechanisms or setter methods. The event handlers can just update the data directly. We also don't have to manually write the UI updates code.</p>
-<p>While this is a simpler approach with less boiler-plate and repetition, its down-side is that a complete UI description is computed even when only a small part of the document changes, and this may have a performance cost. Note that SwiftUI and <a href="https://svelte.dev">Svelte</a> reduce this draw-back using language features that track data dependencies in user code, to only update UI hierarchies whose data sources changed.</p>
+<p>While this is a simpler approach with less boiler-plate and repetition, its down-side is that a complete UI description is computed even when only a small part of the document changes, and this may have a performance cost. Note that SwiftUI and <a href="https://svelte.dev">Svelte</a> reduce this cost using language features that track data dependencies in user code, to only update UI hierarchies whose data sources changed.</p>
 <h2 id="the-rationale-behind-the-traditional-approach">The rationale behind the traditional approach</h2>
 <p>If React's approach is so simple, why did major companies like Apple, Microsoft, and others make UI libraries that are more difficult to use? Did they just not find the right idea, or did they have good reasons?</p>
 <p>The answer is that decades ago, computers were orders of magnitude slower than today, and we needed to program GUIs in the most efficient way possible rather than in ways that are easier for programmers to use.</p>
@@ -115,7 +115,7 @@
 
     <!--Share buttons-->
     <div class="social-buttons">
-      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: The revolution in UI paradigms (draft) - " data-via="yairchu">Tweet</a>
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: The revolution in UI paradigms - " data-via="yairchu">Tweet</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
       <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
