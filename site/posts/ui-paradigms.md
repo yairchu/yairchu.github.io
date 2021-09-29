@@ -1,18 +1,17 @@
 ---
-title: The revolution in UI paradigms (draft)
+title: The revolution in UI paradigms
 author: Yair Chuchem
-date: 2021.09.28
+date: 2021.09.29
 tags: [code, ui, declarative, history]
 description: The rise of declarative UI libraries
 image: double-bike-336x500.jpg
-draft: []
 ---
 
-For decades we've been developing GUIs using libraries which all worked in a similar ways, until in 2013 Facebook unveiled [React](https://reactjs.org), which has changed the way we write UIs. Its ideas have propagated to other platforms and libraries like Apple's SwiftUI.
+For decades, developing GUIs was cumbersome, until in 2013 Facebook unveiled [React](https://reactjs.org), which has profoundly changed the way we write them, and this change propagated to other platforms and libraries like Apple's SwiftUI.
 
 ![Model and UI code](/images/ui-code.svg)
 
-In this post I'd like to describe what sets apart the modern libraries from traditional ones like Qt, GTK, AppKit, etc, and also trace back earlier origins of the new approach back to 2003 with the "Immediate Mode UI" paradigm ([ZMW](http://perso.univ-lyon1.fr/thierry.excoffier/ZMW/), [Dear Imgui](https://github.com/ocornut/imgui)).
+In this post I'd like to describe what sets apart the modern libraries from the traditional ones like Qt, GTK, AppKit, etc, and also trace back early origins of the new approach back to 2003 with the "Immediate Mode UI" paradigm ([ZMW](http://perso.univ-lyon1.fr/thierry.excoffier/ZMW/), [Dear Imgui](https://github.com/ocornut/imgui)).
 
 ## Elements of a traditional GUI application
 
@@ -29,7 +28,7 @@ The user code of a GUI app traditionally consisted of the following parts:
   * Listener handlers updating the UI when the document changes
   * UI objects destructor which unregister the model listeners
 
-This structure is tricky to get right. The Model and UI stay in sync using listeners that which we may forget to register, and the update handlers need to update the UI in a way that is consistent with how the same state would have been contructed initially, often leaving a scent of code duplication.
+This structure is tricky to get right. We need to keep the model and UI in sync using listeners which we may forget to register, and the update handlers need to update the UI in a way that is consistent with how the same state would have been contructed initially, often leaving a scent of code duplication.
 
 ## React's approach
 
@@ -38,7 +37,7 @@ React reuses the UI initialization code for UI updates. It does this by comparin
 With this approach our model could be a simple data structure, and it no longer needs listener mechanisms or setter methods. The event handlers can just update the data directly. We also don't have to manually write the UI updates code.
 
 While this is a simpler approach with less boiler-plate and repetition,
-its down-side is that a complete UI description is computed even when only a small part of the document changes, and this may have a performance cost. Note that SwiftUI and [Svelte](https://svelte.dev) reduce this draw-back using language features that track data dependencies in user code, to only update UI hierarchies whose data sources changed.
+its down-side is that a complete UI description is computed even when only a small part of the document changes, and this may have a performance cost. Note that SwiftUI and [Svelte](https://svelte.dev) reduce this cost using language features that track data dependencies in user code, to only update UI hierarchies whose data sources changed.
 
 ## The rationale behind the traditional approach
 
