@@ -1,0 +1,39 @@
+digraph {
+    bgcolor=invis
+    rankdir=LR
+    graph [color=invis style=rounded]
+    node [shape=rect style="rounded,filled" fontcolor="white" color=invis]
+    subgraph cluster_all
+    {
+        label="The Incomplete Programmer State Machine"
+        bgcolor="#eeeeee"
+
+        edit [fillcolor="#449944", label="Edit\nCode"]
+        err [fillcolor="#aa5555", label="Fix\nErrors"]
+        warn [fillcolor="#aa9944", label="Warnings"]
+        fmt [fillcolor="#555599", label="Formatter"]
+        test [fillcolor="#996655", label="Run\nTests"]
+        debug [fillcolor="#aa5555", label="Debug"]
+        merge [fillcolor="#aa4444", label="Merge"]
+        push [fillcolor="#44aa44", label="Push"]
+        issues [fillcolor="#994499", label="Issues"]
+        slack [fillcolor="#449999", label="Slack off,\nwrite a blog post"]
+
+        edge [color=black]
+        edit -> err -> warn -> fmt -> merge
+        debug -> edit
+        merge -> slack -> merge
+        edge [color=invis]
+        fmt -> debug
+        slack -> issues
+        edge [color="#116611"]
+        merge -> test
+        test -> push
+        push -> issues -> edit [constraint=false]
+        edge [color="#aa4444"]
+        test -> debug [constraint=false]
+        push -> merge
+        merge -> err
+        issues -> debug [color="#554411", constraint=false]
+    }
+}
