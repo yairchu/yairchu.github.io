@@ -68,16 +68,35 @@
     </div>
   </div>
   <article class="post">
-    <p>Serialization and deserialization are tedious tasks, often riddled with boiler-plate and bug-prone code. There's a plethora of tools, such as parser combinator libraries, which aim to assist us in some of these tasks, and it seems that new tools never stop popping up. This hints that there are probably no well known satisfactory solutions to these problems, which probably means that most of these tools are ad-hoc rather than principled high-quality solutions.</p>
+    <p>Serialization and deserialization are tedious tasks, often riddled
+with boiler-plate and bug-prone code. There's a plethora of tools, such
+as parser combinator libraries, which aim to assist us in some of these
+tasks, and it seems that new tools never stop popping up. This hints
+that there are probably no well known satisfactory solutions to these
+problems, which probably means that most of these tools are ad-hoc
+rather than principled high-quality solutions.</p>
 <p>Are there no good solutions out there? Actually, there are!</p>
-<p>Back when I was programming in Python, I have used <a href="https://construct.readthedocs.io/en/latest/intro.html">Construct</a> to great satisfaction. But for a long time now I have been using Haskell, and have found no equivalent to it, <a href="https://stackoverflow.com/questions/1225053/haskell-equivalent-of-pythons-construct">which I've actually wanted for more than 10 years</a>! So perhaps I should start looking into making one? Hence this post.</p>
-<p>In this post we'll introduce Construct's declarative approach and then discuss how to implement an equivalent principled solution in Haskell, based on optics.</p>
-<h2 id="construct-declarative-parsers-and-builders">Construct: declarative parsers and builders</h2>
+<p>Back when I was programming in Python, I have used <a
+href="https://construct.readthedocs.io/en/latest/intro.html">Construct</a>
+to great satisfaction. But for a long time now I have been using
+Haskell, and have found no equivalent to it, <a
+href="https://stackoverflow.com/questions/1225053/haskell-equivalent-of-pythons-construct">which
+I've actually wanted for more than 10 years</a>! So perhaps I should
+start looking into making one? Hence this post.</p>
+<p>In this post we'll introduce Construct's declarative approach and
+then discuss how to implement an equivalent principled solution in
+Haskell, based on optics.</p>
+<h2 id="construct-declarative-parsers-and-builders">Construct:
+declarative parsers and builders</h2>
 <p>Construct is declarative.</p>
-<p>What do I mean by that? A declarative implementation of a parser should describe the format, not how to parse it!</p>
-<p>From this description, the computer will automatically figure out how to parse. Not only that, it will also know how to build, and ideally even generate extra artifacts like documentation for the format!</p>
+<p>What do I mean by that? A declarative implementation of a parser
+should describe the format, not how to parse it!</p>
+<p>From this description, the computer will automatically figure out how
+to parse. Not only that, it will also know how to build, and ideally
+even generate extra artifacts like documentation for the format!</p>
 <p>Here's how Construct defines the format of IPv4 packets:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ipv4 <span class="op">=</span> Struct(</span>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ipv4 <span class="op">=</span> Struct(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;header&quot;</span> <span class="op">/</span> BitStruct(</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;version&quot;</span> <span class="op">/</span> Const(<span class="dv">4</span>, Nibble),</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;length&quot;</span> <span class="op">/</span> ExprAdapter(Nibble,</span>
@@ -91,20 +110,42 @@
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;options&quot;</span> <span class="op">/</span> Bytes(this.header.length <span class="op">-</span> <span class="dv">20</span>),</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;body&quot;</span> <span class="op">/</span> Bytes(this.total_length <span class="op">-</span> this.header.length),</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>In this simple declaration we created a parser, builder, and the data type for IPv4 packets!</p>
-<p>Also, I'd like to highlight the richness of the format. It isn't a simple "struct" with fields of known types, but rather a "dependently-typed" one, where the size of the <code>options</code> field depends on the value of <code>header.length</code>! Haskell parser combinators libraries which support such dependencies tend to identify as <a href="http://hackage.haskell.org/package/parsec">"monadic parser combinators" libraries</a>, in constrast to <a href="http://hackage.haskell.org/package/regex-applicative">"applicative parser combinators"</a> which don't support them.</p>
-<h2 id="parsers-and-builders-as-prisms">Parsers and builders as prisms</h2>
+<p>In this simple declaration we created a parser, builder, and the data
+type for IPv4 packets!</p>
+<p>Also, I'd like to highlight the richness of the format. It isn't a
+simple "struct" with fields of known types, but rather a
+"dependently-typed" one, where the size of the <code>options</code>
+field depends on the value of <code>header.length</code>! Haskell parser
+combinators libraries which support such dependencies tend to identify
+as <a href="http://hackage.haskell.org/package/parsec">"monadic parser
+combinators" libraries</a>, in constrast to <a
+href="http://hackage.haskell.org/package/regex-applicative">"applicative
+parser combinators"</a> which don't support them.</p>
+<h2 id="parsers-and-builders-as-prisms">Parsers and builders as
+prisms</h2>
 <p>What is the essence of parsing and building?</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Codec</span> myType encoded <span class="ot">=</span> <span class="dt">Codec</span></span>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Codec</span> myType encoded <span class="ot">=</span> <span class="dt">Codec</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    {<span class="ot"> build ::</span> myType <span class="ot">-&gt;</span> encoded</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ,<span class="ot"> parse ::</span> encoded <span class="ot">-&gt;</span> <span class="dt">Maybe</span> myType</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    }</span></code></pre></div>
-<p>(Caveat: one may desire meaningful parse errors using <code>Either ParseError</code> rather of <code>Maybe</code>. We'll ignore this issue for now)</p>
-<p>Looking for a principled solution, one may notice that this type is equivalent to <a href="https://hackage.haskell.org/package/lens/docs/Control-Lens-Prism.html"><code>Prism</code></a> from the popular <a href="https://hackage.haskell.org/package/lens"><code>lens</code></a> package!</p>
+<p>(Caveat: one may desire meaningful parse errors using
+<code>Either ParseError</code> rather of <code>Maybe</code>. We'll
+ignore this issue for now)</p>
+<p>Looking for a principled solution, one may notice that this type is
+equivalent to <a
+href="https://hackage.haskell.org/package/lens/docs/Control-Lens-Prism.html"><code>Prism</code></a>
+from the popular <a
+href="https://hackage.haskell.org/package/lens"><code>lens</code></a>
+package!</p>
 <blockquote>
-<p>‘There are only two hard things in Computer Science: cache invalidation and naming things.’ - Phil Karlton</p>
+<p>‘There are only two hard things in Computer Science: cache
+invalidation and naming things.’ - Phil Karlton</p>
 </blockquote>
-<p>Naming things is hard, and we want principled approaches and code re-use, so we'll choose to use the existing <code>Prism</code> rather than make an equivalent new ad-hoc type. Hopefully this will also enable enjoying the fruits of the existing <code>lens</code> eco-system.</p>
+<p>Naming things is hard, and we want principled approaches and code
+re-use, so we'll choose to use the existing <code>Prism</code> rather
+than make an equivalent new ad-hoc type. Hopefully this will also enable
+enjoying the fruits of the existing <code>lens</code> eco-system.</p>
 <p>Let's demonstrate with a simplified IP-like protocol:</p>
 <ul>
 <li>Word8: The constant 7</li>
@@ -113,7 +154,8 @@
 <li>Word16: Destination address</li>
 <li>Body-length bytes: Packet body</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> simplifiedIp <span class="op">#</span> ((<span class="dv">2</span>, <span class="dv">3</span>), <span class="st">&quot;Hello World!&quot;</span>)</span>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> simplifiedIp <span class="op">#</span> ((<span class="dv">2</span>, <span class="dv">3</span>), <span class="st">&quot;Hello World!&quot;</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;\a\NUL\f\NUL\STX\NUL\ETXHello World!&quot;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="st">&quot;\a\NUL\f\NUL\STX\NUL\ETXHello World!&quot;</span> <span class="op">^?</span> simplifiedIp</span>
@@ -138,9 +180,12 @@
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    aside takeBytes <span class="op">.</span>     <span class="co">-- ((origin, dest), (body, remainder))</span></span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    retuple               <span class="co">-- (((origin, dest), body), remainder)</span></span></code></pre></div>
-<p>This uses some combinators from <code>Control.Lens</code> and some extra combinators defined below:</p>
-<h3 id="parse-build-prism-combinators">Parse-build prism combinators</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">firstOnly ::</span> <span class="dt">Eq</span> e <span class="ot">=&gt;</span> e <span class="ot">-&gt;</span> <span class="dt">Prism&#39;</span> (e, a) a</span>
+<p>This uses some combinators from <code>Control.Lens</code> and some
+extra combinators defined below:</p>
+<h3 id="parse-build-prism-combinators">Parse-build prism
+combinators</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">firstOnly ::</span> <span class="dt">Eq</span> e <span class="ot">=&gt;</span> e <span class="ot">-&gt;</span> <span class="dt">Prism&#39;</span> (e, a) a</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>firstOnly x <span class="ot">=</span> asideFirst (only x) <span class="op">.</span> iso <span class="fu">snd</span> ((,) ())</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ot">secondOnly ::</span> <span class="dt">Eq</span> e <span class="ot">=&gt;</span> e <span class="ot">-&gt;</span> <span class="dt">Prism&#39;</span> (a, e) a</span>
@@ -179,31 +224,52 @@
 <span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="dt">ByteString</span><span class="op">.</span><span class="fu">splitAt</span> (<span class="fu">fromIntegral</span> count) x <span class="op">&lt;$</span></span>
 <span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>        guard (<span class="fu">fromIntegral</span> count <span class="op">&lt;=</span> <span class="dt">ByteString</span><span class="op">.</span><span class="fu">length</span> x))</span></code></pre></div>
 <h2 id="conclusion">Conclusion</h2>
-<p>We've succesfully crafted prisms to parse and build our structure!</p>
+<p>We've succesfully crafted prisms to parse and build our
+structure!</p>
 <p>Now let's review some drawbacks of the presented approach:</p>
 <ul>
 <li>We used anonymous tuples where Construct uses named fields
 <ul>
 <li>Using tuples isn't so type-safe nor is it descriptive</li>
 <li>Reordering our tuples to fit the combinators was painful</li>
-<li>To do what Construct does, we would need structural records, where we can add fields to the structure one at a time (note that this may be possible using a package such as <a href="https://hackage.haskell.org/package/vinyl-0.12.0/docs/Data-Vinyl-Tutorial-Overview.html">vinyl</a>?)</li>
+<li>To do what Construct does, we would need structural records, where
+we can add fields to the structure one at a time (note that this may be
+possible using a package such as <a
+href="https://hackage.haskell.org/package/vinyl-0.12.0/docs/Data-Vinyl-Tutorial-Overview.html">vinyl</a>?)</li>
 </ul></li>
 <li>Our parsers don't perform error reporting
 <ul>
-<li>When writing parsers for programming languages this is quite crucial! (Imagine getting a syntax error with the compiler not even pointing out what line it's at)</li>
+<li>When writing parsers for programming languages this is quite
+crucial! (Imagine getting a syntax error with the compiler not even
+pointing out what line it's at)</li>
 </ul></li>
 </ul>
-<p>I believe that both of these problems can be solved, resulting in a powerful and ergonomic principled solution. In my next post I'll describe an approach to add error reporting to our prisms.</p>
+<p>I believe that both of these problems can be solved, resulting in a
+powerful and ergonomic principled solution. In my next post I'll
+describe an approach to add error reporting to our prisms.</p>
 <p>Notes:</p>
 <ul>
-<li><a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2004/01/picklercombinators.pdf">AJ. Kennedy's "Pickler Combinators" paper (JFP 2004)</a> described parsing+building combinators in Haskell using a custom data type (not using prisms) and demonstrated some more useful combinators for parsing</li>
-<li>Apparently T. Filiba, the author of Construct, <a href="http://tomerfiliba.com/blog/ConstructPlusPlus/">has attempted re-implementing it in Haskell in 2014</a>, but gave up</li>
-<li>Image credit: <a href="https://commons.wikimedia.org/wiki/File:Dispersive_prism.png">Kelvinsong [CC0]</a></li>
+<li><a
+href="https://www.microsoft.com/en-us/research/wp-content/uploads/2004/01/picklercombinators.pdf">AJ.
+Kennedy's "Pickler Combinators" paper (JFP 2004)</a> described
+parsing+building combinators in Haskell using a custom data type (not
+using prisms) and demonstrated some more useful combinators for
+parsing</li>
+<li>Apparently T. Filiba, the author of Construct, <a
+href="http://tomerfiliba.com/blog/ConstructPlusPlus/">has attempted
+re-implementing it in Haskell in 2014</a>, but gave up</li>
+<li>Image credit: <a
+href="https://commons.wikimedia.org/wiki/File:Dispersive_prism.png">Kelvinsong
+[CC0]</a></li>
 </ul>
 <p>Discussion:</p>
 <ul>
-<li><img src="/images/twitter-logo.png" alt="twitter" style="width: 20px; display: inline;"/> <a href="https://twitter.com/yairchu/status/1207947943552192512">Twitter</a></li>
-<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://www.reddit.com/r/haskell/comments/ed7k24/parsers_and_builders_as_prisms/">r/haskell</a></li>
+<li><img src="/images/twitter-logo.png" alt="twitter" style="width: 20px; display: inline;"/>
+<a
+href="https://twitter.com/yairchu/status/1207947943552192512">Twitter</a></li>
+<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/>
+<a
+href="https://www.reddit.com/r/haskell/comments/ed7k24/parsers_and_builders_as_prisms/">r/haskell</a></li>
 </ul>
 
     <br>

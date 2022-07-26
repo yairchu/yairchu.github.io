@@ -64,37 +64,78 @@
     </div>
   </div>
   <article class="post">
-    <p>If you’ve ever had to deal with git merge conflicts, then there’s a good chance that these messages give you the chills:</p>
+    <p>If you’ve ever had to deal with git merge conflicts, then there’s a
+good chance that these messages give you the chills:</p>
 <pre><code>Auto-merging &lt;SOURCE-FILE-PATH&gt;
 CONFLICT (content): Merge conflict in &lt;SOURCE-FILE-PATH&gt;
 Automatic merge failed; fix conflicts and then commit the result.</code></pre>
-<p>They arise when performing merges, reverts, and cherry-picks, and they scare people away and make them reconsider their actions.</p>
-<p><img src="/images/kdiff3.png" alt="git mergetool --tool=kdiff3" /></p>
-<p>Solving these conflicts <a href="http://stackoverflow.com/questions/161813/how-to-resolve-merge-conflicts-in-git">was hard</a>, time consuming and very error-prone, using either fancy 3-way GUI merge tools or doing it manually (did I mention error prone?).</p>
-<p><img src="/images/mine-sweeper-losing.jpeg" alt="When resolving conflicts we have to be careful, do it correctly, and avoid introducing bugs" /></p>
-<p>Then I learned about <a href="https://github.com/Peaker/git-mediate">git-mediate</a>, a small open-source tool by Eyal Lotem, which helps resolve merge conflicts rather easily, and most important, <strong>correctly</strong>!</p>
+<p>They arise when performing merges, reverts, and cherry-picks, and
+they scare people away and make them reconsider their actions.</p>
+<p><img src="/images/kdiff3.png"
+alt="git mergetool --tool=kdiff3" /></p>
+<p>Solving these conflicts <a
+href="http://stackoverflow.com/questions/161813/how-to-resolve-merge-conflicts-in-git">was
+hard</a>, time consuming and very error-prone, using either fancy 3-way
+GUI merge tools or doing it manually (did I mention error prone?).</p>
+<p><img src="/images/mine-sweeper-losing.jpeg"
+alt="When resolving conflicts we have to be careful, do it correctly, and avoid introducing bugs" /></p>
+<p>Then I learned about <a
+href="https://github.com/Peaker/git-mediate">git-mediate</a>, a small
+open-source tool by Eyal Lotem, which helps resolve merge conflicts
+rather easily, and most important, <strong>correctly</strong>!</p>
 <p>How does it work?</p>
 <p>First, configure git to use its “diff3” merge conflict style:</p>
 <pre><code>git config --global merge.conflictstyle diff3</code></pre>
-<p>Now when conflicts appear, they look like this in the affected files:</p>
-<p><img src="/images/diff3-style.jpeg" alt="An unresolved git merge conflict" /></p>
-<p>When a conflict occurs, look at it and try to figure out what changed between the base and either the upper or lower branch — choose whichever looks like a simpler change. Now apply this change on the two other parts that don’t yet have it: both the base and the other branch. After your edits, the conflict <em>should</em> look like this:</p>
-<p><img src="/images/diff3-resolved.jpeg" alt="Mouth added to both HEAD and base chunks" /></p>
-<p>Now we run git-mediate which rewrites the file with one where the conflict is resolved and <code>git add</code>s it if no conflicts remain.</p>
-<p>How does it work? It notices that for this conflict one of the branches matches the base, and replaces the conflict with the <em>other</em> branch, which now contains <strong>both changes</strong>.</p>
-<p>If git-mediate finds that, after our changes, neither branch is identical to the base, it means that we missed parts of the change. That often happens and it’s ok. We just have to see what we missed, which is easier now that the branch is more similar to the new base, and apply that on the other two parts. We can then run git-mediate again and have our conflicts resolved.</p>
-<p>Had we tried to resolve the conflict manually (without git-mediate) we could have easily missed whether we didn’t apply the full change, and in doing so accidentally revert changes in our conflict resolution. By using git-mediate to verify our work and resolve the conflict for us, we avoid such mistakes.</p>
-<p>Using git-mediate is a bit like magic, you do a small little change, press the button, and your conflict is resolved!</p>
+<p>Now when conflicts appear, they look like this in the affected
+files:</p>
+<p><img src="/images/diff3-style.jpeg"
+alt="An unresolved git merge conflict" /></p>
+<p>When a conflict occurs, look at it and try to figure out what changed
+between the base and either the upper or lower branch — choose whichever
+looks like a simpler change. Now apply this change on the two other
+parts that don’t yet have it: both the base and the other branch. After
+your edits, the conflict <em>should</em> look like this:</p>
+<p><img src="/images/diff3-resolved.jpeg"
+alt="Mouth added to both HEAD and base chunks" /></p>
+<p>Now we run git-mediate which rewrites the file with one where the
+conflict is resolved and <code>git add</code>s it if no conflicts
+remain.</p>
+<p>How does it work? It notices that for this conflict one of the
+branches matches the base, and replaces the conflict with the
+<em>other</em> branch, which now contains <strong>both
+changes</strong>.</p>
+<p>If git-mediate finds that, after our changes, neither branch is
+identical to the base, it means that we missed parts of the change. That
+often happens and it’s ok. We just have to see what we missed, which is
+easier now that the branch is more similar to the new base, and apply
+that on the other two parts. We can then run git-mediate again and have
+our conflicts resolved.</p>
+<p>Had we tried to resolve the conflict manually (without git-mediate)
+we could have easily missed whether we didn’t apply the full change, and
+in doing so accidentally revert changes in our conflict resolution. By
+using git-mediate to verify our work and resolve the conflict for us, we
+avoid such mistakes.</p>
+<p>Using git-mediate is a bit like magic, you do a small little change,
+press the button, and your conflict is resolved!</p>
 <p>A few extra tips:</p>
 <ul>
-<li>Regardless of your merging solution, large merges can often be split into several smaller ones, for example by rebasing feature-branches instead of doing one big merge.</li>
-<li>When figuring out the changes in a conflict isn’t simple, <code>git-mediate -d</code> shows, in diff form, the two different changes from the base.</li>
+<li>Regardless of your merging solution, large merges can often be split
+into several smaller ones, for example by rebasing feature-branches
+instead of doing one big merge.</li>
+<li>When figuring out the changes in a conflict isn’t simple,
+<code>git-mediate -d</code> shows, in diff form, the two different
+changes from the base.</li>
 </ul>
 <p>Happy merging!</p>
 <p>Discussion:</p>
 <ul>
-<li><img src="/images/Medium_logo_Monogram.svg" alt="medium" style="width: 20px; display: inline;"/> This post was originally <a href="https://medium.com/@yairchu/how-git-mediate-made-me-stop-fearing-merge-conflicts-and-start-treating-them-like-an-easy-game-of-a2c71b919984">posted on Medium</a>. It was migrated to my new blog at 2020.04.21</li>
-<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://www.reddit.com/r/git/comments/5kwrnm/how_gitmediate_made_me_stop_fearing_merge/">r/git</a></li>
+<li><img src="/images/Medium_logo_Monogram.svg" alt="medium" style="width: 20px; display: inline;"/>
+This post was originally <a
+href="https://medium.com/@yairchu/how-git-mediate-made-me-stop-fearing-merge-conflicts-and-start-treating-them-like-an-easy-game-of-a2c71b919984">posted
+on Medium</a>. It was migrated to my new blog at 2020.04.21</li>
+<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/>
+<a
+href="https://www.reddit.com/r/git/comments/5kwrnm/how_gitmediate_made_me_stop_fearing_merge/">r/git</a></li>
 </ul>
 
     <br>

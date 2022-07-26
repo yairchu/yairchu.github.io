@@ -65,20 +65,44 @@
     </div>
   </div>
   <article class="post">
-    <p>For existing projects, considering switching libraries can be intimidating. We may not even be certain that the alternative is worth the switch.</p>
-<p>Often we'd first evaluate candidate libraries with smaller example projects. This evaluation takes time, but it can save us a bigger time sink that could had happened if we discover that the library is actually not a good fit after already having put a lot of work into integrating it.</p>
-<p>There's a middle approach between integrating with a toy and just switching on the actual project. In this approach we choose a very specific toy example for evaluation: an early, simpler version of the real project, which we can obtain from our version control history!</p>
+    <p>For existing projects, considering switching libraries can be
+intimidating. We may not even be certain that the alternative is worth
+the switch.</p>
+<p>Often we'd first evaluate candidate libraries with smaller example
+projects. This evaluation takes time, but it can save us a bigger time
+sink that could had happened if we discover that the library is actually
+not a good fit after already having put a lot of work into integrating
+it.</p>
+<p>There's a middle approach between integrating with a toy and just
+switching on the actual project. In this approach we choose a very
+specific toy example for evaluation: an early, simpler version of the
+real project, which we can obtain from our version control history!</p>
 <p>When possible, this has several benefits:</p>
 <ul>
 <li>Our evaluation is with something similar to the real project</li>
-<li>The work we're doing for evaluation could be reused for integration in the real project!</li>
+<li>The work we're doing for evaluation could be reused for integration
+in the real project!</li>
 </ul>
-<p>Re-using the work for the real project relies on our ability to <a href="/tag/merge">merge effectively</a>. I call this a "time travelling refactor", because we do the refactor of switching libraries "in the past" and then by merging we apply the effects of past changes to the present.</p>
+<p>Re-using the work for the real project relies on our ability to <a
+href="/tag/merge">merge effectively</a>. I call this a "time travelling
+refactor", because we do the refactor of switching libraries "in the
+past" and then by merging we apply the effects of past changes to the
+present.</p>
 <h2 id="experience-report">Experience report</h2>
-<p>I've recently implemented this approach successfully, performing a library switch that I would otherwise feel intimidated from doing. I used <a href="/posts/split-merge-to-smaller-pieces"><code>sub-rebase</code> for splitting the merges to smaller steps</a> and <a href="/posts/git-mediate-stops-fear"><code>git-mediate</code> to resolve the conflicts</a>.</p>
-<p>Did you ever do the "time travelling refactor"? Let me know if you did, how did your experience go, as well as if you know of any existing post on the topic.</p>
+<p>I've recently implemented this approach successfully, performing a
+library switch that I would otherwise feel intimidated from doing. I
+used <a
+href="/posts/split-merge-to-smaller-pieces"><code>sub-rebase</code> for
+splitting the merges to smaller steps</a> and <a
+href="/posts/git-mediate-stops-fear"><code>git-mediate</code> to resolve
+the conflicts</a>.</p>
+<p>Did you ever do the "time travelling refactor"? Let me know if you
+did, how did your experience go, as well as if you know of any existing
+post on the topic.</p>
 <ul>
-<li><a href="https://www.flickr.com/photos/jjackowski/12236722024/">Image by Jeff Jacowski</a></li>
+<li><a
+href="https://www.flickr.com/photos/jjackowski/12236722024/">Image by
+Jeff Jacowski</a></li>
 </ul>
 
     <br>

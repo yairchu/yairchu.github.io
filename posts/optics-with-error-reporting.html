@@ -64,17 +64,30 @@
     </div>
   </div>
   <article class="post">
-    <p>When <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#v:-94--63-"><code>^?</code></a> returns <code>Nothing</code>, it is often desired to know why.</p>
-<p>Let's define a <code>^??</code> operator which returns an <code>Either</code> instead of a <code>Maybe</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">ConstEither</span> e r a <span class="ot">=</span> <span class="dt">ConstEither</span> {<span class="ot"> getConstEither ::</span> <span class="dt">Either</span> e r }</span>
+    <p>When <a
+href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#v:-94--63-"><code>^?</code></a>
+returns <code>Nothing</code>, it is often desired to know why.</p>
+<p>Let's define a <code>^??</code> operator which returns an
+<code>Either</code> instead of a <code>Maybe</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">ConstEither</span> e r a <span class="ot">=</span> <span class="dt">ConstEither</span> {<span class="ot"> getConstEither ::</span> <span class="dt">Either</span> e r }</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">deriving</span> <span class="dt">Functor</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">infixl</span> <span class="dv">8</span> <span class="op">^??</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ot">(^??) ::</span> s <span class="ot">-&gt;</span> <span class="dt">LensLike&#39;</span> (<span class="dt">ConstEither</span> e a) s a <span class="ot">-&gt;</span> <span class="dt">Either</span> e a</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>whole <span class="op">^??</span> f <span class="ot">=</span> f (<span class="dt">ConstEither</span> <span class="op">.</span> <span class="dt">Right</span>) whole <span class="op">&amp;</span> getConstEither</span></code></pre></div>
-<p>The standard optics (<code>Traversal</code>, <code>Prism</code>, etc) do not work with our new combinator, so let's see how we can define ones which would.</p>
-<p><a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Traversal.html#v:Traversal"><code>Traversal s t a b</code></a> is <code>forall f. Applicative f =&gt; (a -&gt; f b) -&gt; s -&gt; f t</code> and it uses <code>f</code>'s <code>pure</code> in the empty case, so we'll replace the <code>Applicative</code> with a verbose variant which supplies error information in the empty case:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Apply</span> f <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e f <span class="kw">where</span></span>
+<p>The standard optics (<code>Traversal</code>, <code>Prism</code>, etc)
+do not work with our new combinator, so let's see how we can define ones
+which would.</p>
+<p><a
+href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Traversal.html#v:Traversal"><code>Traversal s t a b</code></a>
+is
+<code>forall f. Applicative f =&gt; (a -&gt; f b) -&gt; s -&gt; f t</code>
+and it uses <code>f</code>'s <code>pure</code> in the empty case, so
+we'll replace the <code>Applicative</code> with a verbose variant which
+supplies error information in the empty case:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">Apply</span> f <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e f <span class="kw">where</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    vpure ::</span> e <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> f a</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">VerboseTraversal</span> e s t a b <span class="ot">=</span></span>
@@ -103,8 +116,10 @@
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ConstEither</span> x <span class="op">&lt;.&gt;</span> _ <span class="ot">=</span> <span class="dt">ConstEither</span> x</span>
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> e <span class="op">~</span> e&#39; <span class="ot">=&gt;</span> <span class="dt">VerboseApplicative</span> e (<span class="dt">ConstEither</span> e&#39; r) <span class="kw">where</span></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    vpure e _ <span class="ot">=</span> <span class="dt">ConstEither</span> (<span class="dt">Left</span> e)</span></code></pre></div>
-<p>Now we may want an operator to transform optics into verbose optics:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Given an error message constructor, turns:</span></span>
+<p>Now we may want an operator to transform optics into verbose
+optics:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Given an error message constructor, turns:</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- * Traversal to VerboseTraversal</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- * Prism to VerbosePrism</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ot">verbose ::</span></span>
@@ -130,9 +145,15 @@
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Pure</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Other</span> x <span class="ot">=</span> <span class="dt">Other</span> (f <span class="op">&lt;$&gt;</span> x)</span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Other</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Pure</span> x <span class="ot">=</span> <span class="dt">Other</span> (f <span class="op">&lt;&amp;&gt;</span> (<span class="op">$</span> x))</span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Other</span> f <span class="op">&lt;*&gt;</span> <span class="dt">Other</span> x <span class="ot">=</span> <span class="dt">Other</span> (liftF2 (<span class="op">$</span>) f x)</span></code></pre></div>
-<p>Note that I haven't found how to make <code>verbose</code> also turn a <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#t:Fold"><code>Fold</code></a> to a verbose variant.</p>
-<p>To see our verbose optics in action we'll make some verbose variants of optics from <a href="https://hackage.haskell.org/package/lens-aeson/docs/Data-Aeson-Lens.html"><code>lens-aeson</code></a>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Err</span> <span class="ot">=</span> <span class="dt">String</span></span>
+<p>Note that I haven't found how to make <code>verbose</code> also turn
+a <a
+href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Fold.html#t:Fold"><code>Fold</code></a>
+to a verbose variant.</p>
+<p>To see our verbose optics in action we'll make some verbose variants
+of optics from <a
+href="https://hackage.haskell.org/package/lens-aeson/docs/Data-Aeson-Lens.html"><code>lens-aeson</code></a>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="dt">Err</span> <span class="ot">=</span> <span class="dt">String</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ot">v_Value ::</span> (<span class="dt">AsValue</span> t, <span class="dt">Show</span> t) <span class="ot">=&gt;</span> <span class="dt">VerbosePrism&#39;</span> <span class="dt">Err</span> t <span class="dt">Value</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>v_Value <span class="ot">=</span> verbose (\x <span class="ot">-&gt;</span> <span class="st">&quot;Doesn&#39;t parse as JSON: &quot;</span> <span class="op">&lt;&gt;</span> <span class="fu">show</span> x) _Value</span>
@@ -148,7 +169,8 @@
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Expected &quot;</span> <span class="op">&lt;&gt;</span> e <span class="op">&lt;&gt;</span> <span class="st">&quot; but found &quot;</span> <span class="op">&lt;&gt;</span></span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    Data.ByteString.Lazy.Char8.unpack (encode x)</span></code></pre></div>
 <p>Now let's see they work:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp"># Verbose traversals can work like regular traversals</span></span>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="pp"># Verbose traversals can work like regular traversals</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="st">&quot;[1, \&quot;x\&quot;]&quot;</span> <span class="op">^?</span> _Value <span class="op">.</span> nth <span class="dv">0</span> <span class="op">.</span> _Double</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="dt">Just</span> <span class="fl">1.0</span></span>
@@ -168,18 +190,35 @@
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="st">&quot;hello&quot;</span> <span class="op">^??</span> v_Value <span class="op">.</span> v_Double</span>
 <span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="dt">Left</span> <span class="st">&quot;Doesn&#39;t parse as JSON: \&quot;hello\&quot;&quot;</span></span></code></pre></div>
 <h2 id="notes">Notes</h2>
-<p><a href="https://www.reddit.com/r/haskell/comments/eh4gpg/elegant_ast_parsing_and_building_with_prisms/fcl7dvv/">In the previous post's discussion</a>, <a href="https://github.com/ekmett/lens"><code>lens</code></a>'s creator Edward Kmett noted that in <code>lens</code>'s early days they experimented with a different formulation of error-reporting optics that placed the extra information in <code>Optic p f s t a b</code>'s <code>p</code> rather than <code>f</code>, but that with that formulation they ran into problems with inference and that this new formulation may work better.</p>
+<p><a
+href="https://www.reddit.com/r/haskell/comments/eh4gpg/elegant_ast_parsing_and_building_with_prisms/fcl7dvv/">In
+the previous post's discussion</a>, <a
+href="https://github.com/ekmett/lens"><code>lens</code></a>'s creator
+Edward Kmett noted that in <code>lens</code>'s early days they
+experimented with a different formulation of error-reporting optics that
+placed the extra information in <code>Optic p f s t a b</code>'s
+<code>p</code> rather than <code>f</code>, but that with that
+formulation they ran into problems with inference and that this new
+formulation may work better.</p>
 <h2 id="request-for-feedback">Request for feedback</h2>
 <ul>
-<li>Do you have use cases for this? If so, do you think that this should belong in <code>lens</code>?</li>
-<li>Should it belong in a separate package? Perhaps along with the previous posts' <code>Prism</code> combinators and with additional optics like <a href="https://github.com/ekmett/lens/issues/904">inverted <code>Prism</code>s and partial <code>Iso</code>s</a>?</li>
+<li>Do you have use cases for this? If so, do you think that this should
+belong in <code>lens</code>?</li>
+<li>Should it belong in a separate package? Perhaps along with the
+previous posts' <code>Prism</code> combinators and with additional
+optics like <a href="https://github.com/ekmett/lens/issues/904">inverted
+<code>Prism</code>s and partial <code>Iso</code>s</a>?</li>
 <li>Any code suggestions or improvements?</li>
 </ul>
 <p>Discussion</p>
 <ul>
-<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://www.reddit.com/r/haskell/comments/ej15ar/basic_error_reporting_for_optics/">r/haskell</a></li>
+<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/>
+<a
+href="https://www.reddit.com/r/haskell/comments/ej15ar/basic_error_reporting_for_optics/">r/haskell</a></li>
 </ul>
-<p><a href="https://www.peakpx.com/637476/railway-line-train-railway-crossing-sky-no-people">Image source</a></p>
+<p><a
+href="https://www.peakpx.com/637476/railway-line-train-railway-crossing-sky-no-people">Image
+source</a></p>
 
     <br>
     <br>

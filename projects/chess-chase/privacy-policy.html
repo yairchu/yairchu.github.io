@@ -65,15 +65,39 @@
     </div>
   </div>
   <article class="post">
-    <p>When playing Chess Chase, the game's communication is peer-to-peer, not involving any servers except when establishing the connection.</p>
+    <p>When playing Chess Chase, the game's communication is peer-to-peer,
+not involving any servers except when establishing the connection.</p>
 <p>There are several steps involved in establishing the connection:</p>
 <ul>
-<li>First, the game first contacts a third-party <a href="https://en.wikipedia.org/wiki/STUN">STUN service</a> to find out the game's internet IP address and <a href="https://en.wikipedia.org/wiki/User_Datagram_Protocol">UDP</a> port. One of <a href="https://github.com/talkiq/pystun3/blob/master/stun/__init__.py#L10">the providers used</a> by the <a href="https://github.com/talkiq/pystun3"><code>pystun3</code></a> library is picked at random. There is no personal information involved in this service and the third-party providers do not know if you are playing a game or conducting a VoIP call or other p2p task.</li>
-<li>When it knows its IP, the game registers it with the <a href="https://github.com/yairchu/game-match-server">matching server</a>, which provides the service of matching peers by a short random phrase, such as "BEER BANG DEER". The matching server gets no personal information except for the game's internet IP address which is essential for the communication to occur.</li>
+<li>First, the game first contacts a third-party <a
+href="https://en.wikipedia.org/wiki/STUN">STUN service</a> to find out
+the game's internet IP address and <a
+href="https://en.wikipedia.org/wiki/User_Datagram_Protocol">UDP</a>
+port. One of <a
+href="https://github.com/talkiq/pystun3/blob/master/stun/__init__.py#L10">the
+providers used</a> by the <a
+href="https://github.com/talkiq/pystun3"><code>pystun3</code></a>
+library is picked at random. There is no personal information involved
+in this service and the third-party providers do not know if you are
+playing a game or conducting a VoIP call or other p2p task.</li>
+<li>When it knows its IP, the game registers it with the <a
+href="https://github.com/yairchu/game-match-server">matching server</a>,
+which provides the service of matching peers by a short random phrase,
+such as "BEER BANG DEER". The matching server gets no personal
+information except for the game's internet IP address which is essential
+for the communication to occur.</li>
 </ul>
-<p>All of the in-game chat and plays are never transmitted to any server and are sent to the other player via direct peer-to-peer communication.</p>
-<p>The servers only know your IP addresses and whether you tried to establish a connection with a peer. This information is essential to establish the connection. This information may also be used to create aggregate statistics which count number of games played, and your IP will never be disclosed to any other party.</p>
-<p>Image source: <a href="https://www.wallpaperflare.com/office-stapler-and-paperclip-various-business-close-up-white-wallpaper-woypt" class="uri">https://www.wallpaperflare.com/office-stapler-and-paperclip-various-business-close-up-white-wallpaper-woypt</a></p>
+<p>All of the in-game chat and plays are never transmitted to any server
+and are sent to the other player via direct peer-to-peer
+communication.</p>
+<p>The servers only know your IP addresses and whether you tried to
+establish a connection with a peer. This information is essential to
+establish the connection. This information may also be used to create
+aggregate statistics which count number of games played, and your IP
+will never be disclosed to any other party.</p>
+<p>Image source: <a
+href="https://www.wallpaperflare.com/office-stapler-and-paperclip-various-business-close-up-white-wallpaper-woypt"
+class="uri">https://www.wallpaperflare.com/office-stapler-and-paperclip-various-business-close-up-white-wallpaper-woypt</a></p>
 
     <br>
     <br>

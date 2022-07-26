@@ -67,16 +67,22 @@
     </div>
   </div>
   <article class="post">
-    <p>Following my <a href="codecs-as-prisms">previous post</a> which suggested the use of <code>Prism</code>s for parsing and building, using a binary format example - I also want to show how the same idea can work nicely for parsing and building programming language syntax.</p>
+    <p>Following my <a href="codecs-as-prisms">previous post</a> which
+suggested the use of <code>Prism</code>s for parsing and building, using
+a binary format example - I also want to show how the same idea can work
+nicely for parsing and building programming language syntax.</p>
 <h2 id="simple-ast-example">Simple AST example</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Expr</span></span>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> <span class="dt">Expr</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="ot">=</span> <span class="dt">Lit</span> <span class="dt">Int</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="dt">Add</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="dt">Mul</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Generic</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>makePrisms <span class="ch">&#39;&#39;</span><span class="dt">Expr</span></span></code></pre></div>
-<p>Here's our <code>Prism</code> for parsing and building the above AST:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> expr <span class="op">#</span> <span class="dt">Mul</span> (<span class="dt">Add</span> (<span class="dt">Lit</span> <span class="dv">1</span>) (<span class="dt">Lit</span> <span class="dv">2</span>)) (<span class="dt">Lit</span> <span class="dv">3</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>makePrisms &#39;<span class="dt">&#39;Expr</span></span></code></pre></div>
+<p>Here's our <code>Prism</code> for parsing and building the above
+AST:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> expr <span class="op">#</span> <span class="dt">Mul</span> (<span class="dt">Add</span> (<span class="dt">Lit</span> <span class="dv">1</span>) (<span class="dt">Lit</span> <span class="dv">2</span>)) (<span class="dt">Lit</span> <span class="dv">3</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;(1 + 2) * 3&quot;</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ot">expr ::</span> <span class="dt">Prism&#39;</span> <span class="dt">String</span> <span class="dt">Expr</span></span>
@@ -95,20 +101,48 @@
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        takeExpr <span class="op">.</span> aside (_Cons <span class="op">.</span> firstOnly <span class="st">&quot;)&quot;</span>)</span></code></pre></div>
 <p>This uses the following combinators:</p>
 <ul>
-<li><a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Cons.html"><code>_Cons</code></a>, <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:_Show"><code>_Show</code></a>, and <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:aside"><code>aside</code></a> from <a href="http://hackage.haskell.org/package/lens"><code>Control.Lens</code></a></li>
-<li><code>firstOnly</code>, <code>secondOnly</code>, and <code>asideFirst</code> from <a href="codecs-as-prisms#parse-build-prism-combinators">the previous post</a></li>
-<li><code>tokens</code>, <code>infixOpLeftRecursion</code>, and <code>tryMatch</code> are defined in the <a href="#appendix">appendix</a> at the bottom</li>
+<li><a
+href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Cons.html"><code>_Cons</code></a>,
+<a
+href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:_Show"><code>_Show</code></a>,
+and <a
+href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Prism.html#v:aside"><code>aside</code></a>
+from <a
+href="http://hackage.haskell.org/package/lens"><code>Control.Lens</code></a></li>
+<li><code>firstOnly</code>, <code>secondOnly</code>, and
+<code>asideFirst</code> from <a
+href="codecs-as-prisms#parse-build-prism-combinators">the previous
+post</a></li>
+<li><code>tokens</code>, <code>infixOpLeftRecursion</code>, and
+<code>tryMatch</code> are defined in the <a
+href="#appendix">appendix</a> at the bottom</li>
 </ul>
 <h2 id="observations">Observations</h2>
-<p>In the previous post, <code>Prism</code>s didn't match up to Python's <a href="https://construct.readthedocs.io/en/latest/intro.html">Construct</a> in encoding binary protocols, where Construct made good use of structural duck types (though this appears solvable with some effort). However, for programming language syntax <code>Prism</code>s seem very elegant imho.</p>
-<p>Note how we harness optics' parametricity and composition. In the previous post we parsed <code>ByteString</code>s but here we parse <code>String</code> and we start by converting them to tokens (ie <code>[String]</code>) and parse that.</p>
+<p>In the previous post, <code>Prism</code>s didn't match up to Python's
+<a
+href="https://construct.readthedocs.io/en/latest/intro.html">Construct</a>
+in encoding binary protocols, where Construct made good use of
+structural duck types (though this appears solvable with some effort).
+However, for programming language syntax <code>Prism</code>s seem very
+elegant imho.</p>
+<p>Note how we harness optics' parametricity and composition. In the
+previous post we parsed <code>ByteString</code>s but here we parse
+<code>String</code> and we start by converting them to tokens (ie
+<code>[String]</code>) and parse that.</p>
 <h3 id="renegade-prisms">Renegade prisms</h3>
-<p>Unlike the previous post's lawful <code>Prism</code>s, this post's parsing is lossy, so it breaks the <a href="https://artyom.me/lens-over-tea-2#traversal-laws"><code>Traversal</code> laws</a>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="st">&quot;1 + (2*3)&quot;</span> <span class="op">&amp;</span> expr <span class="op">%~</span> <span class="fu">id</span></span>
+<p>Unlike the previous post's lawful <code>Prism</code>s, this post's
+parsing is lossy, so it breaks the <a
+href="https://artyom.me/lens-over-tea-2#traversal-laws"><code>Traversal</code>
+laws</a>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="st">&quot;1 + (2*3)&quot;</span> <span class="op">&amp;</span> expr <span class="op">%~</span> <span class="fu">id</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;1 + 2 * 3&quot;</span></span></code></pre></div>
-<p>If one desires lawful parsing Prisms, their AST representation has to represent white-space and redundant parentheses.</p>
-<p>A <code>Prism</code> law that is kept is that if you parse what you built you do get it back:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Test.QuickCheck.Arbitrary.ADT</span></span>
+<p>If one desires lawful parsing Prisms, their AST representation has to
+represent white-space and redundant parentheses.</p>
+<p>A <code>Prism</code> law that is kept is that if you parse what you
+built you do get it back:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Test.QuickCheck.Arbitrary.ADT</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>propParseBack e <span class="ot">=</span> (expr <span class="op">#</span> e) <span class="op">^?</span> expr <span class="op">==</span> <span class="dt">Just</span> e</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -118,23 +152,38 @@
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> quickCheck propParseBack</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="op">+++</span> <span class="dt">OK</span>, passed <span class="dv">100</span> tests<span class="op">.</span></span></code></pre></div>
-<h3 id="caveat-meaninful-parse-errors">Caveat: meaninful parse errors</h3>
-<p>When parsing with this <code>Prism</code> fails, it offers no useful error-reporting. But do I believe that this is solvable and I'll address it in future posts.</p>
+<h3 id="caveat-meaninful-parse-errors">Caveat: meaninful parse
+errors</h3>
+<p>When parsing with this <code>Prism</code> fails, it offers no useful
+error-reporting. But do I believe that this is solvable and I'll address
+it in future posts.</p>
 <h2 id="request-for-feedback">Request for feedback</h2>
 <ul>
-<li>Do you think that some extra combinators used here (<code>asideFirst</code>, <code>firstOnly</code>, etc) should belong in <a href="http://hackage.haskell.org/package/lens"><code>lens</code></a>?</li>
-<li>Or prehaps these combinators should belong in a separate package? How would you call it?</li>
-<li>Any suggestions as for naming these combinators? Other code improvements?</li>
-<li>Image credit: Does anyone know who is the artist for the opening image? (I found it on <a href="https://www.pinterest.com/pin/800303796254211989/">the internets</a>)</li>
+<li>Do you think that some extra combinators used here
+(<code>asideFirst</code>, <code>firstOnly</code>, etc) should belong in
+<a
+href="http://hackage.haskell.org/package/lens"><code>lens</code></a>?</li>
+<li>Or prehaps these combinators should belong in a separate package?
+How would you call it?</li>
+<li>Any suggestions as for naming these combinators? Other code
+improvements?</li>
+<li>Image credit: Does anyone know who is the artist for the opening
+image? (I found it on <a
+href="https://www.pinterest.com/pin/800303796254211989/">the
+internets</a>)</li>
 </ul>
 <p>Btw: Thanks to Eyal Lotem for reading drafts of this.</p>
 <p>Discussion:</p>
 <ul>
-<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> <a href="https://www.reddit.com/r/haskell/comments/eh4gpg/elegant_ast_parsing_and_building_with_prisms/">r/haskell</a></li>
+<li><img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/>
+<a
+href="https://www.reddit.com/r/haskell/comments/eh4gpg/elegant_ast_parsing_and_building_with_prisms/">r/haskell</a></li>
 </ul>
 <h2 id="appendix">Appendix</h2>
-<h3 id="ast-parse-build-prism-combinators">AST parse-build prism combinators</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Extend a base parsing prism with applications of an operator</span></span>
+<h3 id="ast-parse-build-prism-combinators">AST parse-build prism
+combinators</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Extend a base parsing prism with applications of an operator</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ot">infixOpLeftRecursion ::</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Eq</span> a <span class="ot">=&gt;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    a <span class="ot">-&gt;</span>                        <span class="co">-- The operator&#39;s text</span></span>
@@ -198,8 +247,17 @@
 <span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>            ((y<span class="op">:</span>ys) <span class="op">:</span> zs) <span class="op">|</span> <span class="fu">not</span> (isParen y) <span class="op">&amp;&amp;</span> isOp x <span class="op">==</span> isOp y <span class="ot">-&gt;</span> (x<span class="op">:</span>y<span class="op">:</span>ys) <span class="op">:</span> zs</span>
 <span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>            ys <span class="ot">-&gt;</span> [x] <span class="op">:</span> ys</span></code></pre></div>
 <ul>
-<li>The <code>retuple</code> <code>Iso</code> was <a href="codecs-as-prisms#parse-build-prism-combinators">defined in the previous post</a></li>
-<li><code>tryMatch</code> takes two prisms from the unparsed source and from the resulting structure to the matched pattern. If there were optics for inversed prisms and <a href="https://stackoverflow.com/questions/59426379/optic-for-partial-conversion-on-both-sides/59441415#59441415">partial isomorphisms</a> then these could be combined into one argument and the existing <a href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Combinators.html#v:failing"><code>failing</code></a> combinator could replace <code>tryMatch</code>.</li>
+<li>The <code>retuple</code> <code>Iso</code> was <a
+href="codecs-as-prisms#parse-build-prism-combinators">defined in the
+previous post</a></li>
+<li><code>tryMatch</code> takes two prisms from the unparsed source and
+from the resulting structure to the matched pattern. If there were
+optics for inversed prisms and <a
+href="https://stackoverflow.com/questions/59426379/optic-for-partial-conversion-on-both-sides/59441415#59441415">partial
+isomorphisms</a> then these could be combined into one argument and the
+existing <a
+href="http://hackage.haskell.org/package/lens-4.18.1/docs/Control-Lens-Combinators.html#v:failing"><code>failing</code></a>
+combinator could replace <code>tryMatch</code>.</li>
 </ul>
 
     <br>

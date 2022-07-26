@@ -67,43 +67,96 @@
     </div>
   </div>
   <article class="post">
-    <p>Whichever programming language you use, its eco-system probably consists of a plethora of confusing command line tools which you might have needed to use to actually make software with it.</p>
+    <p>Whichever programming language you use, its eco-system probably
+consists of a plethora of confusing command line tools which you might
+have needed to use to actually make software with it.</p>
 <h2 id="compiling-your-program">Compiling your program</h2>
-<p>You need something to compile or interpret your program. In Haskell this is <code>ghc</code>, in Python it's <code>python</code>. In C++ it's <del><code>gcc</code></del> <del><code>clang</code></del> your IDE.</p>
-<h2 id="compiling-a-program-which-consists-of-several-modules">Compiling a program which consists of several modules</h2>
-<p>In some languages, the compiler only compiles a single source file. If we split our code to several modules, we need a tool to run the compiler for each one. In Haskell that's <code>cabal</code> (and later also <code>ghc --make</code>), in Python it was always baked in to the interpreter. In C++ this is the reason you just use an IDE.</p>
+<p>You need something to compile or interpret your program. In Haskell
+this is <code>ghc</code>, in Python it's <code>python</code>. In C++
+it's <del><code>gcc</code></del> <del><code>clang</code></del> your
+IDE.</p>
+<h2 id="compiling-a-program-which-consists-of-several-modules">Compiling
+a program which consists of several modules</h2>
+<p>In some languages, the compiler only compiles a single source file.
+If we split our code to several modules, we need a tool to run the
+compiler for each one. In Haskell that's <code>cabal</code> (and later
+also <code>ghc --make</code>), in Python it was always baked in to the
+interpreter. In C++ this is the reason you just use an IDE.</p>
 <h2 id="package-manager">Package manager</h2>
-<p>You want to use libraries. In the old days folks downloaded installers or source packages from the internet and executed their install scripts, but the current trend is to invoke the package manager which magically installs a package along with its transitive dependencies for you.</p>
-<p>In Haskell that's <code>cabal-install</code>. In Python it was <code>easy_install</code> and nowadays it seems to be <code>pip</code>. In C++ you simply try to avoid using libraries.</p>
+<p>You want to use libraries. In the old days folks downloaded
+installers or source packages from the internet and executed their
+install scripts, but the current trend is to invoke the package manager
+which magically installs a package along with its transitive
+dependencies for you.</p>
+<p>In Haskell that's <code>cabal-install</code>. In Python it was
+<code>easy_install</code> and nowadays it seems to be <code>pip</code>.
+In C++ you simply try to avoid using libraries.</p>
 <h3 id="the-package-manager-fallacy">The package manager fallacy</h3>
-<p>A problem with this paradigm arises when you work on two projects which depend on different versions of the same library. This is a conflict!</p>
-<p>The problem is even more subtle as versions of the transitive dependencies may occasionally matter too.</p>
+<p>A problem with this paradigm arises when you work on two projects
+which depend on different versions of the same library. This is a
+conflict!</p>
+<p>The problem is even more subtle as versions of the transitive
+dependencies may occasionally matter too.</p>
 <p>This is the reason that we need even more tools.</p>
 <h3 id="the-sandbox">The "Sandbox"</h3>
-<p>This tool allows different projects to use distinct versions of libraries. In Haskell this is <code>cabal-v2</code>, in Python it was <code>virtualenv</code> and nowaday it seems to be <code>venv</code>.</p>
-<h3 id="the-libraries-sandbox-fallacy">The Libraries Sandbox fallacy</h3>
-<p>The libraries aren't all of the dependencies. The specific version of the programming language's compiler/interpreter itself also tends to matter quite a lot!</p>
+<p>This tool allows different projects to use distinct versions of
+libraries. In Haskell this is <code>cabal-v2</code>, in Python it was
+<code>virtualenv</code> and nowaday it seems to be
+<code>venv</code>.</p>
+<h3 id="the-libraries-sandbox-fallacy">The Libraries Sandbox
+fallacy</h3>
+<p>The libraries aren't all of the dependencies. The specific version of
+the programming language's compiler/interpreter itself also tends to
+matter quite a lot!</p>
 <p>This is the reason that we need even more tools.</p>
 <h2 id="reproducible-build">Reproducible Build</h2>
-<p><img src="/images/turtles-all-the-way-down.jpg" alt="Turtles all the way down" /></p>
-<p>You also want to be able to express which exact version of your compiler/etc you are using, and have your tool do all the rest (get this compiler version, your dependencies, and build your program for you).</p>
-<p>You want the definitions to be stored in your source repository so that you could easily go and build the old versions of your project just like you did when you implemented them.</p>
-<p>In Haskell the tool for this is generally <code>stack</code> (which actually existed before <code>cabal-v2</code>) or <code>nix</code>. In Python folks keep several toolset installations (i.e <code>python2</code> and <code>python3</code>) and manually invoke the right one. In C++ to build your old code you keep around an old computer.</p>
-<p>In a perfect world the "reproducible build" tool should be the only tool you need.</p>
-<p>The existence of the previous partial solutions is an awkward artifact of history which represents the order of iterative discovery and partial solutions to this problem space.</p>
+<p><img src="/images/turtles-all-the-way-down.jpg"
+alt="Turtles all the way down" /></p>
+<p>You also want to be able to express which exact version of your
+compiler/etc you are using, and have your tool do all the rest (get this
+compiler version, your dependencies, and build your program for
+you).</p>
+<p>You want the definitions to be stored in your source repository so
+that you could easily go and build the old versions of your project just
+like you did when you implemented them.</p>
+<p>In Haskell the tool for this is generally <code>stack</code> (which
+actually existed before <code>cabal-v2</code>) or <code>nix</code>. In
+Python folks keep several toolset installations (i.e
+<code>python2</code> and <code>python3</code>) and manually invoke the
+right one. In C++ to build your old code you keep around an old
+computer.</p>
+<p>In a perfect world the "reproducible build" tool should be the only
+tool you need.</p>
+<p>The existence of the previous partial solutions is an awkward
+artifact of history which represents the order of iterative discovery
+and partial solutions to this problem space.</p>
 <h3 id="points-for-rust">Points for Rust</h3>
 <p><img src="/images/dab-emoji.jpg" alt="Dab Emoji" style="width: 150px;"/></p>
 <p>Hindsight is 20/20.</p>
-<p>Unlike Python, Haskell, and other languages which each developed their five tools, Rust, a new-comer modern programming language skipped this baggage and does offer a single reproducible build tool to rule them all - <code>cargo</code>.</p>
+<p>Unlike Python, Haskell, and other languages which each developed
+their five tools, Rust, a new-comer modern programming language skipped
+this baggage and does offer a single reproducible build tool to rule
+them all - <code>cargo</code>.</p>
 <h2 id="is-that-all">Is that all</h2>
 <p><img src="/images/yo-dawg-tool-to-get-tools.jpg" alt="Yo dawg" /></p>
-<p>Is that all? Or do we also need a tool to specify the exact version of our reproducible build tool?</p>
-<p>In a perfect world you wouldn't need that, but unfortunately the world is not perfect. Haskell's <code>stack</code>'s new versions don't support some features of the definition files (<code>stack.yaml</code>) of its older versions and vice versa. To solve this problem without an additional layer the reproducible build tool must be solid. It has to be backwards compatible with its older versions and also not have any weird behaviors (a bug-feature) that people rely on. Otherwise we'd need to keep piling layers.</p>
+<p>Is that all? Or do we also need a tool to specify the exact version
+of our reproducible build tool?</p>
+<p>In a perfect world you wouldn't need that, but unfortunately the
+world is not perfect. Haskell's <code>stack</code>'s new versions don't
+support some features of the definition files (<code>stack.yaml</code>)
+of its older versions and vice versa. To solve this problem without an
+additional layer the reproducible build tool must be solid. It has to be
+backwards compatible with its older versions and also not have any weird
+behaviors (a bug-feature) that people rely on. Otherwise we'd need to
+keep piling layers.</p>
 <p>Image sources:</p>
 <ul>
 <li><a href="https://imgur.com/gallery/BwYFH0F">Duct-tape car</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Turtles_all_the_way_down#/media/File:River_terrapin.jpg">Turtles</a></li>
-<li><a href="https://www.change.org/p/apple-add-the-dab-emoji-to-ios">Dab Emoji</a></li>
+<li><a
+href="https://en.wikipedia.org/wiki/Turtles_all_the_way_down#/media/File:River_terrapin.jpg">Turtles</a></li>
+<li><a
+href="https://www.change.org/p/apple-add-the-dab-emoji-to-ios">Dab
+Emoji</a></li>
 </ul>
 
     <br>

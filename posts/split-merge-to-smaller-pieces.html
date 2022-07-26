@@ -66,31 +66,41 @@
   </div>
   <article class="post">
     <p>Merges with many conflicts are horrifying.</p>
-<p>As the chance for a conflict resolution mistake increases, we can't run the tests to verify correctness until all of the conflicts are resolved.</p>
-<p>Often, however, we can break the merge process down to smaller pieces, where we can check and save our work after each step!</p>
+<p>As the chance for a conflict resolution mistake increases, we can't
+run the tests to verify correctness until all of the conflicts are
+resolved.</p>
+<p>Often, however, we can break the merge process down to smaller
+pieces, where we can check and save our work after each step!</p>
 <p><img src="/images/merge.svg" alt="Git merge" /></p>
-<p>The simplest way to break a merge down is to apply "sub-merges" which merge a single commit at a time.</p>
-<p><img src="/images/sub-merge.svg" alt="Git merge with sub-merges" /></p>
-<p>Each sub-merge involves less conflicts and we can run our test-suite to verify ourselves.</p>
-<p>A down-side of this simple approach is that it may be tedious to do manually and it will result in a very complicated git history tree.</p>
-<p>One way to resolve the history issue is to rewrite it, which one can do with <code>git rebase</code>.</p>
-<p>If we rebase rather than merge, the following script makes the process easy by automating it:</p>
+<p>The simplest way to break a merge down is to apply "sub-merges" which
+merge a single commit at a time.</p>
+<p><img src="/images/sub-merge.svg"
+alt="Git merge with sub-merges" /></p>
+<p>Each sub-merge involves less conflicts and we can run our test-suite
+to verify ourselves.</p>
+<p>A down-side of this simple approach is that it may be tedious to do
+manually and it will result in a very complicated git history tree.</p>
+<p>One way to resolve the history issue is to rewrite it, which one can
+do with <code>git rebase</code>.</p>
+<p>If we rebase rather than merge, the following script makes the
+process easy by automating it:</p>
 <h2 id="sub-rebasesh">sub-rebase.sh</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">BASE=${1</span><span class="op">:-</span>master<span class="va">}</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="va">BASE</span><span class="op">=</span><span class="va">${1</span><span class="op">:-</span>master<span class="va">}</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="fu">true</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Find next commit to rebase to</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">NEXT_COMMIT=</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">COMMON_ANCESTOR=$(</span><span class="fu">git</span> merge-base HEAD <span class="va">$BASE)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">NEXT_COMMIT</span><span class="op">=</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">COMMON_ANCESTOR</span><span class="op">=</span><span class="va">$(</span><span class="fu">git</span> merge-base HEAD <span class="va">$BASE)</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> COMMIT <span class="kw">in</span> <span class="va">$(</span><span class="fu">git</span> rev-list ..<span class="va">$BASE</span> <span class="at">--reverse</span><span class="va">)</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">do</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">[</span> <span class="va">$(</span><span class="fu">git</span> merge-base HEAD <span class="va">$COMMIT)</span> <span class="ot">==</span> <span class="va">$COMMON_ANCESTOR</span> <span class="bu">]</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">then</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Rebasing on this commit will strictly progress towards our goal</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>            <span class="va">NEXT_COMMIT=$COMMIT</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            <span class="bu">break</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>            <span class="va">NEXT_COMMIT</span><span class="op">=</span><span class="va">$COMMIT</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">fi</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># The commit is not strictly ahead of BASE</span></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> Skipping <span class="va">$COMMIT</span> as it is not strictly ahead of <span class="va">$BASE</span></span>
@@ -100,18 +110,29 @@
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> Rebasing over <span class="va">$NEXT_COMMIT</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">git</span> rebase <span class="va">$NEXT_COMMIT</span> <span class="kw">||</span> <span class="bu">exit</span> 1</span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
-<p>It rebases up to the first parent of the base branch which has any merge conflicts to address (so it doesn't accumulate conflicts from multiple commits).</p>
-<p>Apply it to advance towards your complete merge in smaller, testable pieces.</p>
-<p><em>Update:</em> I learned about the <a href="https://github.com/mhagger/git-imerge"><code>git-imerge</code> tool</a> which aims to do exactly what I suggest here. I will give it a try and will update this post subsequently!</p>
+<p>It rebases up to the first parent of the base branch which has any
+merge conflicts to address (so it doesn't accumulate conflicts from
+multiple commits).</p>
+<p>Apply it to advance towards your complete merge in smaller, testable
+pieces.</p>
+<p><em>Update:</em> I learned about the <a
+href="https://github.com/mhagger/git-imerge"><code>git-imerge</code>
+tool</a> which aims to do exactly what I suggest here. I will give it a
+try and will update this post subsequently!</p>
 <p>Notes:</p>
 <ul>
 <li>This process works well when we commit often in small commits.</li>
-<li>For resolving the conflicts, <a href="/posts/git-mediate-stops-fear">I recommend using git-mediate</a></li>
-<li>Image from <a href="https://www.reddit.com/r/funny/comments/ub7x3/fail_shape_sorter_college_campus_level/">this meme</a></li>
+<li>For resolving the conflicts, <a
+href="/posts/git-mediate-stops-fear">I recommend using
+git-mediate</a></li>
+<li>Image from <a
+href="https://www.reddit.com/r/funny/comments/ub7x3/fail_shape_sorter_college_campus_level/">this
+meme</a></li>
 </ul>
 <p>Updates:</p>
 <ul>
-<li>2020.05.19: Updated script to skip over commits that are not strictly ahead of the common ancestor with the base branch</li>
+<li>2020.05.19: Updated script to skip over commits that are not
+strictly ahead of the common ancestor with the base branch</li>
 </ul>
 
     <br>
