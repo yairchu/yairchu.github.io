@@ -3,10 +3,28 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    size: 11191
+    url: https://github.com/ChrisPenner/slick/archive/0127e8d7942dba17967d6ef431093f730e00d5e3.tar.gz
+    name: slick
+    version: 1.1.2.2
+    sha256: 9de86ca7ba8e86f503b63356f096a9df478329173458de567adf6d5209605846
+    pantry-tree:
+      size: 880
+      sha256: 551394912628327a977ad8a714bd7de6aa15dd9f08a9000051fe88cc5e616b62
+  original:
+    url: https://github.com/ChrisPenner/slick/archive/0127e8d7942dba17967d6ef431093f730e00d5e3.tar.gz
+- completed:
+    hackage: mustache-2.4.1@sha256:dc92ddbf90e3a64c3f2ec7785cf2937d6dcf6ffcebbc38ad9c8b33b6a70bb298,3180
+    pantry-tree:
+      size: 1182
+      sha256: d201b56e6402cf92b69f60718658bf25fc602fabe87d3c84934d07c910194e38
+  original:
+    hackage: mustache-2.4.1@sha256:dc92ddbf90e3a64c3f2ec7785cf2937d6dcf6ffcebbc38ad9c8b33b6a70bb298,3180
 snapshots:
 - completed:
-    size: 586069
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/14.yaml
-    sha256: 87842ecbaa8ca9cee59a7e6be52369dbed82ed075cb4e0d152614a627e8fd488
-  original: lts-18.14
+    size: 619163
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/19/16.yaml
+    sha256: a27a5761890ade44d7dd21a5f5f93c87e60b9c063655fff835d69dd1071474f0
+  original: lts-19.16

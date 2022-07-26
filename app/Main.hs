@@ -10,7 +10,6 @@ import Data.Aeson as A
 import Data.Aeson.Lens
 import Data.Foldable (traverse_)
 import Data.Function (on)
-import qualified Data.HashMap.Lazy as HML
 import Data.List (groupBy, sortOn)
 import qualified Data.Ord as Ord
 import qualified Data.Text as T
@@ -38,7 +37,7 @@ outputFolder = "docs/"
 
 --Data models-------------------------------------------------------------------
 withSiteMeta :: Value -> Value
-withSiteMeta (Object obj) = Object $ HML.union obj siteMetaObj
+withSiteMeta (Object obj) = Object (obj <> siteMetaObj)
   where
     Object siteMetaObj = toJSON siteMeta
 withSiteMeta _ = error "only add site meta to objects"
