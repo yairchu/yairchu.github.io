@@ -1,0 +1,13 @@
+digraph {
+    node [style="filled" fontcolor="white" color="#8888ff"]
+
+    Cpp [label="C++"]
+
+    Cpp -> Python
+    Cpp -> Java
+    Python -> Haskell
+    Cpp -> Haskell
+    Cpp -> Go
+    Java -> Go
+    Cpp -> Rust
+}

@@ -2,12 +2,93 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-07-26T14:04:SZ</updated>
+  <updated>2022-07-26T14:08:SZ</updated>
   <author>
       <name></name>
   </author>
   <id>https://yairchu.github.io//</id>
 
+  <entry>
+      <title>Modern coding with formatters and linters</title>
+      <link href="https://yairchu.github.io/posts/formatters-and-linters"/>
+      <id>https://yairchu.github.io/posts/formatters-and-linters</id>
+      <updated>2022-07-26T00:00:SZ</updated>
+      <category term="code"/>
+      <category term="python"/>
+      <category term="rust"/>
+      <category term="lamdu"/>
+      <summary>Modern coding with formatters and linters and how Lamdu does it
+differently</summary>
+      <content type="html"><![CDATA[<p>Many developers nowadays use code auto-formatters and linters. Modern
+languages like Rust even have these tools built in with their
+environments (<code>cargo fmt</code>, <code>cargo clippy</code>).</p>
+<p>You may write a piece of Python code like</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> a:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    something_long(that_should_be_split, to_several_lines, because_we_dont, like_horizontal_scrolling)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> b:</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        c()</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        d()</span></code></pre></div>
+<p>And then click a button to auto-format it to:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> a:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    something_long(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        that_should_be_split,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        to_several_lines,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        because_we_dont,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        like_horizontal_scrolling,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> b:</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        c()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        d()</span></code></pre></div>
+<p>Afterwards you may handle linter suggestions from a tool such as <a
+href="https://sourcery.ai">sourcery</a> to turn it to:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> a:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    something_long(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        that_should_be_split,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        to_several_lines,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        because_we_dont,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        like_horizontal_scrolling,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> b:</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    c()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    d()</span></code></pre></div>
+<p>This is certainly an improvement over eras when those suggestions
+came from manual code reviewers work in pull requests.</p>
+<p>But I can't help but notice how many steps are in the programming
+process:</p>
+<p><img src="/images/programmer-state-machine.svg"
+alt="Programmer State Machine" /></p>
+<p>Wouldn't it be awesome if this was a non-issue? I think it would, and
+that's how it works in <a href="http://www.lamdu.org">Lamdu</a>:</p>
+<ul>
+<li>Code layout is automatic as you edit. Formatting happens in
+real-time and doesn't require an extra step. It's even responsive and
+will break lines differently depending on the available width.</li>
+<li>Syntax sugars like <code>elif</code> apply automatically whenever
+the code matches the pattern, always. We still aim to get out of your
+way if you want to make changes that would not fit the sugar anymore,
+and it will automatically switch back to unsugared form.</li>
+</ul>
+<p>For more info on Lamdu's approach see the demo in this video:</p>
+<iframe style="display: block; margin: auto; margin-top: 15px;" width="640" height="360" src="https://www.youtube.com/embed/Q61dh87WGrE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
+>
+</iframe>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>The back-end deployment state-machine adds even more steps to the
+development process and <a href="https://darklang.com">Dark</a> is
+taking steps to simplify this</li>
+<li>Header image: Scene of <a href="https://youtu.be/AbSehcT19u0">Hal
+fixing a light-bulb</a> from Malcolm in the Middle</li>
+</ul>]]></content>
+  </entry>
   <entry>
       <title>The revolution in UI paradigms</title>
       <link href="https://yairchu.github.io/posts/ui-paradigms"/>
