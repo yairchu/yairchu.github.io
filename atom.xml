@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-07-26T14:08:SZ</updated>
+  <updated>2022-07-27T13:26:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -63,7 +63,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a hr
 came from manual code reviewers work in pull requests.</p>
 <p>But I can't help but notice how many steps are in the programming
 process:</p>
-<p><img src="/images/programmer-state-machine.svg"
+<p><img src="/images/programmer-state-machine-2.png"
 alt="Programmer State Machine" /></p>
 <p>Wouldn't it be awesome if this was a non-issue? I think it would, and
 that's how it works in <a href="http://www.lamdu.org">Lamdu</a>:</p>
