@@ -21,22 +21,19 @@ This can be implemented without overlapping instances as follows:
 {-# LANGUAGE FlexibleInstances, UndecidableInstances, DataKinds, TypeFamilies #-}
 
 import Data.Proxy
+import TypeFun.Data.Eq (Equal) -- From "type-fun" package
 
 pyPrint :: PyStr a => a -> IO ()
 pyPrint = putStrLn . pyStr
 
 class PyStr a where pyStr :: a -> String
 
-type family IsStr a where
-    IsStr String = True
-    IsStr _ = False
-
 class PyStrHelper a where pyStrHelper :: a -> String
 instance PyStrHelper (Proxy True, String) where pyStrHelper = snd
 instance Show a => PyStrHelper (Proxy False, a) where pyStrHelper = show . snd
 
-instance PyStrHelper (Proxy (IsStr a), a) => PyStr a where
-    pyStr = pyStrHelper . ((,) Proxy :: a -> (Proxy (IsStr a), a))
+instance PyStrHelper (Proxy (Equal String a), a) => PyStr a where
+    pyStr = pyStrHelper . ((,) Proxy :: a -> (Proxy (Equal String a), a))
 ```
 
 ## Good idea or not
