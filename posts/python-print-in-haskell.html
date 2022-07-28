@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="Python&#39;s print in Haskell">
+  <meta name="twitter:description" content="Implementing Python&#39;s print function in Haskell">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/serpent-and-eve.jpg">
+  <title>Python&#39;s print in Haskell</title>
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="Python&#39;s print in Haskell" />
+  <meta property="og:image" content="https://yairchu.github.io/images/serpent-and-eve.jpg" />
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3ZVL4J64MW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3ZVL4J64MW');
+  </script>
+</head>
+<body>
+  <header dir="ltr">
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        Python&#39;s print in Haskell
+      </span>
+
+      <img class="post-image" src="/images/serpent-and-eve.jpg">
+      <span class="byline">by Yair Chuchem</span>
+      <span class="date">2022.07.28</span>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/python" class="tag">python</a>
+        <a href="/tag/haskell" class="tag">haskell</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p>Python's <code>print</code> function doesn't quote strings like
+Haskell's does. Suppose you wanted that:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    pyPrint <span class="st">&quot;Hello!&quot;</span> <span class="co">-- Prints Hello! (without quotes)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    pyPrint (<span class="dv">1</span>, <span class="st">&quot;a&quot;</span>) <span class="co">-- Prints (1,&quot;a&quot;)</span></span></code></pre></div>
+<p>This can be implemented without overlapping instances as follows:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE FlexibleInstances, UndecidableInstances, DataKinds, TypeFamilies #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Proxy</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ot">pyPrint ::</span> <span class="dt">PyStr</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>pyPrint <span class="ot">=</span> <span class="fu">putStrLn</span> <span class="op">.</span> pyStr</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">PyStr</span> a <span class="kw">where</span><span class="ot"> pyStr ::</span> a <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">IsStr</span> a <span class="kw">where</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">IsStr</span> <span class="dt">String</span> <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">IsStr</span> _ <span class="ot">=</span> <span class="dt">False</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">PyStrHelper</span> a <span class="kw">where</span><span class="ot"> pyStrHelper ::</span> a <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">PyStrHelper</span> (<span class="dt">Proxy</span> <span class="dt">True</span>, <span class="dt">String</span>) <span class="kw">where</span> pyStrHelper <span class="ot">=</span> <span class="fu">snd</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> <span class="dt">PyStrHelper</span> (<span class="dt">Proxy</span> <span class="dt">False</span>, a) <span class="kw">where</span> pyStrHelper <span class="ot">=</span> <span class="fu">show</span> <span class="op">.</span> <span class="fu">snd</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">PyStrHelper</span> (<span class="dt">Proxy</span> (<span class="dt">IsStr</span> a), a) <span class="ot">=&gt;</span> <span class="dt">PyStr</span> a <span class="kw">where</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    pyStr <span class="ot">=</span> pyStrHelper <span class="op">.</span> ((,) <span class="dt">Proxy</span><span class="ot"> ::</span> a <span class="ot">-&gt;</span> (<span class="dt">Proxy</span> (<span class="dt">IsStr</span> a), a))</span></code></pre></div>
+<h2 id="good-idea-or-not">Good idea or not</h2>
+<p>I'm writing this post because I'm currently considering a similar
+solution for processing the types AST of Lamdu.</p>
+<p>This AST is parameterized on whether we're displaying an inferred
+type, which doesn't have edit and refactoring actions available, or
+whether it is a user-editable type like the definition of a nominal
+type.</p>
+<p>Lamdu's <a
+href="https://github.com/lamdu/lamdu/blob/master/doc/Names.md">name-presentation
+AST pass</a> should have instances that work on both variants and this
+technique appears to allow that.</p>
+<p>What do you think? Is this a good idea?</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>See more detailed post on this technique <a
+href="https://kseo.github.io/posts/2017-02-05-avoid-overlapping-instances-with-closed-type-families.html">by
+Kwang</a></li>
+<li>Header image credit: <a
+href="https://www.jw.org/en/library/magazines/watchtower-study-december-2019/did-satan-promise-eve-immortality/">jw.org</a></li>
+</ul>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: Python&#39;s print in Haskell - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
