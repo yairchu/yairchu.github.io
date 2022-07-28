@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-07-28T12:38:SZ</updated>
+  <updated>2022-07-28T18:08:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -28,22 +28,19 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a 
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# LANGUAGE FlexibleInstances, UndecidableInstances, DataKinds, TypeFamilies #-}</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Proxy</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ot">pyPrint ::</span> <span class="dt">PyStr</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>pyPrint <span class="ot">=</span> <span class="fu">putStrLn</span> <span class="op">.</span> pyStr</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">PyStr</span> a <span class="kw">where</span><span class="ot"> pyStr ::</span> a <span class="ot">-&gt;</span> <span class="dt">String</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> <span class="kw">family</span> <span class="dt">IsStr</span> a <span class="kw">where</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">IsStr</span> <span class="dt">String</span> <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">IsStr</span> _ <span class="ot">=</span> <span class="dt">False</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">PyStrHelper</span> a <span class="kw">where</span><span class="ot"> pyStrHelper ::</span> a <span class="ot">-&gt;</span> <span class="dt">String</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">PyStrHelper</span> (<span class="dt">Proxy</span> <span class="dt">True</span>, <span class="dt">String</span>) <span class="kw">where</span> pyStrHelper <span class="ot">=</span> <span class="fu">snd</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> <span class="dt">PyStrHelper</span> (<span class="dt">Proxy</span> <span class="dt">False</span>, a) <span class="kw">where</span> pyStrHelper <span class="ot">=</span> <span class="fu">show</span> <span class="op">.</span> <span class="fu">snd</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">PyStrHelper</span> (<span class="dt">Proxy</span> (<span class="dt">IsStr</span> a), a) <span class="ot">=&gt;</span> <span class="dt">PyStr</span> a <span class="kw">where</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    pyStr <span class="ot">=</span> pyStrHelper <span class="op">.</span> ((,) <span class="dt">Proxy</span><span class="ot"> ::</span> a <span class="ot">-&gt;</span> (<span class="dt">Proxy</span> (<span class="dt">IsStr</span> a), a))</span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">TypeFun.Data.Eq</span> (<span class="dt">Equal</span>) <span class="co">-- From &quot;type-fun&quot; package</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ot">pyPrint ::</span> <span class="dt">PyStr</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>pyPrint <span class="ot">=</span> <span class="fu">putStrLn</span> <span class="op">.</span> pyStr</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">PyStr</span> a <span class="kw">where</span><span class="ot"> pyStr ::</span> a <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="dt">PyStrHelper</span> a <span class="kw">where</span><span class="ot"> pyStrHelper ::</span> a <span class="ot">-&gt;</span> <span class="dt">String</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">PyStrHelper</span> (<span class="dt">Proxy</span> <span class="dt">True</span>, <span class="dt">String</span>) <span class="kw">where</span> pyStrHelper <span class="ot">=</span> <span class="fu">snd</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Show</span> a <span class="ot">=&gt;</span> <span class="dt">PyStrHelper</span> (<span class="dt">Proxy</span> <span class="dt">False</span>, a) <span class="kw">where</span> pyStrHelper <span class="ot">=</span> <span class="fu">show</span> <span class="op">.</span> <span class="fu">snd</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">PyStrHelper</span> (<span class="dt">Proxy</span> (<span class="dt">Equal</span> <span class="dt">String</span> a), a) <span class="ot">=&gt;</span> <span class="dt">PyStr</span> a <span class="kw">where</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    pyStr <span class="ot">=</span> pyStrHelper <span class="op">.</span> ((,) <span class="dt">Proxy</span><span class="ot"> ::</span> a <span class="ot">-&gt;</span> (<span class="dt">Proxy</span> (<span class="dt">Equal</span> <span class="dt">String</span> a), a))</span></code></pre></div>
 <h2 id="good-idea-or-not">Good idea or not</h2>
 <p>I'm writing this post because I'm currently considering a similar
 solution for processing the types AST of Lamdu.</p>
