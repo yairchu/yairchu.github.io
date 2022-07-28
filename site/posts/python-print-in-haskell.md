@@ -53,3 +53,4 @@ What do you think? Is this a good idea?
 
 * See more detailed post on this technique [by Kwang](https://kseo.github.io/posts/2017-02-05-avoid-overlapping-instances-with-closed-type-families.html)
 * Header image credit: [jw.org](https://www.jw.org/en/library/magazines/watchtower-study-december-2019/did-satan-promise-eve-immortality/)
+* Discussion: * Discussions: <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell](https://www.reddit.com/r/haskell/comments/wa6wml/pythons_print_in_haskell/)
