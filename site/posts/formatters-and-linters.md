@@ -58,7 +58,7 @@ This is certainly an improvement over eras when those suggestions came from manu
 
 But I can't help but notice how many steps are in the programming process:
 
-![Programmer State Machine](/images/programmer-state-machine-2.png)
+![Programmer State Machine](/images/programmer-state-machine-3.png)
 
 Wouldn't it be awesome if this was a non-issue? I think it would, and that's how it works in [Lamdu](http://www.lamdu.org):
 
