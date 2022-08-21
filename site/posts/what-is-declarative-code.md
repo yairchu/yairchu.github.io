@@ -52,5 +52,34 @@ The standalone version of this app (**TODO**: link) has command line options, wh
 
 Naively one might write code to parse these options, and separately write documentation for them. A declarative library generates both from a single description.
 
+## Additional use-cases
+
+**TODO**: Find ways to incorporate this into another aspect of the app
+
+### Automatic differentiation
+
+Machine learning and optimization problems often require computing [gradients](https://en.wikipedia.org/wiki/Gradient) of cost functions.
+
+There are 2 parts of the model which would often involve similar code:
+
+* Executing the model
+* Training the model, whereas this part would consist of two parts
+  * Forward pass. It is very similar to the model execution but it retains intermediate results
+  * Backward pass. It traverses the computation in reverse order to compute all the gradients
+
+There are two declarative approaches to unify all of these to a single description:
+
+* Automatic differentiation (like ad or autograd) libraries only require making the model execution function polymorphic, but do incur have some performance penalry
+* ML Frameworks like TensorFlow produce efficient implementations of all three processes from a single model descriptions
+
 ## Declarative code: Pros and Cons
 
+Pros:
+
+* The error is less error prone because there is a single source of truth rather than several variations of it that need to be consistent. No ammount of testing could replace the value this brings in eliminating bugs
+* The code is more succint and elegant
+
+Cons:
+
+* Learning curve
+* There are usually more steps involved when debugging
