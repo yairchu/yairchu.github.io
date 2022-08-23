@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="What is declarative code">
+  <meta name="twitter:description" content="Declarative code explained with an example app.">
+    <title>What is declarative code</title>
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="What is declarative code" />
+  <meta property="og:image" content="https://yairchu.github.io/images/" />
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3ZVL4J64MW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3ZVL4J64MW');
+  </script>
+</head>
+<body>
+  <header dir="ltr">
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        What is declarative code
+      </span>
+
+      <span class="byline">by Yair Chuchem</span>
+      <span class="date">2022.08.21</span>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/declarative" class="tag">declarative</a>
+        <a href="/tag/optics" class="tag">optics</a>
+        <a href="/tag/parsing" class="tag">parsing</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p><em>Declarative code</em> doesn't do one specific thing, but rather
+describes a structure from which several processes can be derived.</p>
+<p>For example, take a look at this app:</p>
+<p><strong>TODO:</strong> A fun app maybe of animations consisting of
+configurable layers with effects</p>
+<p>We will look on four different aspects of this app which can be
+implemented either declaratively, or not:</p>
+<ul>
+<li>Graphical user interface</li>
+<li>Saving and loading documents</li>
+<li>Internal data manipulations</li>
+<li>Command line options (for the standalone version of this app)</li>
+</ul>
+<p>We will conclude with discussing the trade-offs involved with the
+declarative approach.</p>
+<h2 id="guis">GUIs</h2>
+<p>Traditional GUI frameworks (like GTK or Qt) require your app to
+implement the following two pieces of code:</p>
+<ul>
+<li>Upon loading a document, create the UI elements representing it</li>
+<li>When the document changes, maintain the UI, by updating or possibly
+adding and removing elements from it</li>
+</ul>
+<p>A declarative GUI library (like SwiftUI or Imgui) requires the user
+to implement a single mapping from a document to a UI, and uses it for
+both the initialization step and for updates.</p>
+<h2 id="saving-and-loading">Saving and loading</h2>
+<p>Concerning a data model and how to save it, an app would usually
+have:</p>
+<ul>
+<li>A function to serialize the document to a file</li>
+<li>A completely separate function to parse a file into a document</li>
+<li>Migration code to load documents saved by older versions</li>
+<li>And additionally, statically typed languages may also require
+definitions for the document's data types</li>
+</ul>
+<p>A library such as Protocol Buffers or Construct allows generating
+these tasks from a single succinct declaration. When PB's default values
+mechanism doesn't suffice, migration may require some additional logic,
+but this extra code is probably truly unavoidable.</p>
+<h2 id="internal-data-manipulation">Internal data manipulation</h2>
+<p>TODO: Describe the use of optics to create both getters and
+setters/modifiers.</p>
+<h2 id="command-line-options">Command line options</h2>
+<p>The standalone version of this app (<strong>TODO</strong>: link) has
+command line options, which control the window size and whether to use
+dark-mode.</p>
+<p>Naively one might write code to parse these options, and separately
+write documentation for them. A declarative library generates both from
+a single description.</p>
+<h2 id="additional-use-cases">Additional use-cases</h2>
+<p><strong>TODO</strong>: Find ways to incorporate this into another
+aspect of the app</p>
+<h3 id="automatic-differentiation">Automatic differentiation</h3>
+<p>Machine learning and optimization problems often require computing <a
+href="https://en.wikipedia.org/wiki/Gradient">gradients</a> of cost
+functions.</p>
+<p>There are 2 parts of the model which would often involve similar
+code:</p>
+<ul>
+<li>Executing the model</li>
+<li>Training the model, whereas this part would consist of two parts
+<ul>
+<li>Forward pass. It is very similar to the model execution but it
+retains intermediate results</li>
+<li>Backward pass. It traverses the computation in reverse order to
+compute all the gradients</li>
+</ul></li>
+</ul>
+<p>There are two declarative approaches to unify all of these to a
+single description:</p>
+<ul>
+<li>Automatic differentiation (like ad or autograd) libraries only
+require making the model execution function polymorphic, but do incur
+have some performance penalry</li>
+<li>ML Frameworks like TensorFlow produce efficient implementations of
+all three processes from a single model descriptions</li>
+</ul>
+<h2 id="declarative-code-pros-and-cons">Declarative code: Pros and
+Cons</h2>
+<p>Pros:</p>
+<ul>
+<li>The error is less error prone because there is a single source of
+truth rather than several variations of it that need to be consistent.
+No ammount of testing could replace the value this brings in eliminating
+bugs</li>
+<li>The code is more succint and elegant</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>Learning curve</li>
+<li>There are usually more steps involved when debugging</li>
+</ul>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: What is declarative code - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
