@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-08-26T20:20:SZ</updated>
+  <updated>2022-08-26T21:02:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -19,7 +19,7 @@
       <category term="ui"/>
       <category term="optics"/>
       <category term="automatic-differentiation"/>
-      <summary>Declarative code explained with an example app.</summary>
+      <summary>Declarative code explained with examples</summary>
       <content type="html"><![CDATA[<p>Some applications' code for saving and loading documents may consist
 of two separate functions kept in sync: one to translate the document
 into a stream of bytes and another for the inverse translation. Both
