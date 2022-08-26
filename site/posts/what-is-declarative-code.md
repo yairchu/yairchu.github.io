@@ -57,7 +57,7 @@ Cons:
 
 * **Require additional learning**. For example if you want mutually exclusive command line options, instead of adding a straightforward if-statement you would need to read the library's documentation to find how to specify this
 * The additional **indirections** often require additional digging when debugging
-* **Glass ceilings**: If what you want to do isn't supported by the libraries? You would have to extend library code, which is a more difficult task
+* **Glass ceilings**: What if what you need to do isn't supported by the libraries? You would have to extend library code, which is a more difficult task
 * **Performance**: In some cases, like garbage collection, dynamic typing, or taped-based [automatic differentiation](https://en.wikipedia.org/wiki/Automatic_differentiation#Reverse_accumulation), we do pay a significant performance price for the work saved from us, and hand-crafted undeclarative low-level code may win over the declarative alternative in the benchmarks
 
 In addition to these, declarative code has an additional, perhaps more important advantage, at least for me: *I just like it!*
