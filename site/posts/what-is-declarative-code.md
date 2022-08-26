@@ -32,7 +32,7 @@ Maintaining the help text separately is somewhat like hanging on to a unicycle w
 ## Declarative code
 
 The use of Protocol Buffers or `argparse` as descrbied above is called *Declarative Code*.
-It means code the doesn't perform a computation of a single task (like saving a document), but rather describes an aspect's essence from which several different processes can be derived.
+It means code which doesn't perform a computation of a single task (like saving a document), but rather describes an aspect's essence from which several different processes can be derived.
 
 Here are a few additional examples:
 
@@ -55,10 +55,10 @@ Pros:
 
 Cons:
 
-* **Require additional learning**. For example if you want mutually exclusive command line options, instead of adding a straightforward if-statement you would need to read the library's documentation to find how to specify this
+* The declarative style **requires additional learning**. For example if you want mutually exclusive command line options, instead of adding a straightforward if-statement you would need to read the library's documentation to find out how to specify this
 * The additional **indirections** often require additional digging when debugging
 * **Glass ceilings**: What if what you need to do isn't supported by the libraries? You would have to extend library code, which is a more difficult task
-* **Performance**: In some cases, like garbage collection, dynamic typing, or taped-based [automatic differentiation](https://en.wikipedia.org/wiki/Automatic_differentiation#Reverse_accumulation), we do pay a significant performance price for the work saved from us, and hand-crafted undeclarative low-level code may win over the declarative alternative in the benchmarks
+* **Performance**: In some cases, like garbage collection, dynamic typing, or tape-based [automatic differentiation](https://en.wikipedia.org/wiki/Automatic_differentiation#Reverse_accumulation), we do pay a significant performance price for the work saved from us. Sometimes hand-crafted non-declarative code might win over the declarative alternative in the benchmarks
 
 In addition to these, declarative code has an additional, perhaps more important advantage, at least for me: *I just like it!*
 
