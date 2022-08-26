@@ -8,10 +8,11 @@
 <meta name="twitter:creator" content="@yairchu">
 <meta name="twitter:title" content="What is declarative code">
   <meta name="twitter:description" content="Declarative code explained with an example app.">
-    <title>What is declarative code</title>
+  <meta name="twitter:image" content="https://yairchu.github.io//images/bugs-chasing-man-on-two-skateboards.jpg">
+  <title>What is declarative code</title>
   <link rel="stylesheet" href="/css/syntax.css">
   <meta property="og:title" content="What is declarative code" />
-  <meta property="og:image" content="https://yairchu.github.io/images/" />
+  <meta property="og:image" content="https://yairchu.github.io/images/bugs-chasing-man-on-two-skateboards.jpg" />
   <meta charset="UTF-8">
   <meta name=viewport content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/css/style.css">
@@ -50,112 +51,165 @@
         What is declarative code
       </span>
 
+      <img class="post-image" src="/images/bugs-chasing-man-on-two-skateboards.jpg">
       <span class="byline">by Yair Chuchem</span>
-      <span class="date">2022.08.21</span>
+      <span class="date">2022.08.26</span>
       <div class="metadata">
       </div>
       <div class="tags">
         <a href="/tag/code" class="tag">code</a>
         <a href="/tag/declarative" class="tag">declarative</a>
-        <a href="/tag/optics" class="tag">optics</a>
         <a href="/tag/parsing" class="tag">parsing</a>
+        <a href="/tag/ui" class="tag">ui</a>
+        <a href="/tag/optics" class="tag">optics</a>
+        <a href="/tag/automatic-differentiation" class="tag">automatic-differentiation</a>
       </div>
     </div>
   </div>
   <article class="post">
-    <p><em>Declarative code</em> doesn't do one specific thing, but rather
-describes a structure from which several processes can be derived.</p>
-<p>For example, take a look at this app:</p>
-<p><strong>TODO:</strong> A fun app maybe of animations consisting of
-configurable layers with effects</p>
-<p>We will look on four different aspects of this app which can be
-implemented either declaratively, or not:</p>
+    <p>Some applications' code for saving and loading documents may consist
+of two separate functions kept in sync: one to translate the document
+into a stream of bytes and another for the inverse translation. Both
+mirror the document's format from different perspectives.</p>
+<p>Suppose that you made a bug in one of these functions, or between
+other tasks you simply forgot to maintain it, such that the app's new
+feature may be saved but isn't loaded. We can hope that the QA team or
+the test suite would catch it.</p>
+<p>This process is reminiscent to trying to ride two skateboards at the
+same time. Sometimes you would fall, go back to the skateboard left
+behind and try to do it again. Nailing it is an impressive feat! But
+when you are being chased by bugs and deadlines, wouldn't it have been
+easier if the boards were fused together?</p>
+<p><img src="/images/surfing-on-two-surfboards.jpg" alt="Surfing on two surfboards" style="width: 75%"/></p>
+<p>Tools like <a
+href="https://en.wikipedia.org/wiki/Protocol_Buffers">Protocol
+Buffers</a> provide a saner solution. You'll only need to declare your
+data structure once, and it automatically implements both saving and
+loading. As a bonus, when using statically typed languages, it also
+creates the document's data types for you.</p>
+<h3 id="command-line-arguments">Command line arguments</h3>
+<p><sub>(another example, skip <a href="#declarative-code">to next
+session</a> if you got the point)</sub></p>
+<p>Imagine getting an issue about a command line flag not working as
+described in the <code>--help</code> text, when you know that it's
+actually a deprecated option which was already removed! But apparently
+not from the help text..</p>
+<p>This wouldn't happen when using libraries like <a
+href="https://docs.python.org/3/library/argparse.html"><code>argparse</code></a>.
+When using it you provide a description of the command line arguments
+and get their parsing (with helpful error messages), and the help text
+both generated from it, always in sync!</p>
+<p>Maintaining the help text separately is somewhat like hanging on to a
+unicycle when already sporting a jetpack. I think that we can leave the
+unicycle behind :)</p>
+<p><img src="/images/jetpack-unicycle-girl.jpg" alt="Girl with a jetpack riding a unicycle" style="width: 75%"/></p>
+<h2 id="declarative-code">Declarative code</h2>
+<p>The use of Protocol Buffers or <code>argparse</code> as descrbied
+above is called <em>Declarative Code</em>. It means code the doesn't
+perform a computation of a single task (like saving a document), but
+rather describes an aspect's essence from which several different
+processes can be derived.</p>
+<p>Here are a few additional examples:</p>
 <ul>
-<li>Graphical user interface</li>
-<li>Saving and loading documents</li>
-<li>Internal data manipulations</li>
-<li>Command line options (for the standalone version of this app)</li>
+<li><strong>Graphical User Interfaces</strong>: Back in the day we would
+write code to map the document to a UI objects hierarchy, and write
+additional code to maintain this object hierarchy when the document
+changes. Libraries like <a href="https://reactjs.org">React</a> provided
+a solution where the mapping function alone would suffice, and UI
+elements would be automatically added, updated, or removed as
+necessary.</li>
+<li><strong>Automatic differentitation and Machine Learning</strong>:
+Computing <a href="https://en.wikipedia.org/wiki/Gradient">gradients</a>
+of functions is a very common task in machine learning and in
+optimization algorithms like <a
+href="https://en.wikipedia.org/wiki/Gradient_descent">gradient
+descent</a>. Traditionally the function's implementation would be
+repeated three times with different variations: the plain function, and
+the so-called forward and backward phases for the <a
+href="https://en.wikipedia.org/wiki/Backpropagation">back-propagation</a>
+process which computes the gradients. Beside all the work it took,
+trying to keep those implementations perfectly consistent was very bug
+prone. DSLs like <a href="https://www.tensorflow.org">TensorFlow</a>
+allow describing the function once to get all of these tasks from
+it.</li>
+<li><strong>Data structure manipulation</strong>: <a
+href="https://www.optics.dev/Monocle/">"Optics"</a> reify queries and
+updates of data structures in a modular way. For example the basic
+"lens" describes a path to a specific field in a structure, and is
+composable with other lenses to form deeper paths which you can then
+both read or update. Immutable data structures became trendy in part
+because optics made them ergonomic.</li>
+<li><strong>General programming language features</strong>: It can be
+argued that PL features like <a
+href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">garbage
+collection</a> make code more declarative. In retro languages like C
+programmers manually coded the allocation and disposal of memory address
+space for data structures. GC allows us to only describe the allocation
+and get the disposal for free. This provides more than just developer
+time savings! It eliminates potential memory leaks and corruption bugs.
+Similarly, type-inference and dynamic typing both save us from the task
+of describing the typing aspects of our code to the compiler.</li>
 </ul>
-<p>We will conclude with discussing the trade-offs involved with the
-declarative approach.</p>
-<h2 id="guis">GUIs</h2>
-<p>Traditional GUI frameworks (like GTK or Qt) require your app to
-implement the following two pieces of code:</p>
-<ul>
-<li>Upon loading a document, create the UI elements representing it</li>
-<li>When the document changes, maintain the UI, by updating or possibly
-adding and removing elements from it</li>
-</ul>
-<p>A declarative GUI library (like SwiftUI or Imgui) requires the user
-to implement a single mapping from a document to a UI, and uses it for
-both the initialization step and for updates.</p>
-<h2 id="saving-and-loading">Saving and loading</h2>
-<p>Concerning a data model and how to save it, an app would usually
-have:</p>
-<ul>
-<li>A function to serialize the document to a file</li>
-<li>A completely separate function to parse a file into a document</li>
-<li>Migration code to load documents saved by older versions</li>
-<li>And additionally, statically typed languages may also require
-definitions for the document's data types</li>
-</ul>
-<p>A library such as Protocol Buffers or Construct allows generating
-these tasks from a single succinct declaration. When PB's default values
-mechanism doesn't suffice, migration may require some additional logic,
-but this extra code is probably truly unavoidable.</p>
-<h2 id="internal-data-manipulation">Internal data manipulation</h2>
-<p>TODO: Describe the use of optics to create both getters and
-setters/modifiers.</p>
-<h2 id="command-line-options">Command line options</h2>
-<p>The standalone version of this app (<strong>TODO</strong>: link) has
-command line options, which control the window size and whether to use
-dark-mode.</p>
-<p>Naively one might write code to parse these options, and separately
-write documentation for them. A declarative library generates both from
-a single description.</p>
-<h2 id="additional-use-cases">Additional use-cases</h2>
-<p><strong>TODO</strong>: Find ways to incorporate this into another
-aspect of the app</p>
-<h3 id="automatic-differentiation">Automatic differentiation</h3>
-<p>Machine learning and optimization problems often require computing <a
-href="https://en.wikipedia.org/wiki/Gradient">gradients</a> of cost
-functions.</p>
-<p>There are 2 parts of the model which would often involve similar
-code:</p>
-<ul>
-<li>Executing the model</li>
-<li>Training the model, whereas this part would consist of two parts
-<ul>
-<li>Forward pass. It is very similar to the model execution but it
-retains intermediate results</li>
-<li>Backward pass. It traverses the computation in reverse order to
-compute all the gradients</li>
-</ul></li>
-</ul>
-<p>There are two declarative approaches to unify all of these to a
-single description:</p>
-<ul>
-<li>Automatic differentiation (like ad or autograd) libraries only
-require making the model execution function polymorphic, but do incur
-have some performance penalry</li>
-<li>ML Frameworks like TensorFlow produce efficient implementations of
-all three processes from a single model descriptions</li>
-</ul>
-<h2 id="declarative-code-pros-and-cons">Declarative code: Pros and
-Cons</h2>
+<p><img src="/images/lens-shedding-light.jpg" alt="Lens shedding light" style="width: 75%"/></p>
+<h2 id="the-pros-and-cons-of-declarative-code">The pros and cons of
+declarative code</h2>
+<p>What are the benefits and disadvantages of declarative code?</p>
 <p>Pros:</p>
 <ul>
-<li>The error is less error prone because there is a single source of
-truth rather than several variations of it that need to be consistent.
-No ammount of testing could replace the value this brings in eliminating
-bugs</li>
-<li>The code is more succint and elegant</li>
+<li>It is <strong>less error prone</strong> because there is a
+<strong>single source of truth</strong> rather than several variations
+that need to be kept consistent. No amount of testing could replace the
+value this brings in <strong>eliminating bugs</strong></li>
+<li>The code is more <strong>succint</strong> and
+<strong>elegant</strong>, as it describes a more abstract
+<strong>essence</strong> of our program</li>
 </ul>
 <p>Cons:</p>
 <ul>
-<li>Learning curve</li>
-<li>There are usually more steps involved when debugging</li>
+<li><strong>Require additional learning</strong>. For example if you
+want mutually exclusive command line options, instead of adding a
+straightforward if-statement you would need to read the library's
+documentation to find how to specify this</li>
+<li>The additional <strong>indirections</strong> often require
+additional digging when debugging</li>
+<li><strong>Glass ceilings</strong>: If what you want to do isn't
+supported by the libraries? You would have to extend library code, which
+is a more difficult task</li>
+<li><strong>Performance</strong>: In some cases, like garbage
+collection, dynamic typing, or taped-based <a
+href="https://en.wikipedia.org/wiki/Automatic_differentiation#Reverse_accumulation">automatic
+differentiation</a>, we do pay a significant performance price for the
+work saved from us, and hand-crafted undeclarative low-level code may
+win over the declarative alternative in the benchmarks</li>
 </ul>
+<p>In addition to these, declarative code has an additional, perhaps
+more important advantage, at least for me: <em>I just like it!</em></p>
+<p><img src="/images/bugs-chasing-man-on-one-skateboard.jpg" alt="Riding a single skateboard is easier" style="width: 75%"/></p>
+<h2 id="notes">Notes</h2>
+<p>The images for this post were all painted by the extremely talented
+<a href="https://openai.com/dall-e-2/">DALL-E 2</a> per my requests.
+Here are some details on the process and links to their prompts:</p>
+<ul>
+<li><a
+href="https://labs.openai.com/s/jbYY45SKTyHEGSzzp0ic5JUi">Steampunk dude
+riding two skateboards simultaneously</a> + <a
+href="https://labs.openai.com/s/m8OGehagBoCtsOlu5KKHeguH">chased by a
+giant bug</a> (digital art)</li>
+<li><a href="https://labs.openai.com/s/bmW7IXriyoDOxkeZMA0nSveV">Surfer
+surfing simultaneously on two surfboards, standing with one leg on each.
+Digital Art</a></li>
+<li><a href="https://labs.openai.com/s/PEUytwoXLE2qux5ZUcuQvPNF">Riding
+a single skateboard</a> is a variation of an edit of the previous</li>
+<li><a href="https://labs.openai.com/s/M2xAxyJZXE9uWKXEQr6ay01P">Girl
+with jetpack riding a unicycle</a>. This one didn't work well as a
+prompt to DALL-E for me. It was an effort consisting of many attempts,
+edits and variations until I succeeded getting it right. Unfortunately I
+didn't save the intermediate steps of the process</li>
+<li><a href="https://labs.openai.com/s/i2gW5ODiWJj1KYojaSYvSx55">Skies
+with clouds of bad code illuminated from the ground by a spotlight with
+a lambda in its center, digital art</a></li>
+</ul>
+<p>I wish to thank OpenAI for creating this delightful artist!</p>
 
     <br>
     <br>

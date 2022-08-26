@@ -2,12 +2,168 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-08-23T14:50:SZ</updated>
+  <updated>2022-08-26T20:10:SZ</updated>
   <author>
       <name></name>
   </author>
   <id>https://yairchu.github.io//</id>
 
+  <entry>
+      <title>What is declarative code</title>
+      <link href="https://yairchu.github.io/posts/what-is-declarative-code"/>
+      <id>https://yairchu.github.io/posts/what-is-declarative-code</id>
+      <updated>2022-08-26T00:00:SZ</updated>
+      <category term="code"/>
+      <category term="declarative"/>
+      <category term="parsing"/>
+      <category term="ui"/>
+      <category term="optics"/>
+      <category term="automatic-differentiation"/>
+      <summary>Declarative code explained with an example app.</summary>
+      <content type="html"><![CDATA[<p>Some applications' code for saving and loading documents may consist
+of two separate functions kept in sync: one to translate the document
+into a stream of bytes and another for the inverse translation. Both
+mirror the document's format from different perspectives.</p>
+<p>Suppose that you made a bug in one of these functions, or between
+other tasks you simply forgot to maintain it, such that the app's new
+feature may be saved but isn't loaded. We can hope that the QA team or
+the test suite would catch it.</p>
+<p>This process is reminiscent to trying to ride two skateboards at the
+same time. Sometimes you would fall, go back to the skateboard left
+behind and try to do it again. Nailing it is an impressive feat! But
+when you are being chased by bugs and deadlines, wouldn't it have been
+easier if the boards were fused together?</p>
+<p><img src="/images/surfing-on-two-surfboards.jpg" alt="Surfing on two surfboards" style="width: 75%"/></p>
+<p>Tools like <a
+href="https://en.wikipedia.org/wiki/Protocol_Buffers">Protocol
+Buffers</a> provide a saner solution. You'll only need to declare your
+data structure once, and it automatically implements both saving and
+loading. As a bonus, when using statically typed languages, it also
+creates the document's data types for you.</p>
+<h3 id="command-line-arguments">Command line arguments</h3>
+<p><sub>(another example, skip <a href="#declarative-code">to next
+session</a> if you got the point)</sub></p>
+<p>Imagine getting an issue about a command line flag not working as
+described in the <code>--help</code> text, when you know that it's
+actually a deprecated option which was already removed! But apparently
+not from the help text..</p>
+<p>This wouldn't happen when using libraries like <a
+href="https://docs.python.org/3/library/argparse.html"><code>argparse</code></a>.
+When using it you provide a description of the command line arguments
+and get their parsing (with helpful error messages), and the help text
+both generated from it, always in sync!</p>
+<p>Maintaining the help text separately is somewhat like hanging on to a
+unicycle when already sporting a jetpack. I think that we can leave the
+unicycle behind :)</p>
+<p><img src="/images/jetpack-unicycle-girl.jpg" alt="Girl with a jetpack riding a unicycle" style="width: 75%"/></p>
+<h2 id="declarative-code">Declarative code</h2>
+<p>The use of Protocol Buffers or <code>argparse</code> as descrbied
+above is called <em>Declarative Code</em>. It means code the doesn't
+perform a computation of a single task (like saving a document), but
+rather describes an aspect's essence from which several different
+processes can be derived.</p>
+<p>Here are a few additional examples:</p>
+<ul>
+<li><strong>Graphical User Interfaces</strong>: Back in the day we would
+write code to map the document to a UI objects hierarchy, and write
+additional code to maintain this object hierarchy when the document
+changes. Libraries like <a href="https://reactjs.org">React</a> provided
+a solution where the mapping function alone would suffice, and UI
+elements would be automatically added, updated, or removed as
+necessary.</li>
+<li><strong>Automatic differentitation and Machine Learning</strong>:
+Computing <a href="https://en.wikipedia.org/wiki/Gradient">gradients</a>
+of functions is a very common task in machine learning and in
+optimization algorithms like <a
+href="https://en.wikipedia.org/wiki/Gradient_descent">gradient
+descent</a>. Traditionally the function's implementation would be
+repeated three times with different variations: the plain function, and
+the so-called forward and backward phases for the <a
+href="https://en.wikipedia.org/wiki/Backpropagation">back-propagation</a>
+process which computes the gradients. Beside all the work it took,
+trying to keep those implementations perfectly consistent was very bug
+prone. DSLs like <a href="https://www.tensorflow.org">TensorFlow</a>
+allow describing the function once to get all of these tasks from
+it.</li>
+<li><strong>Data structure manipulation</strong>: <a
+href="https://www.optics.dev/Monocle/">"Optics"</a> reify queries and
+updates of data structures in a modular way. For example the basic
+"lens" describes a path to a specific field in a structure, and is
+composable with other lenses to form deeper paths which you can then
+both read or update. Immutable data structures became trendy in part
+because optics made them ergonomic.</li>
+<li><strong>General programming language features</strong>: It can be
+argued that PL features like <a
+href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">garbage
+collection</a> make code more declarative. In retro languages like C
+programmers manually coded the allocation and disposal of memory address
+space for data structures. GC allows us to only describe the allocation
+and get the disposal for free. This provides more than just developer
+time savings! It eliminates potential memory leaks and corruption bugs.
+Similarly, type-inference and dynamic typing both save us from the task
+of describing the typing aspects of our code to the compiler.</li>
+</ul>
+<p><img src="/images/lens-shedding-light.jpg" alt="Lens shedding light" style="width: 75%"/></p>
+<h2 id="the-pros-and-cons-of-declarative-code">The pros and cons of
+declarative code</h2>
+<p>What are the benefits and disadvantages of declarative code?</p>
+<p>Pros:</p>
+<ul>
+<li>It is <strong>less error prone</strong> because there is a
+<strong>single source of truth</strong> rather than several variations
+that need to be kept consistent. No amount of testing could replace the
+value this brings in <strong>eliminating bugs</strong></li>
+<li>The code is more <strong>succint</strong> and
+<strong>elegant</strong>, as it describes a more abstract
+<strong>essence</strong> of our program</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li><strong>Require additional learning</strong>. For example if you
+want mutually exclusive command line options, instead of adding a
+straightforward if-statement you would need to read the library's
+documentation to find how to specify this</li>
+<li>The additional <strong>indirections</strong> often require
+additional digging when debugging</li>
+<li><strong>Glass ceilings</strong>: If what you want to do isn't
+supported by the libraries? You would have to extend library code, which
+is a more difficult task</li>
+<li><strong>Performance</strong>: In some cases, like garbage
+collection, dynamic typing, or taped-based <a
+href="https://en.wikipedia.org/wiki/Automatic_differentiation#Reverse_accumulation">automatic
+differentiation</a>, we do pay a significant performance price for the
+work saved from us, and hand-crafted undeclarative low-level code may
+win over the declarative alternative in the benchmarks</li>
+</ul>
+<p>In addition to these, declarative code has an additional, perhaps
+more important advantage, at least for me: <em>I just like it!</em></p>
+<p><img src="/images/bugs-chasing-man-on-one-skateboard.jpg" alt="Riding a single skateboard is easier" style="width: 75%"/></p>
+<h2 id="notes">Notes</h2>
+<p>The images for this post were all painted by the extremely talented
+<a href="https://openai.com/dall-e-2/">DALL-E 2</a> per my requests.
+Here are some details on the process and links to their prompts:</p>
+<ul>
+<li><a
+href="https://labs.openai.com/s/jbYY45SKTyHEGSzzp0ic5JUi">Steampunk dude
+riding two skateboards simultaneously</a> + <a
+href="https://labs.openai.com/s/m8OGehagBoCtsOlu5KKHeguH">chased by a
+giant bug</a> (digital art)</li>
+<li><a href="https://labs.openai.com/s/bmW7IXriyoDOxkeZMA0nSveV">Surfer
+surfing simultaneously on two surfboards, standing with one leg on each.
+Digital Art</a></li>
+<li><a href="https://labs.openai.com/s/PEUytwoXLE2qux5ZUcuQvPNF">Riding
+a single skateboard</a> is a variation of an edit of the previous</li>
+<li><a href="https://labs.openai.com/s/M2xAxyJZXE9uWKXEQr6ay01P">Girl
+with jetpack riding a unicycle</a>. This one didn't work well as a
+prompt to DALL-E for me. It was an effort consisting of many attempts,
+edits and variations until I succeeded getting it right. Unfortunately I
+didn't save the intermediate steps of the process</li>
+<li><a href="https://labs.openai.com/s/i2gW5ODiWJj1KYojaSYvSx55">Skies
+with clouds of bad code illuminated from the ground by a spotlight with
+a lambda in its center, digital art</a></li>
+</ul>
+<p>I wish to thank OpenAI for creating this delightful artist!</p>]]></content>
+  </entry>
   <entry>
       <title>Python&#39;s print in Haskell</title>
       <link href="https://yairchu.github.io/posts/python-print-in-haskell"/>
