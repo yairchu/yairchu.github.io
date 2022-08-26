@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-08-26T20:10:SZ</updated>
+  <updated>2022-08-26T20:20:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -125,7 +125,7 @@ straightforward if-statement you would need to read the library's
 documentation to find how to specify this</li>
 <li>The additional <strong>indirections</strong> often require
 additional digging when debugging</li>
-<li><strong>Glass ceilings</strong>: If what you want to do isn't
+<li><strong>Glass ceilings</strong>: What if what you need to do isn't
 supported by the libraries? You would have to extend library code, which
 is a more difficult task</li>
 <li><strong>Performance</strong>: In some cases, like garbage
