@@ -105,7 +105,7 @@ unicycle behind :)</p>
 <p><img src="/images/jetpack-unicycle-girl.jpg" alt="Girl with a jetpack riding a unicycle" style="width: 75%"/></p>
 <h2 id="declarative-code">Declarative code</h2>
 <p>The use of Protocol Buffers or <code>argparse</code> as descrbied
-above is called <em>Declarative Code</em>. It means code the doesn't
+above is called <em>Declarative Code</em>. It means code which doesn't
 perform a computation of a single task (like saving a document), but
 rather describes an aspect's essence from which several different
 processes can be derived.</p>
@@ -166,20 +166,20 @@ value this brings in <strong>eliminating bugs</strong></li>
 </ul>
 <p>Cons:</p>
 <ul>
-<li><strong>Require additional learning</strong>. For example if you
-want mutually exclusive command line options, instead of adding a
-straightforward if-statement you would need to read the library's
-documentation to find how to specify this</li>
+<li>The declarative style <strong>requires additional learning</strong>.
+For example if you want mutually exclusive command line options, instead
+of adding a straightforward if-statement you would need to read the
+library's documentation to find out how to specify this</li>
 <li>The additional <strong>indirections</strong> often require
 additional digging when debugging</li>
 <li><strong>Glass ceilings</strong>: What if what you need to do isn't
 supported by the libraries? You would have to extend library code, which
 is a more difficult task</li>
 <li><strong>Performance</strong>: In some cases, like garbage
-collection, dynamic typing, or taped-based <a
+collection, dynamic typing, or tape-based <a
 href="https://en.wikipedia.org/wiki/Automatic_differentiation#Reverse_accumulation">automatic
 differentiation</a>, we do pay a significant performance price for the
-work saved from us, and hand-crafted undeclarative low-level code may
+work saved from us. Sometimes hand-crafted non-declarative code might
 win over the declarative alternative in the benchmarks</li>
 </ul>
 <p>In addition to these, declarative code has an additional, perhaps
