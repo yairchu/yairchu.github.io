@@ -3,7 +3,7 @@ title: "What is declarative code"
 author: Yair Chuchem
 date: 2022.08.26
 tags: [code, declarative, parsing, ui, optics, automatic-differentiation]
-description: Declarative code explained with an example app.
+description: Declarative code explained with examples
 image: bugs-chasing-man-on-two-skateboards.jpg
 ---
 
