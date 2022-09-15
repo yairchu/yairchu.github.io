@@ -8,11 +8,11 @@
 <meta name="twitter:creator" content="@yairchu">
 <meta name="twitter:title" content="Leet Haskell-style lazy evaluation in Python">
   <meta name="twitter:description" content="Haskell-style lazy evaluation in Python">
-  <meta name="twitter:image" content="https://yairchu.github.io//images/transparent-snake.jpg">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/python-embracing-sloth.jpg">
   <title>Leet Haskell-style lazy evaluation in Python</title>
   <link rel="stylesheet" href="/css/syntax.css">
   <meta property="og:title" content="Leet Haskell-style lazy evaluation in Python" />
-  <meta property="og:image" content="https://yairchu.github.io/images/transparent-snake.jpg" />
+  <meta property="og:image" content="https://yairchu.github.io/images/python-embracing-sloth.jpg" />
   <meta charset="UTF-8">
   <meta name=viewport content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/css/style.css">
@@ -51,7 +51,7 @@
         Leet Haskell-style lazy evaluation in Python
       </span>
 
-      <img class="post-image" src="/images/transparent-snake.jpg">
+      <img class="post-image" src="/images/python-embracing-sloth.jpg">
       <span class="byline">by Yair Chuchem</span>
       <span class="date">2022.09.15</span>
       <div class="metadata">
@@ -65,25 +65,24 @@
     </div>
   </div>
   <article class="post">
-    <p>Haskellers take pride in lazy evaluation, with perhaps its proudest
-achievement being the world renowned <a
-href="https://stackoverflow.com/q/1105765/40916">fibonacci
-code-golf</a>:</p>
+    <p>Haskellers take pride in lazy evaluation, with the world renowned
+Fibonacci sequence code-golf as one of its proudest achievements:</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fibs <span class="ot">=</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">1</span> <span class="op">:</span> <span class="fu">zipWith</span> (<span class="op">+</span>) fibs (<span class="fu">tail</span> fibs)</span></code></pre></div>
-<p>Should Pythoneers envy this majestic implementation? Not anymore!</p>
+<p>Should Pythoneers envy this majestic implementation? Not anymore:</p>
 <div class="sourceCode" id="cb2"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">@leet</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fibs():</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> <span class="dv">1</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> <span class="dv">1</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> <span class="cf">from</span> <span class="bu">map</span>(operator.add, fibs(), itertools.islice(fibs(), <span class="dv">1</span>, <span class="va">None</span>))</span></code></pre></div>
-<p>Note that using the <code>leet</code> decorator is essential, without
-it, it would have been terribly inefficient. Here it is:</p>
+<p>The usage of the <code>leet</code> decorator above is essential.
+Without it <code>fibs</code> would have been terribly inefficient.
+Here's how it this decorator works:</p>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> leet(gen):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Decorate a generator-producing function  </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Decorate a function returning a generator</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">    to memoize its consumed values for all eternity.</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    original <span class="op">=</span> gen()</span>
@@ -94,32 +93,30 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a hr
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                as_list.append(<span class="bu">next</span>(original))</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> as_list[i]</span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span></code></pre></div>
-<p>Note that the Python version has a significant advantage over the
-Haskell one, being that the documentation of the <code>leet</code>
-decorator describes an important facet of this algorithm: its memory
-consumption is far from ideal.</p>
+<p>Note that the documentation of <code>leet</code> clearly explains an
+important facet of this approach: just like the Haskell version, its
+memory consumption is far from ideal.</p>
 <p>Suppose that you want to iterate over the fibonacci sequence until
-you find the first item to satisfy some condition. Let's suppose that
-this value is the 100-billionth value.</p>
-<p>Neither this function or the Haskell one it is based on would be
-useful for this, and you should be advise to use the canonical,
-constant-memory Python fibonacci implementation instead:</p>
+you find the first item to satisfy some condition. If this value is the
+100-billionth value your program will run out of memory before it
+reaches it. Instead you should be advised to use the canonical,
+constant-memory Python fibonacci implementation:</p>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> boring_fibs():</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    cur <span class="op">=</span> <span class="bu">next</span> <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> cur</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        cur, <span class="bu">next</span> <span class="op">=</span> <span class="bu">next</span>, cur <span class="op">+</span> <span class="bu">next</span></span></code></pre></div>
-<p>Should you ever prefer to use the leet version? Not really.</p>
-<p>Does the leet version have any advantage over the plain one? Possibly
-that it's cool, depending on who you're asking.</p>
+<p>Should you ever prefer to use the leet version over the boring one?
+Probably not. So does the leet version have any advantage? Maybe that it
+is kind of cool, subjectively speaking? I guess not.</p>
 <h2 id="in-defence-of-lazyness">In defence of lazyness</h2>
 <p>Devout Haskellers may suggest that the code-golf fibonacci is only a
-basic demonstration of an idea. A more practical example would be
-sorting an array.</p>
+basic demonstration of an idea, and a classic more practical use-case is
+sorting arrays.</p>
 <p>When you use Haskell's <code>sort</code> function but only consume
 the first two elements of the result, it doesn't need to sort everything
-and you get an O(n) of work rather than O(n * log(n)).</p>
+and you get an O(n) of work rather than O(n * log n).</p>
 <p>However you could implement it in Python as well:</p>
 <div class="sourceCode" id="cb5"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> lazy_quick_sort(gen):</span>
@@ -127,39 +124,29 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Haskell-style lazy quick-sort.</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">    It doesn&#39;t need to fully sort everything to find the N smallest elements.</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">    The complexity would be O(N*log(K)) where K is the ammount iterated,</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">    in comparison to O(N*log(N)) for the full sorting algorithm.</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">    The complexity would be O(N * log K) where K is the ammount iterated,</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">    in comparison to O(N * log N) for the full sorting algorithm.</span></span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">    An example use case is iterating over potential dates</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">    The canonical example use-case is iterating over potential dating candidates</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">    ordered by their level of attractiveness,</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">    until one of them agrees to date you.</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">    (but be warned that the odds for that may be lower</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">     if you tend to use functions like this one)</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    gen <span class="op">=</span> <span class="bu">iter</span>(gen)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        pivot <span class="op">=</span> <span class="bu">next</span>(gen)</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">StopIteration</span>:</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    less <span class="op">=</span> []</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    more <span class="op">=</span> []</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> gen:</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        (less <span class="cf">if</span> x <span class="op">&lt;</span> pivot <span class="cf">else</span> more).append(x)</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> <span class="cf">from</span> quick_sort(less)</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> pivot</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> <span class="cf">from</span> quick_sort(more)</span></code></pre></div>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">    until finding one that will agree to date you.</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    gen <span class="op">=</span> <span class="bu">iter</span>(gen)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        pivot <span class="op">=</span> <span class="bu">next</span>(gen)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">StopIteration</span>:</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    less <span class="op">=</span> []</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    more <span class="op">=</span> []</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> gen:</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        (less <span class="cf">if</span> x <span class="op">&lt;</span> pivot <span class="cf">else</span> more).append(x)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> <span class="cf">from</span> lazy_quick_sort(less)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> pivot</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> <span class="cf">from</span> lazy_quick_sort(more)</span></code></pre></div>
 <h2 id="notes">Notes</h2>
-<p>Header image was generated with DALL-E 2 and Photoshop combo.</p>
 <ul>
-<li>I first asked DALL-E for "a cute friendly floating snake built of
-caterpillar treads in a natural environment, 3d render"</li>
-<li>Then I edited the first version to remove the snake, with the
-prompot "natural environment, 3d render". Note that without removing the
-snake's reflection in the water DALL-E would bring it back rather than
-making a backround.</li>
-<li>In Photo-shop I overlaid the image with the snake on the background
-image adding a gradient mask to make its tail fade to transparency,
-which is my artistic interpretation of lazy evaluation in Python</li>
+<li>Header image was generated with DALL-E with the prompt "A cute
+friendly python embracing a sloth, digital art"</li>
 </ul>
 
     <br>
