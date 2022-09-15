@@ -24,7 +24,7 @@ def fibs():
     yield from map(operator.add, fibs(), itertools.islice(fibs(), 1, None))
 ```
 
-The usage of the `leet` decorator above is essential. Without it `fibs` would have been terribly inefficient. Here's how it this decorator works:
+The usage of the `leet` decorator above is essential. Without it `fibs` would have been terribly inefficient. Here's how this decorator works:
 
 ```Python
 def leet(gen):
@@ -44,7 +44,7 @@ def leet(gen):
 
 Note that the documentation of `leet` clearly explains an important facet of this approach: just like the Haskell version, its memory consumption is far from ideal.
 
-Suppose that you want to iterate over the fibonacci sequence until you find the first item to satisfy some condition. If this value is the 100-billionth value your program will run out of memory before it reaches it. Instead you should be advised to use the canonical, constant-memory Python fibonacci implementation:
+Suppose that you want to iterate over the fibonacci sequence until you find the first item to satisfy some condition. If this value is the 100-billionth value your program will run out of memory before it reaches it. Instead you should be advised to use the canonical, constant-memory fibonacci implementation:
 
 ```Python
 def boring_fibs():
@@ -58,7 +58,7 @@ Should you ever prefer to use the leet version over the boring one? Probably not
 
 ## In defence of lazyness
 
-Devout Haskellers may suggest that the code-golf fibonacci is only a basic demonstration of an idea, and a classic more practical use-case is sorting arrays.
+Devout Haskellers may suggest that the code-golf fibonacci is only a basic demonstration of the idea. A classic more practical use-case is sorting arrays.
 
 When you use Haskell's `sort` function but only consume the first two elements of the result, it doesn't need to sort everything and you get an O(n) of work rather than O(n * log n).
 
