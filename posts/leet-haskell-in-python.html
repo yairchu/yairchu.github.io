@@ -78,7 +78,7 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a hr
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> <span class="cf">from</span> <span class="bu">map</span>(operator.add, fibs(), itertools.islice(fibs(), <span class="dv">1</span>, <span class="va">None</span>))</span></code></pre></div>
 <p>The usage of the <code>leet</code> decorator above is essential.
 Without it <code>fibs</code> would have been terribly inefficient.
-Here's how it this decorator works:</p>
+Here's how this decorator works:</p>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> leet(gen):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
@@ -100,7 +100,7 @@ memory consumption is far from ideal.</p>
 you find the first item to satisfy some condition. If this value is the
 100-billionth value your program will run out of memory before it
 reaches it. Instead you should be advised to use the canonical,
-constant-memory Python fibonacci implementation:</p>
+constant-memory fibonacci implementation:</p>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> boring_fibs():</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    cur <span class="op">=</span> <span class="bu">next</span> <span class="op">=</span> <span class="dv">1</span></span>
@@ -112,7 +112,7 @@ Probably not. So does the leet version have any advantage? Maybe that it
 is kind of cool, subjectively speaking? I guess not.</p>
 <h2 id="in-defence-of-lazyness">In defence of lazyness</h2>
 <p>Devout Haskellers may suggest that the code-golf fibonacci is only a
-basic demonstration of an idea, and a classic more practical use-case is
+basic demonstration of the idea. A classic more practical use-case is
 sorting arrays.</p>
 <p>When you use Haskell's <code>sort</code> function but only consume
 the first two elements of the result, it doesn't need to sort everything
