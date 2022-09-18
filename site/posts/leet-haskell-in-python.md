@@ -90,6 +90,12 @@ def lazy_quick_sort(gen):
     yield from lazy_quick_sort(more)
 ```
 
+## My conclusions
+
+While lazy evaluation is very useful, the pervasive lazy evaluation in Haskell (rather than explicit lazy evaluation in other languages) probably causes more trouble than it's worth. In the fibonacci example it leaks memory, and people [have to go to great lengths to work around it](https://www.reddit.com/r/haskell/comments/2g9akh/preventing_memoization_in_ai_search_problems/), and while in the sorting example it does reduce the time complexity from O(log N) to O(log K), the overhead added by the language runtime to implement pervasive lazyness probably adds a larger factor than the one saved.
+
+If I were to design a programming language ([which I am](http://www.lamdu.org)) then I would choose to not have pervasive lazy evaluation, but to make an effort to design the language to accomodate explicit lazy evaluation ergonomically.
+
 ## Notes
 
 * Header image was generated with DALL-E with the prompt "A cute friendly python embracing a sloth, digital art"
