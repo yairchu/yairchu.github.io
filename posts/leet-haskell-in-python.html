@@ -143,6 +143,20 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a hr
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> <span class="cf">from</span> lazy_quick_sort(less)</span>
 <span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> pivot</span>
 <span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> <span class="cf">from</span> lazy_quick_sort(more)</span></code></pre></div>
+<h2 id="my-conclusions">My conclusions</h2>
+<p>While lazy evaluation is very useful, the pervasive lazy evaluation
+in Haskell (rather than explicit lazy evaluation in other languages)
+probably causes more trouble than it's worth. In the fibonacci example
+it leaks memory, and people <a
+href="https://www.reddit.com/r/haskell/comments/2g9akh/preventing_memoization_in_ai_search_problems/">have
+to go to great lengths to work around it</a>, and while in the sorting
+example it does reduce the time complexity from O(log N) to O(log K),
+the overhead added by the language runtime to implement pervasive
+lazyness probably adds a larger factor than the one saved.</p>
+<p>If I were to design a programming language (<a
+href="http://www.lamdu.org">which I am</a>) then I would choose to not
+have pervasive lazy evaluation, but to make an effort to design the
+language to accomodate explicit lazy evaluation ergonomically.</p>
 <h2 id="notes">Notes</h2>
 <ul>
 <li>Header image was generated with DALL-E with the prompt "A cute
