@@ -2,12 +2,149 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-09-18T08:34:SZ</updated>
+  <updated>2022-09-24T20:12:SZ</updated>
   <author>
       <name></name>
   </author>
   <id>https://yairchu.github.io//</id>
 
+  <entry>
+      <title>A simple challenge for Haskellers</title>
+      <link href="https://yairchu.github.io/posts/a-simple-challenge-for-haskellers"/>
+      <id>https://yairchu.github.io/posts/a-simple-challenge-for-haskellers</id>
+      <updated>2022-09-24T00:00:SZ</updated>
+      <category term="code"/>
+      <category term="haskell"/>
+      <category term="rust"/>
+      <category term="lazy-evaluation"/>
+      <summary>A simple challenge problem for Haskellers</summary>
+      <content type="html"><![CDATA[<p>In this post we will discuss a simple Advent-of-Code style problem
+that shouldn't take programmers much effort in any programming
+language.</p>
+<p>Like Advent-of-Code, the problem consists of two parts: a trivial one
+and an easy one.</p>
+<h2 id="part-a-the-trivial-part">Part A: The trivial part</h2>
+<p>We're going to concern ourselves with finding elements in the
+Fibonacci sequence whose decimal representations contain certain
+substrings:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fibs <span class="ot">=</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">1</span> <span class="op">:</span> <span class="fu">zipWith</span> (<span class="op">+</span>) fibs (<span class="fu">tail</span> fibs)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>findFibWith substr <span class="ot">=</span> find (isInfixOf substr <span class="op">.</span> <span class="fu">show</span>) fibs</span></code></pre></div>
+<p>We'll look for substring like "11235813", which is a concatenation of
+the first elements in the fibonacci sequence, and compute the first 8
+digits of the element which contains this substring.</p>
+<p>Or in simple Haskell terms:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>partA n <span class="ot">=</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">take</span> <span class="dv">8</span> (<span class="fu">show</span> result)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        firstFibs <span class="ot">=</span> <span class="fu">take</span> n fibs <span class="op">&gt;&gt;=</span> <span class="fu">show</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Just</span> result <span class="ot">=</span> findFibWith firstFibs</span></code></pre></div>
+<p>No problem so far :)</p>
+<h2 id="part-b-shouldnt-be-tricky">Part B: Shouldn't be tricky</h2>
+<p>We're going to take the result of part A, and find the first
+fibonacci element to contain it, and take its first 8 digits,</p>
+<p>Or in simple Haskell terms:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>partB n <span class="ot">=</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">take</span> <span class="dv">8</span> (<span class="fu">show</span> result)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">Just</span> result <span class="ot">=</span> findFibWith (partA n)</span></code></pre></div>
+<p>But here comes the tricky part: the above code has a "space
+leak".</p>
+<p>If we plot the run times and memory footprints of separate runs
+computing part A and part B, a disturbing picture is revealed:</p>
+<p><img src="/images/fibs-measured-mem.png"
+alt="Ammount of memory used" /></p>
+<p>For part A the memory footprint stayed low, for for part B the memory
+footprint grew linearly with the running time!</p>
+<p><strong>Spoiler alert</strong>: If you want to solve this challenge
+on your own, pause and do it before reading the analysis and
+work-arounds in the next sections.</p>
+<h2 id="analysing-the-space-leak">Analysing the space leak</h2>
+<p>The irony of the situation is that when we research when exactly the
+memory footprint grew so much, we will find that it was happening when
+computing <code>partA</code>, but only when <code>partB</code> was going
+to follow it!</p>
+<p>This is because the mere future use of <code>findFibWith</code> in
+<code>partB</code> holds on to <code>fibs</code> to re-use it later,
+rather than letting the garbage collector to be done with it.</p>
+<p>Thought in our case, this memoization of the fibonacci sequence,
+which we get for free thanks to Haskell's pervasive lazy evaluation, is
+something that we'd rather avoid.</p>
+<h3 id="working-around-the-problem">Working around the problem</h3>
+<p>A possibly silly workaround is employing deliberate code duplication,
+with <code>findFibWith2</code> using <code>fibs2</code> and thus not
+retaining <code>fibs</code>. However we are more ecological than using
+only single-use functions, so we'll look for a better work-around.</p>
+<p>We can replace <code>findFibWith</code> with an implementation that
+has <code>fibs</code> implemented into it:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>findFibWith substr <span class="ot">=</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    go <span class="dv">1</span> <span class="dv">1</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        go cur next</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> isInfixOf substr (<span class="fu">show</span> cur) <span class="ot">=</span> <span class="dt">Just</span> cur</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> go next (cur <span class="op">+</span> next)</span></code></pre></div>
+<h2 id="comparison-functional-rust">Comparison: "Functional" Rust</h2>
+<p>We'll compare the above situation to using Rust in a functional
+manner, and make an implementation which is mostly a translation of the
+Haskell implementation above.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode rust"><code class="sourceCode rust"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">itertools::</span>iterate<span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">num_bigint::</span>BigUint<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">num_traits::</span>One<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="pp">std::</span>env<span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> fibs() <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="bu">Iterator</span><span class="op">&lt;</span>Item <span class="op">=</span> BigUint<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    iterate(</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        (<span class="pp">One::</span>one()<span class="op">,</span> <span class="pp">One::</span>one())<span class="op">,</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">|</span>(cur<span class="op">,</span> next)<span class="op">:</span> <span class="op">&amp;</span>(BigUint<span class="op">,</span> BigUint)<span class="op">|</span> (next<span class="op">.</span>clone()<span class="op">,</span> cur <span class="op">+</span> next)<span class="op">,</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span>map(<span class="op">|</span>(cur<span class="op">,</span> _)<span class="op">|</span> cur)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> find_fib_with(substr<span class="op">:</span> <span class="op">&amp;</span><span class="dt">str</span>) <span class="op">-&gt;</span> <span class="dt">Option</span><span class="op">&lt;</span>BigUint<span class="op">&gt;</span> <span class="op">{</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    fibs()<span class="op">.</span>find(<span class="op">|</span>x<span class="op">|</span> x<span class="op">.</span>to_string()<span class="op">.</span>contains(<span class="op">&amp;</span>substr))</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> part_a(n<span class="op">:</span> <span class="dt">usize</span>) <span class="op">-&gt;</span> <span class="dt">String</span> <span class="op">{</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> first_fibs <span class="op">=</span> fibs()</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>take(n)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>map(<span class="op">|</span>x<span class="op">|</span> x<span class="op">.</span>to_string())</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="pp">collect::</span><span class="op">&lt;</span><span class="dt">Vec</span><span class="op">&lt;</span>_<span class="op">&gt;&gt;</span>()</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span>concat()<span class="op">;</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">String</span><span class="pp">::</span>from(<span class="op">&amp;</span>find_fib_with(<span class="op">&amp;</span>first_fibs)<span class="op">.</span>unwrap()<span class="op">.</span>to_string()[<span class="op">..</span><span class="dv">8</span>])</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> part_b(n<span class="op">:</span> <span class="dt">usize</span>) <span class="op">-&gt;</span> <span class="dt">String</span> <span class="op">{</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    <span class="dt">String</span><span class="pp">::</span>from(<span class="op">&amp;</span>find_fib_with(<span class="op">&amp;</span>part_a(n))<span class="op">.</span>unwrap()<span class="op">.</span>to_string()[<span class="op">..</span><span class="dv">8</span>])</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> n <span class="op">=</span> <span class="pp">env::</span>args()<span class="op">.</span>nth(<span class="dv">1</span>)<span class="op">.</span>and_then(<span class="op">|</span>x<span class="op">|</span> x<span class="op">.</span>parse()<span class="op">.</span>ok())<span class="op">.</span>unwrap_or(<span class="dv">7</span>)<span class="op">;</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="pp">println!</span>(<span class="st">&quot;{}&quot;</span><span class="op">,</span> part_b(n))<span class="op">;</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>In this implementation we wrote modular code in a straight-forward
+manner, like we first tried to do in Haskell, and it just worked,
+without any space leaks.</p>
+<p>(btw a more efficient Rust implementation can probably be made
+employing mutability for constant factor gains, but in this post we
+don't concern ourselves with constant factors)</p>
+<h2 id="follow-up-question">Follow-up question</h2>
+<p>In light of this example, do you think that pervasive lazyness helps
+write modular and re-usable code, or is it a hindrance to this goal?</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Header image was generated with DALL-E. I attempted using it to
+visualize "space leaks".</li>
+<li>This post is my second attempt at making an argument against
+pervasive lazy evaluation. <a href="/posts/leet-haskell-in-python">My
+previous attempt</a> appears to have failed convincing the people in
+r/haskell. I hope that this post better demonstrates the problem</li>
+</ul>]]></content>
+  </entry>
   <entry>
       <title>Leet Haskell-style lazy evaluation in Python</title>
       <link href="https://yairchu.github.io/posts/leet-haskell-in-python"/>
@@ -114,6 +251,10 @@ language to accomodate explicit lazy evaluation ergonomically.</p>
 <ul>
 <li>Header image was generated with DALL-E with the prompt "A cute
 friendly python embracing a sloth, digital art"</li>
+<li>Discussion:
+<img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/>
+<a
+href="https://www.reddit.com/r/haskell/comments/xjz1og/leet_haskellstyle_lazy_evaluation_in_python/">r/haskell</a></li>
 </ul>]]></content>
   </entry>
   <entry>
