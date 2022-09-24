@@ -128,9 +128,9 @@ In this implementation we wrote modular code in a straight-forward manner, like 
 
 ## Follow-up question
 
-In light of this example, do you think that pervasive lazyness helps write modular and re-usable code, or is it a hindrance to this goal?
+In light of this example, do you think that pervasive laziness helps us write modular and re-usable code, or is it a hindrance to it?
 
 ## Notes
 
 * Header image was generated with DALL-E. I attempted using it to visualize "space leaks".
-* This post is my second attempt at making an argument against pervasive lazy evaluation. [My previous attempt](/posts/leet-haskell-in-python) appears to have failed convincing the people in r/haskell. I hope that this post better demonstrates the problem
+* This post is my second attempt at making an argument about pervasive lazy evaluation. [My previous attempt](/posts/leet-haskell-in-python) appears to have failed convincing the people in r/haskell. I hope that this post better demonstrates the problem
