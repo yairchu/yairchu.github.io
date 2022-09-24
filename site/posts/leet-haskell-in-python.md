@@ -99,3 +99,4 @@ If I were to design a programming language ([which I am](http://www.lamdu.org)) 
 ## Notes
 
 * Header image was generated with DALL-E with the prompt "A cute friendly python embracing a sloth, digital art"
+* Discussion: <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell](https://www.reddit.com/r/haskell/comments/xjz1og/leet_haskellstyle_lazy_evaluation_in_python/)
