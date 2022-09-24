@@ -78,8 +78,8 @@ substrings:</p>
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fibs <span class="ot">=</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">1</span> <span class="op">:</span> <span class="fu">zipWith</span> (<span class="op">+</span>) fibs (<span class="fu">tail</span> fibs)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>findFibWith substr <span class="ot">=</span> find (isInfixOf substr <span class="op">.</span> <span class="fu">show</span>) fibs</span></code></pre></div>
-<p>We'll look for substring like "11235813", which is a concatenation of
-the first elements in the fibonacci sequence, and compute the first 8
+<p>We'll look for substrings like "11235813", which is a concatenation
+of the first elements in the fibonacci sequence, and compute the first 8
 digits of the element which contains this substring.</p>
 <p>Or in simple Haskell terms:</p>
 <div class="sourceCode" id="cb2"><pre
@@ -116,17 +116,19 @@ computing <code>partA</code>, but only when <code>partB</code> was going
 to follow it!</p>
 <p>This is because the mere future use of <code>findFibWith</code> in
 <code>partB</code> holds on to <code>fibs</code> to re-use it later,
-rather than letting the garbage collector to be done with it.</p>
-<p>Thought in our case, this memoization of the fibonacci sequence,
-which we get for free thanks to Haskell's pervasive lazy evaluation, is
+rather than letting the garbage collector rid of it.</p>
+<p>Though in our case, this memoization of the fibonacci sequence, which
+we get for free thanks to Haskell's pervasive lazy evaluation, is
 something that we'd rather avoid.</p>
 <h3 id="working-around-the-problem">Working around the problem</h3>
 <p>A possibly silly workaround is employing deliberate code duplication,
 with <code>findFibWith2</code> using <code>fibs2</code> and thus not
-retaining <code>fibs</code>. However we are more ecological than using
-only single-use functions, so we'll look for a better work-around.</p>
-<p>We can replace <code>findFibWith</code> with an implementation that
-has <code>fibs</code> implemented into it:</p>
+retaining <code>fibs</code>. However we'd like a more ecological
+solution than single-use functions, so we'll look for a better
+work-around.</p>
+<p>What we can do is to rewrite <code>findFibWith</code> so that an
+implementation of <code>fibs</code> is woven into it so that it is never
+stored in a data structure:</p>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>findFibWith substr <span class="ot">=</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    go <span class="dv">1</span> <span class="dv">1</span></span>
@@ -134,7 +136,7 @@ class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a 
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        go cur next</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> isInfixOf substr (<span class="fu">show</span> cur) <span class="ot">=</span> <span class="dt">Just</span> cur</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> go next (cur <span class="op">+</span> next)</span></code></pre></div>
-<h2 id="comparison-functional-rust">Comparison: "Functional" Rust</h2>
+<h2 id="comparison-functional-rust">Comparison: Functional Rust</h2>
 <p>We'll compare the above situation to using Rust in a functional
 manner, and make an implementation which is mostly a translation of the
 Haskell implementation above.</p>
