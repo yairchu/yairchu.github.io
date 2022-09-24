@@ -21,7 +21,7 @@ fibs = 1 : 1 : zipWith (+) fibs (tail fibs)
 findFibWith substr = find (isInfixOf substr . show) fibs
 ```
 
-We'll look for substring like "11235813", which is a concatenation of the first elements in the fibonacci sequence, and compute the first 8 digits of the element which contains this substring.
+We'll look for substrings like "11235813", which is a concatenation of the first elements in the fibonacci sequence, and compute the first 8 digits of the element which contains this substring.
 
 Or in simple Haskell terms:
 
@@ -62,15 +62,15 @@ For part A the memory footprint stayed low, for for part B the memory footprint 
 
 The irony of the situation is that when we research when exactly the memory footprint grew so much, we will find that it was happening when computing `partA`, but only when `partB` was going to follow it!
 
-This is because the mere future use of `findFibWith` in `partB` holds on to `fibs` to re-use it later, rather than letting the garbage collector to be done with it.
+This is because the mere future use of `findFibWith` in `partB` holds on to `fibs` to re-use it later, rather than letting the garbage collector rid of it.
 
-Thought in our case, this memoization of the fibonacci sequence, which we get for free thanks to Haskell's pervasive lazy evaluation, is something that we'd rather avoid.
+Though in our case, this memoization of the fibonacci sequence, which we get for free thanks to Haskell's pervasive lazy evaluation, is something that we'd rather avoid.
 
 ### Working around the problem
 
-A possibly silly workaround is employing deliberate code duplication, with `findFibWith2` using `fibs2` and thus not retaining `fibs`. However we are more ecological than using only single-use functions, so we'll look for a better work-around.
+A possibly silly workaround is employing deliberate code duplication, with `findFibWith2` using `fibs2` and thus not retaining `fibs`. However we'd like a more ecological solution than single-use functions, so we'll look for a better work-around.
 
-We can replace `findFibWith` with an implementation that has `fibs` implemented into it:
+What we can do is to rewrite `findFibWith` so that an implementation of `fibs` is woven into it so that it is never stored in a data structure:
 
 ```Haskell
 findFibWith substr =
@@ -81,7 +81,7 @@ findFibWith substr =
             | otherwise = go next (cur + next)
 ```
 
-## Comparison: "Functional" Rust
+## Comparison: Functional Rust
 
 We'll compare the above situation to using Rust in a functional manner, and make an implementation which is mostly a translation of the Haskell implementation above.
 
