@@ -54,7 +54,7 @@ If we plot the run times and memory footprints of separate runs computing part A
 
 ![Ammount of memory used](/images/fibs-measured-mem.png)
 
-For part A the memory footprint stayed low, for for part B the memory footprint grew linearly with the running time!
+For part A the memory footprint stayed low, but for part B the memory footprint grew linearly with the running time!
 
 **Spoiler alert**: If you want to solve this challenge on your own, pause and do it before reading the analysis and work-arounds in the next sections.
 
@@ -64,13 +64,13 @@ The irony of the situation is that when we research when exactly the memory foot
 
 This is because the mere future use of `findFibWith` in `partB` holds on to `fibs` to re-use it later, rather than letting the garbage collector rid of it.
 
-Though in our case, this memoization of the fibonacci sequence, which we get for free thanks to Haskell's pervasive lazy evaluation, is something that we'd rather avoid.
+This memoization of the fibonacci sequence, which we get for free thanks to Haskell's pervasive lazy evaluation, is something that in this situation we'd rather avoid.
 
 ### Working around the problem
 
-A possibly silly workaround is employing deliberate code duplication, with `findFibWith2` using `fibs2` and thus not retaining `fibs`. However we'd like a more ecological solution than single-use functions, so we'll look for a better work-around.
+An obvious but silly workaround is employing deliberate code duplication, with `findFibWith2` using `fibs2` and thus not retaining `fibs`. However we'd like a more ecological solution than single-use functions, so we'll look for a different work-around.
 
-What we can do is to rewrite `findFibWith` so that an implementation of `fibs` is woven into it so that it is never stored in a data structure:
+What we can do is to rewrite `findFibWith` so that `fibs` is woven into it such that the series is never stored in a data structure:
 
 ```Haskell
 findFibWith substr =
