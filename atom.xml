@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-09-25T07:21:SZ</updated>
+  <updated>2022-09-25T09:24:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -145,6 +145,10 @@ visualize "space leaks".</li>
 lazy evaluation. <a href="/posts/leet-haskell-in-python">My previous
 attempt</a> appears to have failed convincing the people in r/haskell. I
 hope that this post better demonstrates the problem</li>
+<li>Discussion:
+<img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/>
+<a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/">r/haskell</a></li>
 </ul>]]></content>
   </entry>
   <entry>
