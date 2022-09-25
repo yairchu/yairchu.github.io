@@ -134,3 +134,4 @@ In light of this example, do you think that pervasive laziness helps us write mo
 
 * Header image was generated with DALL-E. I attempted using it to visualize "space leaks".
 * This post is my second attempt at making an argument about pervasive lazy evaluation. [My previous attempt](/posts/leet-haskell-in-python) appears to have failed convincing the people in r/haskell. I hope that this post better demonstrates the problem
+* Discussion: <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell](https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/)
