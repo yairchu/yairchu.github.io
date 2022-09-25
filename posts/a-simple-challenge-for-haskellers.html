@@ -104,7 +104,7 @@ leak".</p>
 computing part A and part B, a disturbing picture is revealed:</p>
 <p><img src="/images/fibs-measured-mem.png"
 alt="Ammount of memory used" /></p>
-<p>For part A the memory footprint stayed low, for for part B the memory
+<p>For part A the memory footprint stayed low, but for part B the memory
 footprint grew linearly with the running time!</p>
 <p><strong>Spoiler alert</strong>: If you want to solve this challenge
 on your own, pause and do it before reading the analysis and
@@ -117,18 +117,18 @@ to follow it!</p>
 <p>This is because the mere future use of <code>findFibWith</code> in
 <code>partB</code> holds on to <code>fibs</code> to re-use it later,
 rather than letting the garbage collector rid of it.</p>
-<p>Though in our case, this memoization of the fibonacci sequence, which
-we get for free thanks to Haskell's pervasive lazy evaluation, is
-something that we'd rather avoid.</p>
+<p>This memoization of the fibonacci sequence, which we get for free
+thanks to Haskell's pervasive lazy evaluation, is something that in this
+situation we'd rather avoid.</p>
 <h3 id="working-around-the-problem">Working around the problem</h3>
-<p>A possibly silly workaround is employing deliberate code duplication,
-with <code>findFibWith2</code> using <code>fibs2</code> and thus not
-retaining <code>fibs</code>. However we'd like a more ecological
-solution than single-use functions, so we'll look for a better
-work-around.</p>
-<p>What we can do is to rewrite <code>findFibWith</code> so that an
-implementation of <code>fibs</code> is woven into it so that it is never
-stored in a data structure:</p>
+<p>An obvious but silly workaround is employing deliberate code
+duplication, with <code>findFibWith2</code> using <code>fibs2</code> and
+thus not retaining <code>fibs</code>. However we'd like a more
+ecological solution than single-use functions, so we'll look for a
+different work-around.</p>
+<p>What we can do is to rewrite <code>findFibWith</code> so that
+<code>fibs</code> is woven into it such that the series is never stored
+in a data structure:</p>
 <div class="sourceCode" id="cb4"><pre
 class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>findFibWith substr <span class="ot">=</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    go <span class="dv">1</span> <span class="dv">1</span></span>
