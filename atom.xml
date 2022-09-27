@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-09-27T19:15:SZ</updated>
+  <updated>2022-09-27T19:20:SZ</updated>
   <author>
       <name></name>
   </author>
@@ -127,8 +127,12 @@ to re-implement</li>
 <li>Image generated using DALL-E 2 with the prompt "A ranger catching a
 planet with a lasso, digital art". No Lassos there but it's good enough
 :)</li>
-<li>Do you have another solution to the problem? I'd love to hear about
-it!</li>
+<li>Do you have a better solution to the problem? Please let me
+know!</li>
+<li>Discussion:
+<img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/>
+<a
+href="https://www.reddit.com/r/haskell/comments/xppwju/3_ways_to_reduce_sharing_to_avoid_space_leaks/">r/haskell</a></li>
 </ul>]]></content>
   </entry>
   <entry>
