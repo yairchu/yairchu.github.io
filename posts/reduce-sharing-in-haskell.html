@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="3 ways to reduce sharing in Haskell">
+  <meta name="twitter:description" content="3 ways to reduce sharing and avoid space leaks in Hasekll">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/planet-catcher.jpg">
+  <title>3 ways to reduce sharing in Haskell</title>
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="3 ways to reduce sharing in Haskell" />
+  <meta property="og:image" content="https://yairchu.github.io/images/planet-catcher.jpg" />
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3ZVL4J64MW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3ZVL4J64MW');
+  </script>
+</head>
+<body>
+  <header dir="ltr">
+      <nav>
+          <a id="beacon" href="/">
+              <div id="home-text"> HOME </div>
+          </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        3 ways to reduce sharing in Haskell
+      </span>
+
+      <img class="post-image" src="/images/planet-catcher.jpg">
+      <span class="byline">by Yair Chuchem</span>
+      <span class="date">2022.09.27</span>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/haskell" class="tag">haskell</a>
+        <a href="/tag/lazy-evaluation" class="tag">lazy-evaluation</a>
+        <a href="/tag/space-leaks" class="tag">space-leaks</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p>Haskell <a href="/posts/a-simple-challenge-for-haskellers">is prone
+to space leaks</a>, but luckily there are several ways to work around
+them.</p>
+<p>A simple example for a space leak is iterating over the fibonacci
+sequence twice, <a href="/posts/a-simple-challenge-for-haskellers">as
+described in the previous post</a>.</p>
+<p>Luckily, several solutions to this problem were suggested by <a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/">r/haskell</a>:</p>
+<h2 id="using-inline-pragmas">Using INLINE pragmas</h2>
+<p><a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/ipu5qoj/">oberblastmeister
+suggested</a> inlining:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fibs <span class="ot">=</span> <span class="fu">map</span> <span class="fu">fst</span> (<span class="fu">iterate</span> (\(cur, next) <span class="ot">-&gt;</span> (next, cur <span class="op">+</span> next)) (<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# INLINE fibs #-}</span></span></code></pre></div>
+<p>This will make separate iterations be independent from each other,
+each using their own copy of the list which is iterated once and is
+immediately collected by the GC.</p>
+<p>Pros:</p>
+<ul>
+<li>Require minimal changes to our code</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>Fragile? <a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/ipxydqx/">kuribas
+wrote</a> that "INLINE doen’t guarantee inlining, and it depends on
+optimization flags"</li>
+<li>Machine code duplication. May create larger and potentially less
+efficient executables</li>
+</ul>
+<h2 id="using-the--fno-full-laziness-ghc-flag">Using the
+<code>-fno-full-laziness</code> GHC flag</h2>
+<p><a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/ipug4yp/">MorrowM_
+suggested</a> using the <code>-fno-full-laziness</code> after wrapping
+<code>fibs</code> with a lambda:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# OPTIONS -fno-full-laziness #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fibs _ <span class="ot">=</span> <span class="fu">map</span> <span class="fu">fst</span> (<span class="fu">iterate</span> (\(cur, next) <span class="ot">-&gt;</span> (next, cur <span class="op">+</span> next)) (<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p>Note that adding the dummy lambda alone will suffice if not compiling
+with optimizations, but that's not something that we would like to rely
+on, hence the additional <code>-fno-full-laziness</code> option comes
+into place.</p>
+<p>Without it, GHC may notice that the expression in <code>fibs</code>
+doesn't use its parameter and so it may float it out and shares it.</p>
+<p>Pros:</p>
+<ul>
+<li>No machine code duplication: the implementation of <code>fibs</code>
+is shared without the resulting list being shared!</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>Fragile? I fear that this soltuion might break if another module
+uses <code>fibs</code> and GHC decides to inline it, and this second
+module didn't enable <code>-fno-full-laziness</code></li>
+<li>Relies on GHC flags. These might change more easily than the
+language standard does</li>
+<li>Requires modification to our code including in all of
+<code>fibs</code>'s call sites</li>
+</ul>
+<h2 id="functionalization">Functionalization</h2>
+<p>Alonzo Church famously <a
+href="https://en.wikipedia.org/wiki/Church_encoding">discovered that
+data can be encoded in functions</a>, and we can use it to avoid
+creating data structures that could be shared.</p>
+<p>As the Fibonacci sequence is infinite we'll use a function encoding
+for infinite lists:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">fibs ::</span> (<span class="dt">Integer</span> <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>fibs cons <span class="ot">=</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    go <span class="dv">1</span> <span class="dv">1</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        go cur next <span class="ot">=</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>            cons cur (go next (cur <span class="op">+</span> next))</span></code></pre></div>
+<p>We can convert it to a list using <code>fibs (:)</code> but to avoid
+sharing we'll have to change our code using it, and to solve the problem
+in the previous post we'll use a custom variant of
+<code>find</code>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">findInf ::</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> ((a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>findInf <span class="fu">pred</span> infList <span class="ot">=</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    infList f</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        f x rest</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="fu">pred</span> x <span class="ot">=</span> x</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> rest</span></code></pre></div>
+<p>Btw, <a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/ipvm3g3/"><code>yeled_kafot</code>
+suggested</a> a formulation based on <code>lens</code>, which might be
+of use to folks using this eco-systems.</p>
+<p>Pros:</p>
+<ul>
+<li>Solid. Little doubt that this will resume working in the face of
+various compiler optimization</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>More verbose</li>
+<li>Non-standard. We're not using standard lists anymore, and those have
+a wealth of standard library functions supporting them which we may need
+to re-implement</li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Image generated using DALL-E 2 with the prompt "A ranger catching a
+planet with a lasso, digital art". No Lassos there but it's good enough
+:)</li>
+<li>Do you have another solution to the problem? I'd love to hear about
+it!</li>
+</ul>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: 3 ways to reduce sharing in Haskell - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>

@@ -2,12 +2,135 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2022-09-25T09:24:SZ</updated>
+  <updated>2022-09-27T19:15:SZ</updated>
   <author>
       <name></name>
   </author>
   <id>https://yairchu.github.io//</id>
 
+  <entry>
+      <title>3 ways to reduce sharing in Haskell</title>
+      <link href="https://yairchu.github.io/posts/reduce-sharing-in-haskell"/>
+      <id>https://yairchu.github.io/posts/reduce-sharing-in-haskell</id>
+      <updated>2022-09-27T00:00:SZ</updated>
+      <category term="code"/>
+      <category term="haskell"/>
+      <category term="lazy-evaluation"/>
+      <category term="space-leaks"/>
+      <summary>3 ways to reduce sharing and avoid space leaks in Hasekll</summary>
+      <content type="html"><![CDATA[<p>Haskell <a href="/posts/a-simple-challenge-for-haskellers">is prone
+to space leaks</a>, but luckily there are several ways to work around
+them.</p>
+<p>A simple example for a space leak is iterating over the fibonacci
+sequence twice, <a href="/posts/a-simple-challenge-for-haskellers">as
+described in the previous post</a>.</p>
+<p>Luckily, several solutions to this problem were suggested by <a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/">r/haskell</a>:</p>
+<h2 id="using-inline-pragmas">Using INLINE pragmas</h2>
+<p><a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/ipu5qoj/">oberblastmeister
+suggested</a> inlining:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fibs <span class="ot">=</span> <span class="fu">map</span> <span class="fu">fst</span> (<span class="fu">iterate</span> (\(cur, next) <span class="ot">-&gt;</span> (next, cur <span class="op">+</span> next)) (<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# INLINE fibs #-}</span></span></code></pre></div>
+<p>This will make separate iterations be independent from each other,
+each using their own copy of the list which is iterated once and is
+immediately collected by the GC.</p>
+<p>Pros:</p>
+<ul>
+<li>Require minimal changes to our code</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>Fragile? <a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/ipxydqx/">kuribas
+wrote</a> that "INLINE doen’t guarantee inlining, and it depends on
+optimization flags"</li>
+<li>Machine code duplication. May create larger and potentially less
+efficient executables</li>
+</ul>
+<h2 id="using-the--fno-full-laziness-ghc-flag">Using the
+<code>-fno-full-laziness</code> GHC flag</h2>
+<p><a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/ipug4yp/">MorrowM_
+suggested</a> using the <code>-fno-full-laziness</code> after wrapping
+<code>fibs</code> with a lambda:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">{-# OPTIONS -fno-full-laziness #-}</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fibs _ <span class="ot">=</span> <span class="fu">map</span> <span class="fu">fst</span> (<span class="fu">iterate</span> (\(cur, next) <span class="ot">-&gt;</span> (next, cur <span class="op">+</span> next)) (<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p>Note that adding the dummy lambda alone will suffice if not compiling
+with optimizations, but that's not something that we would like to rely
+on, hence the additional <code>-fno-full-laziness</code> option comes
+into place.</p>
+<p>Without it, GHC may notice that the expression in <code>fibs</code>
+doesn't use its parameter and so it may float it out and shares it.</p>
+<p>Pros:</p>
+<ul>
+<li>No machine code duplication: the implementation of <code>fibs</code>
+is shared without the resulting list being shared!</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>Fragile? I fear that this soltuion might break if another module
+uses <code>fibs</code> and GHC decides to inline it, and this second
+module didn't enable <code>-fno-full-laziness</code></li>
+<li>Relies on GHC flags. These might change more easily than the
+language standard does</li>
+<li>Requires modification to our code including in all of
+<code>fibs</code>'s call sites</li>
+</ul>
+<h2 id="functionalization">Functionalization</h2>
+<p>Alonzo Church famously <a
+href="https://en.wikipedia.org/wiki/Church_encoding">discovered that
+data can be encoded in functions</a>, and we can use it to avoid
+creating data structures that could be shared.</p>
+<p>As the Fibonacci sequence is infinite we'll use a function encoding
+for infinite lists:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ot">fibs ::</span> (<span class="dt">Integer</span> <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>fibs cons <span class="ot">=</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    go <span class="dv">1</span> <span class="dv">1</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        go cur next <span class="ot">=</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>            cons cur (go next (cur <span class="op">+</span> next))</span></code></pre></div>
+<p>We can convert it to a list using <code>fibs (:)</code> but to avoid
+sharing we'll have to change our code using it, and to solve the problem
+in the previous post we'll use a custom variant of
+<code>find</code>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ot">findInf ::</span> (a <span class="ot">-&gt;</span> <span class="dt">Bool</span>) <span class="ot">-&gt;</span> ((a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a) <span class="ot">-&gt;</span> a</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>findInf <span class="fu">pred</span> infList <span class="ot">=</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    infList f</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">where</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        f x rest</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="fu">pred</span> x <span class="ot">=</span> x</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> rest</span></code></pre></div>
+<p>Btw, <a
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/ipvm3g3/"><code>yeled_kafot</code>
+suggested</a> a formulation based on <code>lens</code>, which might be
+of use to folks using this eco-systems.</p>
+<p>Pros:</p>
+<ul>
+<li>Solid. Little doubt that this will resume working in the face of
+various compiler optimization</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>More verbose</li>
+<li>Non-standard. We're not using standard lists anymore, and those have
+a wealth of standard library functions supporting them which we may need
+to re-implement</li>
+</ul>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Image generated using DALL-E 2 with the prompt "A ranger catching a
+planet with a lasso, digital art". No Lassos there but it's good enough
+:)</li>
+<li>Do you have another solution to the problem? I'd love to hear about
+it!</li>
+</ul>]]></content>
+  </entry>
   <entry>
       <title>A simple challenge for Haskellers</title>
       <link href="https://yairchu.github.io/posts/a-simple-challenge-for-haskellers"/>
@@ -17,6 +140,7 @@
       <category term="haskell"/>
       <category term="rust"/>
       <category term="lazy-evaluation"/>
+      <category term="space-leaks"/>
       <summary>A simple challenge problem for Haskellers</summary>
       <content type="html"><![CDATA[<p>In this post we will discuss a simple Advent-of-Code style problem
 that shouldn't take programmers much effort in any programming
@@ -148,7 +272,11 @@ hope that this post better demonstrates the problem</li>
 <li>Discussion:
 <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/>
 <a
-href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/">r/haskell</a></li>
+href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_haskellers/">r/haskell</a>
+<ul>
+<li>I've summarized solutions/work-arounds from this discussion <a
+href="reduce-sharing-in-haskell">into a new post</a></li>
+</ul></li>
 </ul>]]></content>
   </entry>
   <entry>
@@ -160,6 +288,7 @@ href="https://www.reddit.com/r/haskell/comments/xngj2w/a_simple_challenge_for_ha
       <category term="haskell"/>
       <category term="python"/>
       <category term="lazy-evaluation"/>
+      <category term="space-leaks"/>
       <summary>Haskell-style lazy evaluation in Python</summary>
       <content type="html"><![CDATA[<p>Haskellers take pride in lazy evaluation, with the world renowned
 Fibonacci sequence code-golf as one of its proudest achievements:</p>
