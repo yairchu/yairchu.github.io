@@ -2,7 +2,7 @@
 title: "Leet Haskell-style lazy evaluation in Python"
 author: Yair Chuchem
 date: 2022.09.15
-tags: [code, haskell, python, lazy-evaluation]
+tags: [code, haskell, python, lazy-evaluation, space-leaks]
 description: Haskell-style lazy evaluation in Python
 image: python-embracing-sloth.jpg
 ---
