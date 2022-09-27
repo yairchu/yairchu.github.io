@@ -98,4 +98,5 @@ Cons:
 ## Notes
 
 * Image generated using DALL-E 2 with the prompt "A ranger catching a planet with a lasso, digital art". No Lassos there but it's good enough :)
-* Do you have another solution to the problem? I'd love to hear about it!
+* Do you have a better solution to the problem? Please let me know!
+* Discussion: <img src="/images/reddit.svg" alt="reddit" style="width: 20px; display: inline;"/> [r/haskell](https://www.reddit.com/r/haskell/comments/xppwju/3_ways_to_reduce_sharing_to_avoid_space_leaks/)
