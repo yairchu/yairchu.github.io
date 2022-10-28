@@ -126,7 +126,6 @@ a, a:visited, a:hover {
     text-decoration: underline; }
 
 header {
-  position: fixed;
   /*color: $night-white;*/
   top: 0;
   height: 4em;
@@ -479,31 +478,26 @@ a.tag, a.category {
   .dark #theme-button {
     color: #DDD; }
 
-#beacon {
+nav a {
   font-family: "Oswald", helvetica, sans-serif;
   font-size: 4em;
   height: 1.5em;
   width: 1.5em;
   text-align: center;
   margin: 0.1em;
-  position: absolute;
   border-radius: 0.1em;
   opacity: 0.4;
   -webkit-transition: opacity 0.5s;
           transition: opacity 0.5s;
   color: inherit; }
-  #beacon path {
+  a path {
     fill: currentColor; }
-  #beacon .logo {
+  a .logo {
     width: 100%;
     height: 100%; }
-  #beacon:hover {
+  a:hover {
     opacity: 1;
     text-decoration: none; }
-
-#home-text {
-  font-size: 0.8em;
-}
 
 #projects-list {
   text-align: center;
@@ -528,7 +522,7 @@ a.tag, a.category {
     height: 3em;
     background: rgba(76, 76, 76, 0.9); }
 
-  #beacon {
+  nav a {
     color: #FFFFFC;
     font-size: 2em;
     margin: 0; }
