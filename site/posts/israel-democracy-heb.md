@@ -4,7 +4,7 @@ author: יאיר חכם
 date: 2023.03.01
 tags: [politics, israel]
 description: מצב הדמוקרטיה בישראל והאם ניתן לשפרו
-image: israharedistine.jpg
+image: israharedistine2.jpg
 draft: []
 lang: he
 ---
