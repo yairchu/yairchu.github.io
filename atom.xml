@@ -2,12 +2,58 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2023-03-05T10:02:SZ</updated>
+  <updated>2023-10-05T14:49:SZ</updated>
   <author>
       <name></name>
   </author>
   <id>https://yairchu.github.io//</id>
 
+  <entry>
+      <title>Git safety mirror</title>
+      <link href="https://yairchu.github.io/posts/git-safety-mirror"/>
+      <id>https://yairchu.github.io/posts/git-safety-mirror</id>
+      <updated>2023-10-05T00:00:SZ</updated>
+      <category term="git"/>
+      <category term="code"/>
+      <summary>A utility to create git mirrors which protect against commits lost due
+to force pushes</summary>
+      <content type="html"><![CDATA[<p>When someone <code>git push --force</code> to a public repo which is
+a dependency of your project, the commit you've used may no longer work.
+Your projects will fail building and you'll be forced to update to a new
+version as well as lose the reproducibility of your older versions
+(which are useful for <code>git bisect</code>s). That's why you
+shouldn't <code>git push --force</code> to the main branches of public
+repos.</p>
+<p>But what can you do when your dependencies are maintained by other
+people who do it anyway?</p>
+<p>Here's a new solution to this problem: create a "safety mirror" for
+the project.</p>
+<h2 id="the-anatomy-of-a-safety-mirror-repository">The anatomy of a
+safety mirror repository</h2>
+<p><img src="/images/safety-mirror-commits.svg"
+alt="Git history for a safety mirror" /></p>
+<ul>
+<li>A safety mirror <a
+href="https://github.com/yairchu/safety-mirror">starts from the
+repository of <code>safety-mirror</code> tool</a></li>
+<li>Then the user sets up the repositories and branches to mirror in
+<code>sources.json</code></li>
+<li>Subsequent runs of <code>safety-mirror.py</code> create quasi-merge
+commits of the sources into the mirror.
+<ul>
+<li>They differ from typical merge commits in that the mirrored
+repository's contents are not actually entering main branch of the
+safety mirror (which stays just the script and its configuration)</li>
+<li>The purpose these merge commits serve is simply to keep the history
+of the mirrored repository attached to the safety mirror's history, so
+that it never gets lost</li>
+</ul></li>
+</ul>
+<p>To then use the safety mirror as a dependency, simply use it instead
+of the original repository, with the original repository's commit hashes
+(which are mirrored). Unlike the original repository, when you update
+your safety mirror no commits will ever get lost.</p>]]></content>
+  </entry>
   <entry>
       <title>דמוקרטיה בישראל</title>
       <link href="https://yairchu.github.io/posts/israel-democracy-heb"/>
