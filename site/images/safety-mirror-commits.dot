@@ -1,0 +1,36 @@
+digraph {
+    graph [bgcolor=invis compound=true]
+    subgraph cluster_all
+    {
+        graph [color=invis bgcolor="#dddddd" style=rounded]
+
+        node [style="rounded,filled" shape=rect label=""]
+
+        subgraph cluster_mirror {
+            node [fillcolor="#8888ee"]
+            tool [label="fork\nsafety-mirror"]
+            conf [label="configure"]
+            merge0 [label="merge*"]
+            merge1 [label="merge*"]
+            merge2 [label="merge*"]
+            tool -> conf -> merge0 -> merge1 -> merge2
+        }
+
+        subgraph cluster_dep_lost {
+            node [fillcolor="#dd9944" label=".."]
+            dep2 [label="was\nmain"]
+            dep4
+            dep5 [label="was\nmain"]
+        }
+
+        subgraph cluster_dep_main {
+            node [fillcolor="#33cc33" label=".."]
+            latest [label="current\nmain"]
+            dep0 -> dep1 -> dep2 -> merge0
+            dep1 -> dep3 -> dep4 -> dep5 -> merge1
+            dep3 -> dep6 -> dep7 -> latest -> merge2
+        }
+
+        dep2 -> dep4 [style=invis]
+    }
+}
