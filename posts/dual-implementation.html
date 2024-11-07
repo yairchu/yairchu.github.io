@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head profile="http://www.w3.org/2005/10/profile">
+  <meta name="description" content="Yair&#39;s website">
+  <meta name="author" content="Yair Chuchem">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@yairchu">
+<meta name="twitter:creator" content="@yairchu">
+<meta name="twitter:title" content="Challenges in translating Python to C++">
+  <meta name="twitter:description" content="Challenges in translating Python to C++">
+  <meta name="twitter:image" content="https://yairchu.github.io//images/dual-implementation.jpg">
+  <title>Challenges in translating Python to C++</title>
+  <link rel="stylesheet" href="/css/syntax.css">
+  <meta property="og:title" content="Challenges in translating Python to C++" />
+  <meta property="og:image" content="https://yairchu.github.io/images/dual-implementation.jpg" />
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3ZVL4J64MW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3ZVL4J64MW');
+  </script>
+</head>
+<body>
+  <header dir="ltr">
+      <nav>
+          <a href="/"> HOME </a>
+          <a href="/projects/recommendations"> FAVS </a>
+      </nav>
+  
+      <div class="right-sidebar">
+          <a class="ext-link" href="https://github.com/yairchu">
+            <img src="/images/github-logo.png" alt="Github Profile"/>
+        </a>
+
+          <a class="ext-link" href="https://twitter.com/yairchu">
+            <img src="/images/twitter-logo.png" alt="Twitter Profile"/>
+        </a>
+    <div id="theme-button">DAY</div>
+      </div>
+  </header>
+
+<div id="page">
+  <div class="wrapper">
+    <div class="masthead">
+      <span class="title">
+        Challenges in translating Python to C++
+      </span>
+
+      <img class="post-image" src="/images/dual-implementation.jpg">
+      <span class="byline">by Yair Chuchem</span>
+      <span class="date">2024.11.07</span>
+      <div class="metadata">
+      </div>
+      <div class="tags">
+        <a href="/tag/code" class="tag">code</a>
+        <a href="/tag/python" class="tag">python</a>
+        <a href="/tag/c++" class="tag">c++</a>
+      </div>
+    </div>
+  </div>
+  <article class="post">
+    <p>An upcoming product from SR has two implementations:</p>
+<ul>
+<li><p>The first one is in Python, which allows for quickly iterating to
+find a solution that works well</p></li>
+<li><p>For speed and other considerations, a re-implementation in C++ is
+required for the actual product</p></li>
+</ul>
+<p>How can one maintain two implementations and make sure that they
+match?</p>
+<p>A common approach is to write tests that compare the outputs of both
+implementations for a variety of inputs. However, when floating-point
+calculations are involved, achieving exact matches becomes a challenging
+task!</p>
+<p>For example, consider the simple task of summing an array:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode c++"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">float</span> x <span class="op">:</span> arr<span class="op">)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    sum <span class="op">+=</span> x<span class="op">;</span></span></code></pre></div>
+<p>vs</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>arr.<span class="bu">sum</span>()  <span class="co"># arr is a numpy array</span></span></code></pre></div>
+<p>At first glance, you might expect both to produce identical results.
+Surprisingly, they don’t! NumPy employs <a
+href="https://en.wikipedia.org/wiki/Pairwise_summation">pairwise
+summation</a>, a more accurate method than the naive C++ loop, leading
+to differences in the final sum.</p>
+<p>So what can we do?</p>
+<ul>
+<li><strong>Allow approximate matches</strong>: Instead of requiring
+identical results in tests, verify that the outputs are “close enough”
+within an acceptable tolerance.</li>
+<li><strong>Test modules separately</strong>: Test individual components
+in isolation. Their results are likely to align more closely than those
+of the entire process, where differences can accumulate.</li>
+<li><strong>Reuse C++ in Python where possible</strong>: Consider using
+parts of the C++ implementation directly in Python with <a
+href="https://pybind11.readthedocs.io/en/stable/">pybind11</a></li>
+<li><strong>Make the implementations more similar</strong>:
+<ul>
+<li>Implementing pairwise summation in C++ can make its results align
+better with <code>np.sum</code>. This has the added benefit of being
+more accurate! If the changes don’t require excessive effort or harm
+performance, this is a worthwhile improvement!</li>
+<li>Alternatively, using Python's built-in <code>sum</code> instead of
+<code>np.sum</code> can produce results identical to the naive C++
+loop</li>
+</ul></li>
+</ul>
+<p>When modifying the implementations to align more closely, it’s
+crucial to respect their respective goals:</p>
+<ul>
+<li><strong>Python implementation</strong>: Should prioritize developer
+productivity—keeping the code simple, declarative, and easy to iterate
+on. Remember, much of the work done in Python may never make it to the
+final product.</li>
+<li><strong>C++ implementation</strong>: Should focus on the end
+user—ensuring the code is fast, robust, portable, and reliable.</li>
+</ul>
+
+    <br>
+    <br>
+
+    <!--Share buttons-->
+    <div class="social-buttons">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out: Challenges in translating Python to C++ - " data-via="yairchu">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <a href="https://twitter.com/yairchu" class="twitter-follow-button" data-show-count="false" data-dnt="true">Follow @yairchu</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <div class="fb-like" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+    </div>
+</article>
+
+</div>
+
+<footer>
+    Web site built with Haskell using <a href="https://github.com/ChrisPenner/slick">slick</a> ❤️
+</footer>
+
+<link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+<script src="/js/main.js"></script>
+</body>
+</html>
