@@ -1,11 +1,6 @@
-resolver: lts-21.14
+resolver: lts-22.40
 
 packages:
 - .
-
-extra-deps:
-- github: ChrisPenner/slick
-  commit: b3d3adf8dcd5e5f4eca36407ddead32c4a36c458
-- mustache-2.4.1@sha256:dc92ddbf90e3a64c3f2ec7785cf2937d6dcf6ffcebbc38ad9c8b33b6a70bb298,3180
 
 allow-newer: true
