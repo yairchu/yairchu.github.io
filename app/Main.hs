@@ -1,6 +1,8 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Functor law" #-}
 
 module Main where
 
@@ -37,9 +39,7 @@ outputFolder = "docs/"
 
 --Data models-------------------------------------------------------------------
 withSiteMeta :: Value -> Value
-withSiteMeta (Object obj) = Object (obj <> siteMetaObj)
-  where
-    Object siteMetaObj = toJSON siteMeta
+withSiteMeta (Object obj) = toJSON siteMeta & _Object %~ (obj <>)
 withSiteMeta _ = error "only add site meta to objects"
 
 data SiteMeta = SiteMeta
@@ -144,11 +144,8 @@ formatDate humanDate = toIsoDate parsedTime
     parsedTime =
       parseTimeOrError True defaultTimeLocale "%Y.%m.%d" humanDate :: UTCTime
 
-rfc3339 :: Maybe String
-rfc3339 = Just "%H:%M:SZ"
-
 toIsoDate :: UTCTime -> String
-toIsoDate = formatTime defaultTimeLocale (iso8601DateFormat rfc3339)
+toIsoDate = formatTime defaultTimeLocale "%Y-%m-%dT%H:%M:%SZ"
 
 buildFeed :: [Post] -> Action ()
 buildFeed ps = do
