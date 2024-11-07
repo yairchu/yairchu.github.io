@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title></title>
     <link href="https://yairchu.github.io//atom.xml" rel="self" type="application/rss+xml" />
-  <updated>2023-10-05T14:49:SZ</updated>
+  <updated>2024-11-07T14:21:37Z</updated>
   <author>
       <name></name>
   </author>
@@ -12,7 +12,7 @@
       <title>Git safety mirror</title>
       <link href="https://yairchu.github.io/posts/git-safety-mirror"/>
       <id>https://yairchu.github.io/posts/git-safety-mirror</id>
-      <updated>2023-10-05T00:00:SZ</updated>
+      <updated>2023-10-05T00:00:00Z</updated>
       <category term="git"/>
       <category term="code"/>
       <summary>A utility to create git mirrors which protect against commits lost due
@@ -58,7 +58,7 @@ your safety mirror no commits will ever get lost.</p>]]></content>
       <title>דמוקרטיה בישראל</title>
       <link href="https://yairchu.github.io/posts/israel-democracy-heb"/>
       <id>https://yairchu.github.io/posts/israel-democracy-heb</id>
-      <updated>2023-03-01T00:00:SZ</updated>
+      <updated>2023-03-01T00:00:00Z</updated>
       <category term="politics"/>
       <category term="israel"/>
       <summary>מצב הדמוקרטיה בישראל והאם ניתן לשפרו</summary>
@@ -157,7 +157,7 @@ your safety mirror no commits will ever get lost.</p>]]></content>
       <title>3 ways to reduce sharing in Haskell</title>
       <link href="https://yairchu.github.io/posts/reduce-sharing-in-haskell"/>
       <id>https://yairchu.github.io/posts/reduce-sharing-in-haskell</id>
-      <updated>2022-09-27T00:00:SZ</updated>
+      <updated>2022-09-27T00:00:00Z</updated>
       <category term="code"/>
       <category term="haskell"/>
       <category term="lazy-evaluation"/>
@@ -284,7 +284,7 @@ href="https://www.reddit.com/r/haskell/comments/xppwju/3_ways_to_reduce_sharing_
       <title>A simple challenge for Haskellers</title>
       <link href="https://yairchu.github.io/posts/a-simple-challenge-for-haskellers"/>
       <id>https://yairchu.github.io/posts/a-simple-challenge-for-haskellers</id>
-      <updated>2022-09-24T00:00:SZ</updated>
+      <updated>2022-09-24T00:00:00Z</updated>
       <category term="code"/>
       <category term="haskell"/>
       <category term="rust"/>
@@ -432,7 +432,7 @@ href="reduce-sharing-in-haskell">into a new post</a></li>
       <title>Leet Haskell-style lazy evaluation in Python</title>
       <link href="https://yairchu.github.io/posts/leet-haskell-in-python"/>
       <id>https://yairchu.github.io/posts/leet-haskell-in-python</id>
-      <updated>2022-09-15T00:00:SZ</updated>
+      <updated>2022-09-15T00:00:00Z</updated>
       <category term="code"/>
       <category term="haskell"/>
       <category term="python"/>
@@ -545,7 +545,7 @@ href="https://www.reddit.com/r/haskell/comments/xjz1og/leet_haskellstyle_lazy_ev
       <title>What is declarative code</title>
       <link href="https://yairchu.github.io/posts/what-is-declarative-code"/>
       <id>https://yairchu.github.io/posts/what-is-declarative-code</id>
-      <updated>2022-08-26T00:00:SZ</updated>
+      <updated>2022-08-26T00:00:00Z</updated>
       <category term="code"/>
       <category term="declarative"/>
       <category term="parsing"/>
@@ -701,7 +701,7 @@ a lambda in its center, digital art</a></li>
       <title>Python&#39;s print in Haskell</title>
       <link href="https://yairchu.github.io/posts/python-print-in-haskell"/>
       <id>https://yairchu.github.io/posts/python-print-in-haskell</id>
-      <updated>2022-07-28T00:00:SZ</updated>
+      <updated>2022-07-28T00:00:00Z</updated>
       <category term="code"/>
       <category term="python"/>
       <category term="haskell"/>
@@ -759,7 +759,7 @@ href="https://www.reddit.com/r/haskell/comments/wa6wml/pythons_print_in_haskell/
       <title>Modern coding with formatters and linters</title>
       <link href="https://yairchu.github.io/posts/formatters-and-linters"/>
       <id>https://yairchu.github.io/posts/formatters-and-linters</id>
-      <updated>2022-07-26T00:00:SZ</updated>
+      <updated>2022-07-26T00:00:00Z</updated>
       <category term="code"/>
       <category term="python"/>
       <category term="rust"/>
@@ -840,7 +840,7 @@ fixing a light-bulb</a> from Malcolm in the Middle</li>
       <title>The revolution in UI paradigms</title>
       <link href="https://yairchu.github.io/posts/ui-paradigms"/>
       <id>https://yairchu.github.io/posts/ui-paradigms</id>
-      <updated>2021-09-29T00:00:SZ</updated>
+      <updated>2021-09-29T00:00:00Z</updated>
       <category term="code"/>
       <category term="ui"/>
       <category term="declarative"/>
@@ -976,7 +976,7 @@ href="https://www.myconfinedspace.com/2008/11/09/double-bike/">monkeyman767</a>?
       <title>The C++ Priv idiom: an alternative to Pimpl</title>
       <link href="https://yairchu.github.io/posts/the-priv-idiom"/>
       <id>https://yairchu.github.io/posts/the-priv-idiom</id>
-      <updated>2021-03-09T00:00:SZ</updated>
+      <updated>2021-03-09T00:00:00Z</updated>
       <category term="code"/>
       <category term="c++"/>
       <summary>Priv - an alternative to the C++ Pimpl idiom</summary>
@@ -1135,7 +1135,7 @@ discussion</a></li>
       <title>The reverted-cherry mergency</title>
       <link href="https://yairchu.github.io/posts/regard-the-reverted-cherry-pick"/>
       <id>https://yairchu.github.io/posts/regard-the-reverted-cherry-pick</id>
-      <updated>2021-01-26T00:00:SZ</updated>
+      <updated>2021-01-26T00:00:00Z</updated>
       <category term="code"/>
       <category term="git"/>
       <category term="merge"/>
@@ -1216,7 +1216,7 @@ carelessly.</li>
       <title>Silly Haskell code formatting is prevalent</title>
       <link href="https://yairchu.github.io/posts/silly-haskell-formatting"/>
       <id>https://yairchu.github.io/posts/silly-haskell-formatting</id>
-      <updated>2020-12-21T00:00:SZ</updated>
+      <updated>2020-12-21T00:00:00Z</updated>
       <category term="code"/>
       <category term="haskell"/>
       <category term="formatting"/>
@@ -1325,7 +1325,7 @@ of code. Personally I see this as a benefit!</p>]]></content>
       <title>Intercepting system calls to fix broken software</title>
       <link href="https://yairchu.github.io/posts/intercept-to-fix"/>
       <id>https://yairchu.github.io/posts/intercept-to-fix</id>
-      <updated>2020-12-10T00:00:SZ</updated>
+      <updated>2020-12-10T00:00:00Z</updated>
       <category term="code"/>
       <category term="c"/>
       <category term="macos"/>
@@ -1397,7 +1397,7 @@ from PixaBay.</li>
       <title>Trying to create Syntax Optics</title>
       <link href="https://yairchu.github.io/posts/attempting-syntax-optics"/>
       <id>https://yairchu.github.io/posts/attempting-syntax-optics</id>
-      <updated>2020-11-19T00:00:SZ</updated>
+      <updated>2020-11-19T00:00:00Z</updated>
       <category term="code"/>
       <category term="declarative"/>
       <category term="haskell"/>
@@ -1474,7 +1474,7 @@ François WITZ</a>.</li>
       <title>Simple Dev/Release Workflows</title>
       <link href="https://yairchu.github.io/posts/simple-dev-flows"/>
       <id>https://yairchu.github.io/posts/simple-dev-flows</id>
-      <updated>2020-11-05T00:00:SZ</updated>
+      <updated>2020-11-05T00:00:00Z</updated>
       <category term="code"/>
       <category term="git"/>
       <category term="teamwork"/>
@@ -1693,7 +1693,7 @@ comparison</li>
       <title>How programmers should report bugs</title>
       <link href="https://yairchu.github.io/posts/programmer-bug-reports"/>
       <id>https://yairchu.github.io/posts/programmer-bug-reports</id>
-      <updated>2020-09-21T00:00:SZ</updated>
+      <updated>2020-09-21T00:00:00Z</updated>
       <category term="code"/>
       <category term="git"/>
       <category term="teamwork"/>
@@ -1756,7 +1756,7 @@ found in wikimedia commons</li>
       <title>How to organise your git commits</title>
       <link href="https://yairchu.github.io/posts/organise-commits"/>
       <id>https://yairchu.github.io/posts/organise-commits</id>
-      <updated>2020-09-03T00:00:SZ</updated>
+      <updated>2020-09-03T00:00:00Z</updated>
       <category term="code"/>
       <category term="git"/>
       <summary>Why and how to organise git commits</summary>
@@ -1844,7 +1844,7 @@ G</a> from
       <title>Time Travelling Refactor - Experience Report</title>
       <link href="https://yairchu.github.io/posts/time-travelling-refactor"/>
       <id>https://yairchu.github.io/posts/time-travelling-refactor</id>
-      <updated>2020-09-02T00:00:SZ</updated>
+      <updated>2020-09-02T00:00:00Z</updated>
       <category term="code"/>
       <category term="git"/>
       <category term="rebase"/>
@@ -1894,7 +1894,7 @@ Jeff Jacowski</a></li>
       <title>Web tech for desktop UI. Why?</title>
       <link href="https://yairchu.github.io/posts/web-based-desktop-ui"/>
       <id>https://yairchu.github.io/posts/web-based-desktop-ui</id>
-      <updated>2020-08-30T00:00:SZ</updated>
+      <updated>2020-08-30T00:00:00Z</updated>
       <category term="code"/>
       <category term="gui"/>
       <category term="web"/>
@@ -1935,7 +1935,7 @@ Amsalem and Ariel Vitkon</li>
       <title>Black Lives Matter</title>
       <link href="https://yairchu.github.io/posts/black-lives-matter"/>
       <id>https://yairchu.github.io/posts/black-lives-matter</id>
-      <updated>2020-06-27T00:00:SZ</updated>
+      <updated>2020-06-27T00:00:00Z</updated>
       <category term="politics"/>
       <summary>Black Lives Matter</summary>
       <content type="html"><![CDATA[<p>The televised murder of the innocent George Floyd by police officers
@@ -2007,7 +2007,7 @@ credit</li>
       <title>C++ is the undefined language</title>
       <link href="https://yairchu.github.io/posts/c-plus-what"/>
       <id>https://yairchu.github.io/posts/c-plus-what</id>
-      <updated>2020-06-17T00:00:SZ</updated>
+      <updated>2020-06-17T00:00:00Z</updated>
       <category term="code"/>
       <category term="c++"/>
       <category term="history"/>
@@ -2117,7 +2117,7 @@ href="https://www.reddit.com/r/ProgrammerHumor/comments/d2qfm9/hang_in_there_lit
       <title>Break big merges to smaller pieces</title>
       <link href="https://yairchu.github.io/posts/split-merge-to-smaller-pieces"/>
       <id>https://yairchu.github.io/posts/split-merge-to-smaller-pieces</id>
-      <updated>2020-04-22T00:00:SZ</updated>
+      <updated>2020-04-22T00:00:00Z</updated>
       <category term="code"/>
       <category term="git"/>
       <category term="merge"/>
@@ -2197,7 +2197,7 @@ strictly ahead of the common ancestor with the base branch</li>
       <title>Basic error reporting for optics</title>
       <link href="https://yairchu.github.io/posts/optics-with-error-reporting"/>
       <id>https://yairchu.github.io/posts/optics-with-error-reporting</id>
-      <updated>2020-01-02T00:00:SZ</updated>
+      <updated>2020-01-02T00:00:00Z</updated>
       <category term="code"/>
       <category term="haskell"/>
       <category term="optics"/>
@@ -2362,7 +2362,7 @@ source</a></p>]]></content>
       <title>Elegant AST Parsing and Building with Prisms</title>
       <link href="https://yairchu.github.io/posts/codecs-as-prisms-asts"/>
       <id>https://yairchu.github.io/posts/codecs-as-prisms-asts</id>
-      <updated>2019-12-29T00:00:SZ</updated>
+      <updated>2019-12-29T00:00:00Z</updated>
       <category term="code"/>
       <category term="declarative"/>
       <category term="haskell"/>
@@ -2567,7 +2567,7 @@ combinator could replace <code>tryMatch</code>.</li>
       <title>Parsers and Builders as Prisms</title>
       <link href="https://yairchu.github.io/posts/codecs-as-prisms"/>
       <id>https://yairchu.github.io/posts/codecs-as-prisms</id>
-      <updated>2019-12-19T00:00:SZ</updated>
+      <updated>2019-12-19T00:00:00Z</updated>
       <category term="code"/>
       <category term="declarative"/>
       <category term="haskell"/>
@@ -2784,7 +2784,7 @@ href="https://www.reddit.com/r/haskell/comments/ed7k24/parsers_and_builders_as_p
       <title>Why does your programming language have five command line tools?</title>
       <link href="https://yairchu.github.io/posts/the-five-tools"/>
       <id>https://yairchu.github.io/posts/the-five-tools</id>
-      <updated>2019-11-07T00:00:SZ</updated>
+      <updated>2019-11-07T00:00:00Z</updated>
       <category term="code"/>
       <category term="haskell"/>
       <category term="python"/>
@@ -2888,7 +2888,7 @@ Emoji</a></li>
       <title>The four simple ways to encode sum-types</title>
       <link href="https://yairchu.github.io/posts/sum-type-encodings"/>
       <id>https://yairchu.github.io/posts/sum-type-encodings</id>
-      <updated>2019-11-06T00:00:SZ</updated>
+      <updated>2019-11-06T00:00:00Z</updated>
       <category term="code"/>
       <category term="expr-problem"/>
       <category term="sum-types"/>
@@ -3140,7 +3140,7 @@ href="https://commons.wikimedia.org/wiki/File:Loc_Bloc_example_1_of_Disney.JPG">
       <title>Nicer Data Types a la Carte with DefaultSignatures</title>
       <link href="https://yairchu.github.io/posts/dtalc-with-defaultsigs"/>
       <id>https://yairchu.github.io/posts/dtalc-with-defaultsigs</id>
-      <updated>2019-10-02T00:00:SZ</updated>
+      <updated>2019-10-02T00:00:00Z</updated>
       <category term="code"/>
       <category term="expr-problem"/>
       <category term="haskell"/>
@@ -3258,7 +3258,7 @@ href="https://www.reddit.com/r/haskell/comments/dcpi4n/nicer_data_types_a_la_car
       <title>How git-mediate made me stop fearing merge conflicts!</title>
       <link href="https://yairchu.github.io/posts/git-mediate-stops-fear"/>
       <id>https://yairchu.github.io/posts/git-mediate-stops-fear</id>
-      <updated>2016-12-28T00:00:SZ</updated>
+      <updated>2016-12-28T00:00:00Z</updated>
       <category term="code"/>
       <category term="git"/>
       <category term="merge"/>
