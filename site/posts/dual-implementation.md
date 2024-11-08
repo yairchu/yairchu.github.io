@@ -1,7 +1,7 @@
 ---
 title: "Challenges in translating Python to C++"
 author: Yair Chuchem
-date: 2024.11.07
+date: 2024.11.08
 tags: [code, python, c++]
 description: Challenges in translating Python to C++
 image: dual-implementation.jpg
@@ -47,3 +47,11 @@ When modifying the implementations to align more closely, it’s crucial to resp
 
 * **Python implementation**: Should prioritize developer productivity—keeping the code simple, declarative, and easy to iterate on. Remember, much of the work done in Python may never make it to the final product.
 * **C++ implementation**: Should focus on the end user—ensuring the code is fast, robust, portable, and reliable.
+
+### The dream
+
+I desire a single language that would be great for all use-cases. I don't believe that it's inherent that different languages suit better different needs.
+
+If we take static vs dynamic types. I believe that static typing with type inference [can be made ergonomic](https://youtu.be/viF1bVTOO6k?si=Ri8jJbeaghCPFDc1).
+
+I hope one day Lamdu or another similar project will make this dream come true.
