@@ -52,7 +52,7 @@
 
       <img class="post-image" src="/images/dual-implementation.jpg">
       <span class="byline">by Yair Chuchem</span>
-      <span class="date">2024.11.08</span>
+      <span class="date">2024.11.11</span>
       <div class="metadata">
       </div>
       <div class="tags">
@@ -67,8 +67,8 @@
 <ul>
 <li><p>The first one is in Python, which allows for quickly iterating to
 find a solution that works well</p></li>
-<li><p>For speed and other considerations, a re-implementation in C++ is
-required for the actual product</p></li>
+<li><p>The final implementation is in C++, for run-time efficiency and
+other considerations</p></li>
 </ul>
 <p>How can one maintain two implementations and make sure that they
 match?</p>
@@ -87,24 +87,24 @@ class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a hr
 <p>At first glance, you might expect both to produce identical results.
 Surprisingly, they don’t! NumPy employs <a
 href="https://en.wikipedia.org/wiki/Pairwise_summation">pairwise
-summation</a>, a more accurate method than the naive C++ loop, leading
-to differences in the final sum.</p>
+summation</a> to reduce numerical errors in the final sum, leading to a
+different result.</p>
 <p>So what can we do?</p>
 <ul>
 <li><strong>Allow approximate matches</strong>: Instead of requiring
 identical results in tests, verify that the outputs are “close enough”
-within an acceptable tolerance.</li>
+within an acceptable tolerance</li>
 <li><strong>Test modules separately</strong>: Test individual components
 in isolation. Their results are likely to align more closely than those
-of the entire process, where differences can accumulate.</li>
-<li><strong>Reuse C++ in Python where possible</strong>: Consider using
-parts of the C++ implementation directly in Python with <a
+of the entire process, where differences may accumulate</li>
+<li><strong>Reuse parts of the C++ implementation in Python</strong>:
+Wrap functions from the C++ implementation with <a
 href="https://pybind11.readthedocs.io/en/stable/">pybind11</a></li>
-<li><strong>Make the implementations more similar</strong>:
+<li><strong>Make the implementations more similar</strong>
 <ul>
-<li>Implementing pairwise summation in C++ can make its results align
+<li>Implementing pairwise summation in C++ would make its results align
 better with <code>np.sum</code>. This has the added benefit of being
-more accurate! If the changes don’t require excessive effort or harm
+more accurate! When the changes don’t require excessive effort or harm
 performance, this is a worthwhile improvement!</li>
 <li>Alternatively, using Python's built-in <code>sum</code> instead of
 <code>np.sum</code> can produce results identical to the naive C++
@@ -116,19 +116,18 @@ crucial to respect their respective goals:</p>
 <ul>
 <li><strong>Python implementation</strong>: Should prioritize developer
 productivity—keeping the code simple, declarative, and easy to iterate
-on. Remember, much of the work done in Python may never make it to the
-final product.</li>
+on. Remember: much of the work done in Python may never make it to the
+final product</li>
 <li><strong>C++ implementation</strong>: Should focus on the end
-user—ensuring the code is fast, robust, portable, and reliable.</li>
+user—ensuring the code is fast, robust, portable, and reliable</li>
 </ul>
 <h3 id="the-dream">The dream</h3>
-<p>I desire a single language that would be great for all use-cases. I
-don't believe that it's inherent that different languages suit better
-different needs.</p>
-<p>If we take static vs dynamic types. I believe that static typing with
-type inference <a
+<p>I dream of one language that would be great for all use-cases. I
+don't believe that it's inherent that different languages suit different
+needs. For example, if we take static vs dynamic types. I believe that
+static typing with type inference <a
 href="https://youtu.be/viF1bVTOO6k?si=Ri8jJbeaghCPFDc1">can be made
-ergonomic</a>.</p>
+ergonomic</a>!</p>
 <p>I hope one day Lamdu or another similar project will make this dream
 come true.</p>
 
