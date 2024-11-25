@@ -1,19 +1,30 @@
-function switchTheme(){
+function switchTheme()
+{
     var button = document.getElementById("theme-button");
-    var html = document.getElementsByTagName("html")[0];
-    html.classList.toggle("dark");
-
-    if(button.innerHTML == "DAY"){
-        button.innerHTML = "NIGHT";
-        // Expire in two months
-        setCookie("theme", "night", 60*24*60*60*1000);
-    } else {
-        button.innerHTML = "DAY";
-        // Expire in two months
-        setCookie("theme", "day", 60*24*60*60*1000);
-    }
-    return;
+    document.getElementsByTagName("html")[0].classList.toggle("dark");
+    button.innerHTML = button.innerHTML == "DAY" ? "NIGHT" : "DAY";
+    // Expire in two months
+    setCookie("theme", button.innerHTML == "DAY" ? "day" : "night", 60*24*60*60*1000);
+    updateGiscusTheme();
 }
+
+function updateGiscusTheme()
+{
+    document.querySelectorAll("iframe").forEach(iframe => {
+        iframe.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: button.innerHTML == "DAY" ? "light" : "dark" } } },
+            "https://giscus.app"
+          );
+    });
+}
+
+let giscusThemeSet = false;
+window.addEventListener("message", event => {
+    if (event.origin === "https://giscus.app" && !giscusThemeSet) {
+        updateGiscusTheme();
+        giscusThemeSet = true;
+    }
+});
 
 function setCookie(cname,cvalue,extime)
 {
